@@ -24,6 +24,10 @@ void AbsEcu::updateSensors(
             frontRight.speedKmh;
     }
 
+    // ==================================================
+    // Sensor health
+    // ==================================================
+
     if (
         !frontLeft.valid ||
         !frontRight.valid
@@ -33,11 +37,34 @@ void AbsEcu::updateSensors(
             AbsHealthStatus::Degraded;
 
         absState.absActive = false;
+
+        return;
+    }
+
+    absState.healthStatus =
+        AbsHealthStatus::Healthy;
+
+    // ==================================================
+    // Simplified wheel-slip detection
+    // ==================================================
+
+    const float wheelSpeedDifference =
+        frontRight.speedKmh -
+        frontLeft.speedKmh;
+
+    constexpr float slipThresholdKmh = 5.0f;
+    constexpr float minimumAbsSpeedKmh = 10.0f;
+
+    if (
+        frontRight.speedKmh > minimumAbsSpeedKmh &&
+        wheelSpeedDifference > slipThresholdKmh
+        )
+    {
+        absState.absActive = true;
     }
     else
     {
-        absState.healthStatus =
-            AbsHealthStatus::Healthy;
+        absState.absActive = false;
     }
 }
 

@@ -7,13 +7,18 @@ public:
     void setBrake(float percent);
     void setSteeringAngle(float angleDeg);
 
+    void setFrontLeftWheelSlip(bool active);
+
     void update(double deltaTimeMs);
 
     float getVehicleSpeedKmh() const;
+
     float getFrontLeftWheelSpeedKmh() const;
     float getFrontRightWheelSpeedKmh() const;
 
     float getSteeringAngleDeg() const;
+
+    float getBrakePercent() const;
 
 private:
     float speedKmh{ 0.0f };
@@ -22,4 +27,6 @@ private:
     float brakePercent{ 0.0f };
 
     float steeringAngleDeg{ 0.0f };
+
+    bool frontLeftWheelSlip{ false };
 };

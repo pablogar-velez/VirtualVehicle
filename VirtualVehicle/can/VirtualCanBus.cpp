@@ -6,8 +6,10 @@
 #include "CanTiming.h"
 
 VirtualCanBus::VirtualCanBus(
-    std::uint32_t bitrate)
-    : bitrate(bitrate)
+    std::uint32_t bitrate,
+    LogLevel logLevel)
+    : bitrate(bitrate),
+    logLevel(logLevel)
 {
 }
 
@@ -45,12 +47,19 @@ CanFrame VirtualCanBus::receive(
         {
             const std::uint32_t winnerId =
                 CanArbitration::selectWinner(
-                    frames[winnerIndex].frame.arbitrationId,
-                    frames[i].frame.arbitrationId
+                    frames[winnerIndex]
+                    .frame
+                    .arbitrationId,
+
+                    frames[i]
+                    .frame
+                    .arbitrationId
                 );
 
-            if (winnerId ==
-                frames[i].frame.arbitrationId)
+            if (
+                winnerId ==
+                frames[i].frame.arbitrationId
+                )
             {
                 winnerIndex = i;
             }
@@ -85,9 +94,11 @@ CanFrame VirtualCanBus::receive(
         startTimeMs + txTimeMs;
 
     const double waitingTimeMs =
-        startTimeMs - winner.requestTimeMs;
+        startTimeMs -
+        winner.requestTimeMs;
 
-    busyUntilMs = finishTimeMs;
+    busyUntilMs =
+        finishTimeMs;
 
     // --------------------------------------------------
     // Statistics
@@ -100,36 +111,65 @@ CanFrame VirtualCanBus::receive(
     );
 
     // --------------------------------------------------
+    // CAN trace
+    // --------------------------------------------------
+
+    trace.push_back(
+        CanTraceEntry{
+            winner.requestTimeMs,
+            startTimeMs,
+            finishTimeMs,
+            waitingTimeMs,
+            txTimeMs,
+            winner.frame.arbitrationId,
+            winner.frame.dlc,
+            winner.frame.data
+        }
+    );
+
+    // --------------------------------------------------
     // Console output
     // --------------------------------------------------
 
-    std::cout << "[CAN BUS]\n";
+    if (
+        logLevel ==
+        LogLevel::Verbose
+        )
+    {
+        std::cout << "[CAN BUS]\n";
 
-    std::cout << "ID: 0x"
-        << std::hex
-        << winner.frame.arbitrationId
-        << std::dec
-        << "\n";
+        std::cout
+            << "ID: 0x"
+            << std::hex
+            << winner.frame.arbitrationId
+            << std::dec
+            << "\n";
 
-    std::cout << "Requested: "
-        << winner.requestTimeMs
-        << " ms\n";
+        std::cout
+            << "Requested: "
+            << winner.requestTimeMs
+            << " ms\n";
 
-    std::cout << "TX Start:  "
-        << startTimeMs
-        << " ms\n";
+        std::cout
+            << "TX Start:  "
+            << startTimeMs
+            << " ms\n";
 
-    std::cout << "TX End:    "
-        << finishTimeMs
-        << " ms\n";
+        std::cout
+            << "TX End:    "
+            << finishTimeMs
+            << " ms\n";
 
-    std::cout << "Wait:      "
-        << waitingTimeMs
-        << " ms\n";
+        std::cout
+            << "Wait:      "
+            << waitingTimeMs
+            << " ms\n";
 
-    std::cout << "TX Time:   "
-        << txTimeMs
-        << " ms\n\n";
+        std::cout
+            << "TX Time:   "
+            << txTimeMs
+            << " ms\n\n";
+    }
 
     return winner.frame;
 }
@@ -137,6 +177,12 @@ CanFrame VirtualCanBus::receive(
 double VirtualCanBus::getBusyUntilMs() const
 {
     return busyUntilMs;
+}
+
+const std::vector<CanTraceEntry>&
+VirtualCanBus::getTrace() const
+{
+    return trace;
 }
 
 void VirtualCanBus::printStatistics(

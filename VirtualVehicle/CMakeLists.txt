@@ -27,7 +27,7 @@ add_executable(
     "can/AbsStateCodec.h" 
     "can/AbsStateCodec.cpp"
 
- "can/CanArbitration.h" "can/CanArbitration.cpp" "can/PendingCanFrame.h" "can/CanTiming.h" "can/CanTiming.cpp" "can/CanStatistics.h" "can/CanStatistics.cpp" "can/CanMessageRegistry.h" "can/CanMessageRegistry.cpp" "can/CanMessageDefinitions.h" "can/SteeringStateCodec.h" "can/SteeringStateCodec.cpp" "ecu/SteeringEcu.h" "ecu/SteeringEcu.cpp" "sensor/SensorFault.h" "sensor/WheelSpeedSensor.h" "sensor/WheelSpeedSensor.cpp" "simulation/VehicleModel.h" "simulation/VehicleModel.cpp")
+ "can/CanArbitration.h" "can/CanArbitration.cpp" "can/PendingCanFrame.h" "can/CanTiming.h" "can/CanTiming.cpp" "can/CanStatistics.h" "can/CanStatistics.cpp" "can/CanMessageRegistry.h" "can/CanMessageRegistry.cpp" "can/CanMessageDefinitions.h" "can/SteeringStateCodec.h" "can/SteeringStateCodec.cpp" "ecu/SteeringEcu.h" "ecu/SteeringEcu.cpp" "sensor/SensorFault.h" "sensor/WheelSpeedSensor.h" "sensor/WheelSpeedSensor.cpp" "simulation/VehicleModel.h" "simulation/VehicleModel.cpp" "simulation/EventLogger.h" "simulation/EventLogger.cpp" "simulation/ScenarioController.h" "simulation/ScenarioController.cpp" "simulation/LogLevel.h" "can/CanTraceEntry.h" "can/CanTracePrinter.h" "can/CanTracePrinter.cpp" "simulation/SimulationEngine.h" "simulation/SimulationEngine.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET VirtualVehicle PROPERTY CXX_STANDARD 20)

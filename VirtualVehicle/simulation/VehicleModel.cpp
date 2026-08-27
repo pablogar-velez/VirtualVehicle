@@ -20,6 +20,12 @@ void VehicleModel::setSteeringAngle(
     steeringAngleDeg = angleDeg;
 }
 
+void VehicleModel::setFrontLeftWheelSlip(
+    bool active)
+{
+    frontLeftWheelSlip = active;
+}
+
 void VehicleModel::update(
     double deltaTimeMs)
 {
@@ -29,9 +35,6 @@ void VehicleModel::update(
             );
 
     // Simplified longitudinal dynamics.
-    //
-    // Full throttle  -> approximately +4 m/s²
-    // Full braking   -> approximately -8 m/s²
 
     const float throttleAcceleration =
         (throttlePercent / 100.0f) * 4.0f;
@@ -43,13 +46,10 @@ void VehicleModel::update(
         throttleAcceleration -
         brakingDeceleration;
 
-    // Convert acceleration from m/s² to km/h per second.
-    const float speedChangeKmh =
+    speedKmh +=
         accelerationMs2 *
         deltaTimeSeconds *
         3.6f;
-
-    speedKmh += speedChangeKmh;
 
     if (speedKmh < 0.0f)
     {
@@ -64,6 +64,12 @@ float VehicleModel::getVehicleSpeedKmh() const
 
 float VehicleModel::getFrontLeftWheelSpeedKmh() const
 {
+    if (frontLeftWheelSlip)
+    {
+        // Simplified locked/slipping-wheel behavior.
+        return speedKmh * 0.60f;
+    }
+
     return speedKmh;
 }
 
@@ -75,4 +81,9 @@ float VehicleModel::getFrontRightWheelSpeedKmh() const
 float VehicleModel::getSteeringAngleDeg() const
 {
     return steeringAngleDeg;
+}
+
+float VehicleModel::getBrakePercent() const
+{
+    return brakePercent;
 }
