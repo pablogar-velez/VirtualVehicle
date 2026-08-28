@@ -7,6 +7,7 @@
 
 #include "../can/VirtualCanBus.h"
 #include "../can/CanTraceEntry.h"
+#include "../can/CanStatistics.h"
 
 #include "../ecu/PowertrainEcu.h"
 #include "../ecu/AbsEcu.h"
@@ -37,9 +38,9 @@ public:
 
     void reset();
 
-   // ==================================================
-   // Fault injection
-   // ==================================================
+    // ==================================================
+    // Fault injection
+    // ==================================================
 
     void setFrontLeftWheelSensorFault(
         SensorFault fault
@@ -52,13 +53,6 @@ public:
     void clearFrontLeftWheelSensorFault();
 
     void clearFrontRightWheelSensorFault();
-
-    // ==================================================
-    // Event access
-    // ==================================================
-
-    const std::vector<VehicleEvent>&
-        getEvents() const;
 
     // ==================================================
     // Demo
@@ -94,8 +88,29 @@ public:
     const AbsState&
         getAbsState() const;
 
+    // ==================================================
+    // Event access
+    // ==================================================
+
+    const std::vector<VehicleEvent>&
+        getEvents() const;
+
+    // ==================================================
+    // CAN trace access
+    // ==================================================
+
     const std::vector<CanTraceEntry>&
         getCanTrace() const;
+
+    // ==================================================
+    // CAN statistics access
+    // ==================================================
+
+    const CanStatistics&
+        getCanStatistics() const;
+
+    std::uint32_t
+        getCanBitrate() const;
 
 private:
     // ==================================================
@@ -159,11 +174,12 @@ private:
     // ==================================================
 
     bool previousAbsActive{ false };
-    AbsHealthStatus previousAbsHealthStatus{
-    AbsHealthStatus::Healthy
-    };
     bool previousBrakeApplied{ false };
     bool vehicleWasMoving{ false };
+
+    AbsHealthStatus previousAbsHealthStatus{
+        AbsHealthStatus::Healthy
+    };
 
     // ==================================================
     // Internal processing

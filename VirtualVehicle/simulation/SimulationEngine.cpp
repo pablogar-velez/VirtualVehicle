@@ -14,7 +14,10 @@
 SimulationEngine::SimulationEngine(
     LogLevel logLevel)
     : logLevel(logLevel),
-    canBus(canBitrate, logLevel)
+    canBus(
+        canBitrate,
+        logLevel
+    )
 {
     vehicleModel.setSteeringAngle(
         3.2f
@@ -38,13 +41,17 @@ SimulationEngine::SimulationEngine(
 void SimulationEngine::update(
     double deltaTimeMs)
 {
-    if (deltaTimeMs <= 0.0)
+    if (
+        deltaTimeMs <=
+        0.0
+        )
     {
         return;
     }
 
     const double targetTimeMs =
-        currentTimeMs + deltaTimeMs;
+        currentTimeMs +
+        deltaTimeMs;
 
     // ==================================================
     // Apply current scenario
@@ -102,7 +109,10 @@ void SimulationEngine::update(
     // Process internal events until target time
     // ==================================================
 
-    while (currentTimeMs < targetTimeMs)
+    while (
+        currentTimeMs <
+        targetTimeMs
+        )
     {
         const double nextEventTimeMs =
             getNextInternalEventTime(
@@ -386,7 +396,8 @@ void SimulationEngine::updateVehicleEvents()
         vehicleModel.getVehicleSpeedKmh();
 
     if (
-        speed > 0.5f
+        speed >
+        0.5f
         )
     {
         vehicleWasMoving =
@@ -395,7 +406,8 @@ void SimulationEngine::updateVehicleEvents()
 
     if (
         vehicleWasMoving &&
-        speed <= 0.5f
+        speed <=
+        0.5f
         )
     {
         eventLogger.log(
@@ -444,9 +456,9 @@ void SimulationEngine::processAbsEcu(
         frontRightReading
     );
 
-// ==================================================
-// ABS health transition detection
-// ==================================================
+    // ==================================================
+    // ABS health transition detection
+    // ==================================================
 
     const AbsHealthStatus currentAbsHealthStatus =
         absEcu
@@ -482,6 +494,10 @@ void SimulationEngine::processAbsEcu(
 
     previousAbsHealthStatus =
         currentAbsHealthStatus;
+
+    // ==================================================
+    // ABS active transition
+    // ==================================================
 
     const bool currentAbsActive =
         absEcu
@@ -649,7 +665,9 @@ void SimulationEngine::processCanBus(
             canBus.getBusyUntilMs()
         );
 
-    while (canBus.hasFrame())
+    while (
+        canBus.hasFrame()
+        )
     {
         const CanFrame frame =
             canBus.receive(
@@ -692,6 +710,9 @@ void SimulationEngine::reset()
     vehicleWasMoving =
         false;
 
+    previousAbsHealthStatus =
+        AbsHealthStatus::Healthy;
+
     vehicleState =
         VehicleState{};
 
@@ -732,9 +753,6 @@ void SimulationEngine::reset()
     steeringEcu.setSteeringState(
         steeringState
     );
-
-    previousAbsHealthStatus =
-        AbsHealthStatus::Healthy;
 }
 
 // ==================================================
@@ -771,7 +789,8 @@ void SimulationEngine::runDemo()
     {
         if (
             !cruiseStarted &&
-            currentTimeMs >= 2000.0
+            currentTimeMs >=
+            2000.0
             )
         {
             startScenario(
@@ -784,7 +803,8 @@ void SimulationEngine::runDemo()
 
         if (
             !hardBrakingStarted &&
-            currentTimeMs >= 3000.0
+            currentTimeMs >=
+            3000.0
             )
         {
             startScenario(
@@ -797,7 +817,8 @@ void SimulationEngine::runDemo()
 
         if (
             !recoveryStarted &&
-            currentTimeMs >= 4500.0
+            currentTimeMs >=
+            4500.0
             )
         {
             startScenario(
@@ -826,8 +847,10 @@ void SimulationEngine::printResults() const
         .displayVehicleState();
 
     if (
-        logLevel == LogLevel::Events ||
-        logLevel == LogLevel::Verbose
+        logLevel ==
+        LogLevel::Events ||
+        logLevel ==
+        LogLevel::Verbose
         )
     {
         eventLogger.printLog();
@@ -887,4 +910,20 @@ const std::vector<CanTraceEntry>&
 SimulationEngine::getCanTrace() const
 {
     return canBus.getTrace();
+}
+
+// ==================================================
+// CAN Statistics
+// ==================================================
+
+const CanStatistics&
+SimulationEngine::getCanStatistics() const
+{
+    return canBus.getStatistics();
+}
+
+std::uint32_t
+SimulationEngine::getCanBitrate() const
+{
+    return canBus.getBitrate();
 }

@@ -18,8 +18,16 @@ public:
         LogLevel logLevel = LogLevel::Verbose
     );
 
+    // ==================================================
+    // CAN trace
+    // ==================================================
+
     const std::vector<CanTraceEntry>&
         getTrace() const;
+
+    // ==================================================
+    // Transmission
+    // ==================================================
 
     void transmit(
         const CanFrame& frame,
@@ -32,21 +40,60 @@ public:
         double currentTimeMs
     );
 
+    // ==================================================
+    // CAN timing
+    // ==================================================
+
     double getBusyUntilMs() const;
+
+    // ==================================================
+    // CAN statistics access
+    // ==================================================
+
+    const CanStatistics&
+        getStatistics() const;
+
+    std::uint32_t
+        getBitrate() const;
+
+    // ==================================================
+    // Console statistics
+    // ==================================================
 
     void printStatistics(
         double simulationTimeMs
     ) const;
 
 private:
+    // ==================================================
+    // Pending frames
+    // ==================================================
+
     std::vector<PendingCanFrame> frames;
+
+    // ==================================================
+    // CAN trace
+    // ==================================================
 
     std::vector<CanTraceEntry> trace;
 
-    std::uint32_t bitrate;
-    double busyUntilMs{};
+    // ==================================================
+    // Configuration
+    // ==================================================
 
-    CanStatistics statistics;
+    std::uint32_t bitrate;
 
     LogLevel logLevel;
+
+    // ==================================================
+    // Timing
+    // ==================================================
+
+    double busyUntilMs{};
+
+    // ==================================================
+    // Statistics
+    // ==================================================
+
+    CanStatistics statistics;
 };
