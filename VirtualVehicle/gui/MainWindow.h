@@ -16,6 +16,7 @@ class FaultInjectionWidget;
 class EventLogWidget;
 class CanMonitorWidget;
 class StatisticsWidget;
+class TestRunnerWidget;
 
 class MainWindow : public QMainWindow
 {
@@ -79,6 +80,12 @@ private:
     StatisticsWidget* statisticsWidget{};
 
     // ==================================================
+    // Test Runner
+    // ==================================================
+
+    TestRunnerWidget* testRunnerWidget{};
+
+    // ==================================================
     // Setup
     // ==================================================
 
@@ -94,6 +101,8 @@ private:
 
     void createStatisticsTab();
 
+    void createTestRunnerTab();
+
     // ==================================================
     // Runtime
     // ==================================================
@@ -105,4 +114,11 @@ private:
     void togglePauseResume();
 
     void resetSimulation();
+
+    // ==================================================
+    // Automated Tests
+    // ==================================================
+
+    void runAllTests();
+    void runSelectedTest();
 };

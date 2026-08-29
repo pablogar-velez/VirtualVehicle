@@ -1,5 +1,8 @@
 #include "MainWindow.h"
 
+#include <string>
+#include <vector>
+
 #include <QFont>
 #include <QHBoxLayout>
 #include <QLabel>
@@ -15,6 +18,9 @@
 #include "widgets/EventLogWidget.h"
 #include "widgets/CanMonitorWidget.h"
 #include "widgets/StatisticsWidget.h"
+#include "widgets/TestRunnerWidget.h"
+
+#include "../test/TestRunner.h"
 
 // ==================================================
 // Constructor
@@ -253,6 +259,8 @@ void MainWindow::setupUi()
     createDiagnosticsTab();
 
     createStatisticsTab();
+
+    createTestRunnerTab();
 }
 
 // ==================================================
@@ -332,6 +340,10 @@ void MainWindow::createDashboardTab()
         1
     );
 
+    // ==================================================
+    // Add Tab
+    // ==================================================
+
     tabWidget->addTab(
         dashboardPage,
         "Dashboard"
@@ -398,6 +410,10 @@ void MainWindow::createDiagnosticsTab()
         16
     );
 
+    // ==================================================
+    // Fault Injection
+    // ==================================================
+
     faultInjectionWidget =
         new FaultInjectionWidget();
 
@@ -406,6 +422,10 @@ void MainWindow::createDiagnosticsTab()
     );
 
     diagnosticsLayout->addStretch();
+
+    // ==================================================
+    // Add Tab
+    // ==================================================
 
     tabWidget->addTab(
         diagnosticsPage,
@@ -438,6 +458,10 @@ void MainWindow::createStatisticsTab()
         16
     );
 
+    // ==================================================
+    // Statistics Widget
+    // ==================================================
+
     statisticsWidget =
         new StatisticsWidget();
 
@@ -446,9 +470,60 @@ void MainWindow::createStatisticsTab()
         1
     );
 
+    // ==================================================
+    // Add Tab
+    // ==================================================
+
     tabWidget->addTab(
         statisticsPage,
         "Statistics"
+    );
+}
+
+// ==================================================
+// Test Runner Tab
+// ==================================================
+
+void MainWindow::createTestRunnerTab()
+{
+    QWidget* testRunnerPage =
+        new QWidget();
+
+    QVBoxLayout* testRunnerLayout =
+        new QVBoxLayout(
+            testRunnerPage
+        );
+
+    testRunnerLayout->setContentsMargins(
+        16,
+        16,
+        16,
+        16
+    );
+
+    testRunnerLayout->setSpacing(
+        16
+    );
+
+    // ==================================================
+    // Automated Validation Widget
+    // ==================================================
+
+    testRunnerWidget =
+        new TestRunnerWidget();
+
+    testRunnerLayout->addWidget(
+        testRunnerWidget,
+        1
+    );
+
+    // ==================================================
+    // Add Tab
+    // ==================================================
+
+    tabWidget->addTab(
+        testRunnerPage,
+        "Test Runner"
     );
 }
 
@@ -551,7 +626,7 @@ void MainWindow::setupConnections()
     );
 
     // ==================================================
-    // Fault Injection - Front Left
+    // Front Left Sensor Dropout
     // ==================================================
 
     connect(
@@ -567,7 +642,7 @@ void MainWindow::setupConnections()
     );
 
     // ==================================================
-    // Fault Injection - Front Right
+    // Front Right Sensor Dropout
     // ==================================================
 
     connect(
@@ -583,7 +658,7 @@ void MainWindow::setupConnections()
     );
 
     // ==================================================
-    // Clear Fault - Front Left
+    // Clear Front Left Fault
     // ==================================================
 
     connect(
@@ -597,7 +672,7 @@ void MainWindow::setupConnections()
     );
 
     // ==================================================
-    // Clear Fault - Front Right
+    // Clear Front Right Fault
     // ==================================================
 
     connect(
@@ -609,10 +684,38 @@ void MainWindow::setupConnections()
             engine.clearFrontRightWheelSensorFault();
         }
     );
+
+    // ==================================================
+    // Run Selected Test
+    // ==================================================
+
+    connect(
+        testRunnerWidget->getRunSelectedButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            runSelectedTest();
+        }
+    );
+
+    // ==================================================
+    // Run All Tests
+    // ==================================================
+
+    connect(
+        testRunnerWidget->getRunAllButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            runAllTests();
+        }
+    );
 }
 
 // ==================================================
-// Simulation update
+// Simulation Update
 // ==================================================
 
 void MainWindow::updateSimulation()
@@ -659,7 +762,7 @@ void MainWindow::togglePauseResume()
 }
 
 // ==================================================
-// Reset
+// Reset Simulation
 // ==================================================
 
 void MainWindow::resetSimulation()
@@ -671,7 +774,7 @@ void MainWindow::resetSimulation()
     engine.reset();
 
     // ==================================================
-    // GUI
+    // Frontend
     // ==================================================
 
     eventLogWidget->clear();
@@ -690,7 +793,7 @@ void MainWindow::resetSimulation()
     );
 
     // ==================================================
-    // Initial scenario
+    // Restart initial scenario
     // ==================================================
 
     engine.startScenario(
@@ -701,13 +804,51 @@ void MainWindow::resetSimulation()
 }
 
 // ==================================================
+// Run Selected Test
+// ==================================================
+
+void MainWindow::runSelectedTest()
+{
+    const std::string testId =
+        testRunnerWidget
+        ->getSelectedTestId();
+
+    TestRunner runner;
+
+    const TestCase result =
+        runner.runTest(
+            testId
+        );
+
+    testRunnerWidget->setSingleResult(
+        result
+    );
+}
+
+// ==================================================
+// Run All Tests
+// ==================================================
+
+void MainWindow::runAllTests()
+{
+    TestRunner runner;
+
+    const std::vector<TestCase> results =
+        runner.runAll();
+
+    testRunnerWidget->setResults(
+        results
+    );
+}
+
+// ==================================================
 // Refresh UI
 // ==================================================
 
 void MainWindow::refreshUi()
 {
     // ==================================================
-    // Time
+    // Simulation Time
     // ==================================================
 
     timeValueLabel->setText(
@@ -720,16 +861,24 @@ void MainWindow::refreshUi()
     );
 
     // ==================================================
-    // Dashboard
+    // Vehicle State
     // ==================================================
 
     vehicleStateWidget->updateState(
         engine.getVehicleState()
     );
 
+    // ==================================================
+    // ABS State
+    // ==================================================
+
     absStateWidget->updateState(
         engine.getAbsState()
     );
+
+    // ==================================================
+    // Event Log
+    // ==================================================
 
     eventLogWidget->updateEvents(
         engine.getEvents()

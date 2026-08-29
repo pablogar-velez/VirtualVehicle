@@ -139,7 +139,7 @@ add_executable(
 
     "gui/widgets/StatisticsWidget.h"
     "gui/widgets/StatisticsWidget.cpp"
-)
+ "test/TestResult.h" "test/TestCase.h" "test/TestRunner.h" "test/TestRunner.cpp" "gui/widgets/TestRunnerWidget.h" "gui/widgets/TestRunnerWidget.cpp")
 
 # ------------------------------------------------------------
 # C++ standard

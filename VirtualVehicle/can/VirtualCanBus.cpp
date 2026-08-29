@@ -162,17 +162,26 @@ CanFrame VirtualCanBus::receive(
 
     CanTraceEntry traceEntry{};
 
+    traceEntry.requestTimeMs =
+        winner.requestTimeMs;
+
     traceEntry.txStartTimeMs =
         startTimeMs;
+
+    traceEntry.txEndTimeMs =
+        finishTimeMs;
+
+    traceEntry.waitingTimeMs =
+        waitingTimeMs;
+
+    traceEntry.transmissionTimeMs =
+        txTimeMs;
 
     traceEntry.arbitrationId =
         winner.frame.arbitrationId;
 
     traceEntry.dlc =
         winner.frame.dlc;
-
-    traceEntry.waitingTimeMs =
-        waitingTimeMs;
 
     traceEntry.data =
         winner.frame.data;
