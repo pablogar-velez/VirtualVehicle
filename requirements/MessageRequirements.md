@@ -1,22 +1,18 @@
 # VirtualVehicle CAN Message Requirements
 
 **Document ID:** VV-MSG-REQ  
-**Baseline:** 1.0  
+**Baseline:** 1.2  
 **Status:** Baseline  
 
 ---
 
 ## 1. Purpose
 
-This document defines the CAN message-level requirements for the
-VirtualVehicle platform.
-
-The requirements describe the identifiers and logical content of messages
-exchanged between simulated ECUs.
+The requirements describe the identifiers and logical content of CAN messages exchanged between simulated ECUs.
 
 ---
 
-## 2. ABS Wheel State Message
+## 2. CAN Message Requirements
 
 ### MSG-ABS-REQ-001 — CAN Identifier
 
@@ -28,8 +24,7 @@ ABS_WHEEL_STATE shall use CAN identifier 0x080.
 
 ### MSG-ABS-REQ-002 — ABS State Information
 
-ABS_WHEEL_STATE shall contain the information required to represent the
-defined simulated ABS and wheel state.
+ABS_WHEEL_STATE shall contain the information required to represent the defined simulated ABS and wheel state.
 
 **Verification Method:** Test
 
@@ -37,14 +32,12 @@ defined simulated ABS and wheel state.
 
 ### MSG-ABS-REQ-003 — Encode/Decode Consistency
 
-Encoding and subsequent decoding of ABS_WHEEL_STATE shall preserve the defined
-signal values within the resolution supported by the message encoding.
+Encoding and subsequent decoding of ABS_WHEEL_STATE shall preserve the defined signal values within the resolution supported by the message encoding.
 
 **Verification Method:** Test
+**Verification Test:** TC_MSG_001
 
 ---
-
-## 3. Powertrain State Message
 
 ### MSG-PT-REQ-001 — CAN Identifier
 
@@ -88,14 +81,12 @@ POWERTRAIN_STATE shall contain brake-state information.
 
 ### MSG-PT-REQ-006 — Encode/Decode Consistency
 
-Encoding and subsequent decoding of POWERTRAIN_STATE shall preserve the
-defined signal values within the resolution supported by the message encoding.
+Encoding and subsequent decoding of POWERTRAIN_STATE shall preserve the defined signal values within the resolution supported by the message encoding.
 
 **Verification Method:** Test
+**Verification Test:** TC_PT_002
 
 ---
-
-## 4. Steering State Message
 
 ### MSG-STR-REQ-001 — CAN Identifier
 
@@ -115,34 +106,57 @@ STEERING_STATE shall contain steering-angle information.
 
 ### MSG-STR-REQ-003 — Encode/Decode Consistency
 
-Encoding and subsequent decoding of STEERING_STATE shall preserve the defined
-signal values within the resolution supported by the message encoding.
+Encoding and subsequent decoding of STEERING_STATE shall preserve the defined signal values within the resolution supported by the message encoding.
 
 **Verification Method:** Test
+**Verification Test:** TC_STR_002
 
 ---
 
-## 5. Verification Status
+## 3. Verification Status
 
-| Requirement | Implementation | Verification |
+| Requirement | Implementation | Verification | Status |
+|---|---|---|---|
+| MSG-ABS-REQ-001 | Implemented | TC_MSG_002 | VERIFIED / PASS |
+| MSG-ABS-REQ-002 | Implemented | TC_MSG_003 | VERIFIED / PASS |
+| MSG-ABS-REQ-003 | Implemented | TC_MSG_001 | VERIFIED / PASS |
+| MSG-PT-REQ-001 | Implemented | TC_MSG_004 | VERIFIED / PASS |
+| MSG-PT-REQ-002 | Implemented | TC_MSG_005 | VERIFIED / PASS |
+| MSG-PT-REQ-003 | Implemented | TC_MSG_006 | VERIFIED / PASS |
+| MSG-PT-REQ-004 | Implemented | TC_MSG_007 | VERIFIED / PASS |
+| MSG-PT-REQ-005 | Implemented | TC_MSG_008 | VERIFIED / PASS |
+| MSG-PT-REQ-006 | Implemented | TC_PT_002 | VERIFIED / PASS |
+| MSG-STR-REQ-001 | Implemented | TC_MSG_009 | VERIFIED / PASS |
+| MSG-STR-REQ-002 | Implemented | TC_MSG_010 | VERIFIED / PASS |
+| MSG-STR-REQ-003 | Implemented | TC_STR_002 | VERIFIED / PASS |
+
+## 4. Traceability
+
+| Requirement | Test Case | Verification Objective | Result |
+|---|---|---|---|
+| MSG-ABS-REQ-003 | TC_MSG_001 | Verify ABS codec roundtrip consistency | PASS |
+| MSG-PT-REQ-006 | TC_PT_002 | Verify Powertrain codec roundtrip consistency | PASS |
+| MSG-STR-REQ-003 | TC_STR_002 | Verify Steering codec roundtrip consistency | PASS |
+
+Detailed byte layout and scaling remain separate from this baseline.
+
+---
+
+## Baseline v1.2 Verification Record
+
+| Requirement | Verification Evidence | Status |
 |---|---|---|
-| MSG-ABS-REQ-001 | Implemented | Unverified |
-| MSG-ABS-REQ-002 | Implemented | Unverified |
-| MSG-ABS-REQ-003 | Implemented | Unverified |
-| MSG-PT-REQ-001 | Implemented | Unverified |
-| MSG-PT-REQ-002 | Implemented | Unverified |
-| MSG-PT-REQ-003 | Implemented | Unverified |
-| MSG-PT-REQ-004 | Implemented | Unverified |
-| MSG-PT-REQ-005 | Implemented | Unverified |
-| MSG-PT-REQ-006 | Implemented | Unverified |
-| MSG-STR-REQ-001 | Implemented | Unverified |
-| MSG-STR-REQ-002 | Implemented | Unverified |
-| MSG-STR-REQ-003 | Implemented | Unverified |
+| MSG-ABS-REQ-001 | TC_MSG_002 | VERIFIED / PASS |
+| MSG-ABS-REQ-002 | TC_MSG_003 | VERIFIED / PASS |
+| MSG-ABS-REQ-003 | TC_MSG_001 | VERIFIED / PASS |
+| MSG-PT-REQ-001 | TC_MSG_004 | VERIFIED / PASS |
+| MSG-PT-REQ-002 | TC_MSG_005 | VERIFIED / PASS |
+| MSG-PT-REQ-003 | TC_MSG_006 | VERIFIED / PASS |
+| MSG-PT-REQ-004 | TC_MSG_007 | VERIFIED / PASS |
+| MSG-PT-REQ-005 | TC_MSG_008 | VERIFIED / PASS |
+| MSG-PT-REQ-006 | TC_PT_002 | VERIFIED / PASS |
+| MSG-STR-REQ-001 | TC_MSG_009 | VERIFIED / PASS |
+| MSG-STR-REQ-002 | TC_MSG_010 | VERIFIED / PASS |
+| MSG-STR-REQ-003 | TC_STR_002 | VERIFIED / PASS |
 
----
-
-## 6. Signal Definition
-
-Detailed signal layout, byte position, scaling, offset, resolution, and valid
-range shall be documented separately from this baseline after verification
-against the implemented CAN codecs.
+**Latest automated suite result:** 84 PASS / 0 FAIL.

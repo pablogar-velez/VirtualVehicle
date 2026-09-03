@@ -1,7 +1,7 @@
 # VirtualVehicle System Requirements
 
 **Document ID:** VV-SYS-REQ  
-**Baseline:** 1.0  
+**Baseline:** 1.2  
 **Status:** Baseline  
 
 ---
@@ -21,6 +21,7 @@ The VirtualVehicle platform shall execute a simulated vehicle environment using
 simulation time independent from wall-clock time.
 
 **Verification Method:** Test
+**Verification Test:** TC_SYS_001
 
 ---
 
@@ -67,6 +68,7 @@ The VirtualVehicle platform shall provide the capability to reset the simulation
 to its defined initial state.
 
 **Verification Method:** Test
+**Verification Test:** TC_SYS_002
 
 ---
 
@@ -90,19 +92,39 @@ shall not modify the state of the interactive vehicle simulation.
 
 ## 3. Verification Status
 
-| Requirement | Implementation | Verification |
-|---|---|---|
-| SYS-REQ-001 | Implemented | Unverified |
-| SYS-REQ-002 | Implemented | Unverified |
-| SYS-REQ-003 | Implemented | Unverified |
-| SYS-REQ-004 | Implemented | Inspection Pending |
-| SYS-REQ-005 | Implemented | Unverified |
-| SYS-REQ-006 | Implemented | Unverified |
-| SYS-REQ-007 | Implemented | Unverified |
-
----
+| Requirement | Implementation | Verification | Status |
+|---|---|---|---|
+| SYS-REQ-001 | Implemented | TC_SYS_001 | VERIFIED / PASS |
+| SYS-REQ-002 | Implemented | TC_VEH_001, TC_VEH_002, TC_VEH_003, TC_VEH_004 | VERIFIED / PASS |
+| SYS-REQ-003 | Implemented | TC_SYS_003 | VERIFIED / PASS |
+| SYS-REQ-004 | Implemented | Inspection IVR-001 | VERIFIED / PASS |
+| SYS-REQ-005 | Implemented | TC_SYS_002 | VERIFIED / PASS |
+| SYS-REQ-006 | Implemented | Inspection IVR-002 | VERIFIED / PASS |
+| SYS-REQ-007 | Implemented | TC_SYS_004 | VERIFIED / PASS |
 
 ## 4. Traceability
 
-Automated test cases for these system-level requirements will be introduced as
-the VirtualVehicle validation suite is expanded.
+| Requirement | Test Case(s) | Verification Objective | Result |
+|---|---|---|---|
+| SYS-REQ-001 | TC_SYS_001 | Verify simulation-time progression | PASS |
+| SYS-REQ-002 | TC_VEH_001, TC_VEH_002, TC_VEH_003, TC_VEH_004 | Verify all four baseline scenarios execute | PASS |
+| SYS-REQ-005 | TC_SYS_002 | Verify reset restores the defined initial simulation state | PASS |
+
+SYS-REQ-002 uses combined scenario evidence. TC_VEH_001 and TC_VEH_003 retain
+their more specific VEH primary requirement mappings.
+
+---
+
+## Baseline v1.2 Verification Record
+
+| Requirement | Verification Evidence | Status |
+|---|---|---|
+| SYS-REQ-001 | TC_SYS_001 | VERIFIED / PASS |
+| SYS-REQ-002 | TC_VEH_001..004 | VERIFIED / PASS |
+| SYS-REQ-003 | TC_SYS_003 | VERIFIED / PASS |
+| SYS-REQ-004 | IVR-001 | VERIFIED / PASS |
+| SYS-REQ-005 | TC_SYS_002 | VERIFIED / PASS |
+| SYS-REQ-006 | IVR-002 | VERIFIED / PASS |
+| SYS-REQ-007 | TC_SYS_004 | VERIFIED / PASS |
+
+**Latest automated suite result:** 84 PASS / 0 FAIL.

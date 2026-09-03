@@ -50,6 +50,21 @@ TestRunnerWidget::TestRunnerWidget(
         "TC_SYS_001"
     );
 
+    testSelector->addItem(
+        "TC_SYS_002 - Simulation Reset",
+        "TC_SYS_002"
+    );
+
+    testSelector->addItem(
+        "TC_SYS_003 - ECU Communication Through Virtual CAN",
+        "TC_SYS_003"
+    );
+
+    testSelector->addItem(
+        "TC_SYS_004 - Automated Validation Isolation",
+        "TC_SYS_004"
+    );
+
     // ==================================================
     // Vehicle / Scenario Tests
     // ==================================================
@@ -74,6 +89,41 @@ TestRunnerWidget::TestRunnerWidget(
         "TC_VEH_004"
     );
 
+    testSelector->addItem(
+        "TC_VEH_005 - Vehicle Speed State",
+        "TC_VEH_005"
+    );
+
+    testSelector->addItem(
+        "TC_VEH_006 - Front-Left Wheel Speed State",
+        "TC_VEH_006"
+    );
+
+    testSelector->addItem(
+        "TC_VEH_007 - Front-Right Wheel Speed State",
+        "TC_VEH_007"
+    );
+
+    testSelector->addItem(
+        "TC_VEH_008 - Brake Input State",
+        "TC_VEH_008"
+    );
+
+    testSelector->addItem(
+        "TC_VEH_009 - Steering Angle State",
+        "TC_VEH_009"
+    );
+
+    testSelector->addItem(
+        "TC_VEH_010 - Vehicle Dynamic State Update",
+        "TC_VEH_010"
+    );
+
+    testSelector->addItem(
+        "TC_VEH_011 - Independent Wheel Speeds",
+        "TC_VEH_011"
+    );
+
     // ==================================================
     // ABS Tests
     // ==================================================
@@ -91,6 +141,26 @@ TestRunnerWidget::TestRunnerWidget(
     testSelector->addItem(
         "TC_ABS_003 - Front Right Wheel Sensor Dropout",
         "TC_ABS_003"
+    );
+
+    testSelector->addItem(
+        "TC_ABS_004 - ABS Healthy State",
+        "TC_ABS_004"
+    );
+
+    testSelector->addItem(
+        "TC_ABS_005 - ABS Intervention State Observability",
+        "TC_ABS_005"
+    );
+
+    testSelector->addItem(
+        "TC_ABS_006 - ABS CAN Identifier",
+        "TC_ABS_006"
+    );
+
+    testSelector->addItem(
+        "TC_ABS_007 - ABS Wheel Slip Processing",
+        "TC_ABS_007"
     );
 
     // ==================================================
@@ -112,6 +182,21 @@ TestRunnerWidget::TestRunnerWidget(
         "TC_SNS_003"
     );
 
+    testSelector->addItem(
+        "TC_SNS_004 - Front-Left Wheel-Speed Measurement",
+        "TC_SNS_004"
+    );
+
+    testSelector->addItem(
+        "TC_SNS_005 - Front-Right Wheel-Speed Measurement",
+        "TC_SNS_005"
+    );
+
+    testSelector->addItem(
+        "TC_SNS_006 - Front-Left Dropout Injection",
+        "TC_SNS_006"
+    );
+
 
     // ==================================================
     // Powertrain Tests
@@ -125,6 +210,31 @@ TestRunnerWidget::TestRunnerWidget(
     testSelector->addItem(
         "TC_PT_002 - Powertrain Codec Roundtrip",
         "TC_PT_002"
+    );
+
+    testSelector->addItem(
+        "TC_PT_003 - Powertrain State",
+        "TC_PT_003"
+    );
+
+    testSelector->addItem(
+        "TC_PT_004 - Powertrain Vehicle Speed",
+        "TC_PT_004"
+    );
+
+    testSelector->addItem(
+        "TC_PT_005 - Powertrain Engine Speed",
+        "TC_PT_005"
+    );
+
+    testSelector->addItem(
+        "TC_PT_006 - Powertrain Gear State",
+        "TC_PT_006"
+    );
+
+    testSelector->addItem(
+        "TC_PT_007 - Powertrain Brake State",
+        "TC_PT_007"
     );
 
     // ==================================================
@@ -141,9 +251,54 @@ TestRunnerWidget::TestRunnerWidget(
         "TC_STR_002"
     );
 
+    testSelector->addItem(
+        "TC_STR_003 - Steering State",
+        "TC_STR_003"
+    );
+
+    testSelector->addItem(
+        "TC_STR_004 - Steering Angle",
+        "TC_STR_004"
+    );
+
     // ==================================================
     // CAN Tests
     // ==================================================
+
+    testSelector->addItem(
+        "TC_DIA_001 - Front-Left Diagnostic Fault Injection",
+        "TC_DIA_001"
+    );
+
+    testSelector->addItem(
+        "TC_DIA_002 - Front-Right Diagnostic Fault Injection",
+        "TC_DIA_002"
+    );
+
+    testSelector->addItem(
+        "TC_DIA_003 - Front-Left Diagnostic Fault Clearing",
+        "TC_DIA_003"
+    );
+
+    testSelector->addItem(
+        "TC_DIA_004 - Front-Right Diagnostic Fault Clearing",
+        "TC_DIA_004"
+    );
+
+    testSelector->addItem(
+        "TC_DIA_005 - ECU Health Observability",
+        "TC_DIA_005"
+    );
+
+    testSelector->addItem(
+        "TC_DIA_006 - Runtime Fault Injection",
+        "TC_DIA_006"
+    );
+
+    testSelector->addItem(
+        "TC_DIA_007 - Runtime Fault Recovery",
+        "TC_DIA_007"
+    );
 
     testSelector->addItem(
         "TC_CAN_001 - CAN Arbitration Priority",
@@ -190,6 +345,71 @@ TestRunnerWidget::TestRunnerWidget(
         "TC_CAN_009"
     );
 
+    testSelector->addItem(
+        "TC_CAN_010 - CAN Transmission Duration",
+        "TC_CAN_010"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_011 - CAN Waiting Time",
+        "TC_CAN_011"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_012 - CAN Frame Count",
+        "TC_CAN_012"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_013 - CAN Average Waiting Time",
+        "TC_CAN_013"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_014 - CAN Maximum Waiting Time",
+        "TC_CAN_014"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_015 - CAN Total Transmission Time",
+        "TC_CAN_015"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_016 - CAN Per-Message Statistics",
+        "TC_CAN_016"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_017 - CAN Pending Frame Behavior",
+        "TC_CAN_017"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_018 - CAN Waiting-Time Trace Evidence",
+        "TC_CAN_018"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_019 - CAN Exclusive Bus Access",
+        "TC_CAN_019"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_020 - CAN Trace Identifier Evidence",
+        "TC_CAN_020"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_021 - CAN Trace Payload Evidence",
+        "TC_CAN_021"
+    );
+
+    testSelector->addItem(
+        "TC_CAN_022 - Multiple ECU Transmission Requests",
+        "TC_CAN_022"
+    );
+
     // ==================================================
     // Message Tests
     // ==================================================
@@ -197,6 +417,81 @@ TestRunnerWidget::TestRunnerWidget(
     testSelector->addItem(
         "TC_MSG_001 - ABS Codec Roundtrip",
         "TC_MSG_001"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_002 - ABS Message CAN Identifier",
+        "TC_MSG_002"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_003 - ABS Message State Information",
+        "TC_MSG_003"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_004 - Powertrain Message CAN Identifier",
+        "TC_MSG_004"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_005 - Powertrain Vehicle-Speed Information",
+        "TC_MSG_005"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_006 - Powertrain Engine-RPM Information",
+        "TC_MSG_006"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_007 - Powertrain Gear-State Information",
+        "TC_MSG_007"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_008 - Powertrain Brake-State Information",
+        "TC_MSG_008"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_009 - Steering Message CAN Identifier",
+        "TC_MSG_009"
+    );
+
+    testSelector->addItem(
+        "TC_MSG_010 - Steering-Angle Information",
+        "TC_MSG_010"
+    );
+
+    testSelector->addItem(
+        "TC_VAL_001 - Individual Test Execution",
+        "TC_VAL_001"
+    );
+
+    testSelector->addItem(
+        "TC_VAL_002 - Validation Test Isolation",
+        "TC_VAL_002"
+    );
+
+    testSelector->addItem(
+        "TC_VAL_003 - Test Status",
+        "TC_VAL_003"
+    );
+
+    testSelector->addItem(
+        "TC_VAL_004 - Execution-Time Evidence",
+        "TC_VAL_004"
+    );
+
+    testSelector->addItem(
+        "TC_VAL_005 - Response-Time Evidence",
+        "TC_VAL_005"
+    );
+
+    testSelector->addItem(
+        "TC_VAL_006 - Timing Pass Criteria",
+        "TC_VAL_006"
     );
 
     // ==================================================

@@ -1,7 +1,7 @@
 # VirtualVehicle Automated Validation Requirements
 
 **Document ID:** VV-VAL-REQ  
-**Baseline:** 1.0  
+**Baseline:** 1.2  
 **Status:** Baseline  
 
 ---
@@ -158,36 +158,45 @@ with an executed requirements-based test.
 
 ## 7. Verification Status
 
-| Requirement | Implementation | Verification |
+Baseline v1.2 records dedicated automated verification for the testable
+validation-framework requirements and inspection evidence for the requirements
+whose defined verification method is Inspection.
+
+| Requirement | Verification Evidence | Status |
 |---|---|---|
-| VAL-REQ-001 | Implemented | Unverified |
-| VAL-REQ-002 | Implemented | Unverified |
-| VAL-REQ-003 | Implemented | Unverified |
-| VAL-REQ-004 | Implemented | Inspection Pending |
-| VAL-REQ-005 | Implemented | Inspection Pending |
-| VAL-REQ-006 | Implemented | Inspection Pending |
-| VAL-REQ-007 | Implemented | Inspection Pending |
-| VAL-REQ-008 | Implemented | Unverified |
-| VAL-REQ-009 | Implemented | Unverified |
-| VAL-REQ-010 | Implemented | Unverified |
-| VAL-REQ-011 | Implemented | Inspection Pending |
-| VAL-REQ-012 | Implemented | Unverified |
-| VAL-REQ-013 | Implemented | Inspection Pending |
-| VAL-REQ-014 | Implemented | Inspection Pending |
-| VAL-REQ-015 | Implemented | Inspection Pending |
+| VAL-REQ-001 | TC_VAL_001 | VERIFIED / PASS |
+| VAL-REQ-002 | Complete suite execution: 84 PASS / 0 FAIL | VERIFIED / PASS |
+| VAL-REQ-003 | TC_VAL_002 | VERIFIED / PASS |
+| VAL-REQ-004 | Inspection IVR-003 | VERIFIED / PASS |
+| VAL-REQ-005 | Inspection IVR-004 | VERIFIED / PASS |
+| VAL-REQ-006 | Inspection IVR-005 | VERIFIED / PASS |
+| VAL-REQ-007 | Inspection IVR-006 | VERIFIED / PASS |
+| VAL-REQ-008 | TC_VAL_003 | VERIFIED / PASS |
+| VAL-REQ-009 | TC_VAL_004 | VERIFIED / PASS |
+| VAL-REQ-010 | TC_VAL_005 | VERIFIED / PASS |
+| VAL-REQ-011 | Inspection IVR-007 | VERIFIED / PASS |
+| VAL-REQ-012 | TC_VAL_006 | VERIFIED / PASS |
+| VAL-REQ-013 | Inspection IVR-008 | VERIFIED / PASS |
+| VAL-REQ-014 | Inspection IVR-009 | VERIFIED / PASS |
+| VAL-REQ-015 | Inspection IVR-010 | VERIFIED / PASS |
 
 ---
 
 ## 8. Current Automated Tests
 
-The Requirements Baseline v1.0 validation framework currently contains the
-following automated tests:
+The Requirements Baseline v1.2 validation framework currently contains
+84 automated tests.
 
-| Test ID | Description |
-|---|---|
-| TC_ABS_001 | ABS Emergency Braking |
-| TC_ABS_002 | Front-Left Wheel Sensor Dropout |
-| TC_ABS_003 | Front-Right Wheel Sensor Dropout |
+**Latest recorded result:** 84 Passed / 0 Failed
 
-Formal requirement-to-test traceability shall be updated after the
-Requirements Baseline v1.0 is completed.
+The complete requirement-to-test mapping is maintained in
+`TraceabilityMatrix.md`.
+
+---
+
+## 9. Validation-Framework Closure
+
+All validation-framework requirements defined in Baseline v1.2 have recorded
+verification evidence. Test-based requirements are covered by dedicated
+automated tests or complete-suite execution evidence. Inspection-based
+requirements are recorded in `InspectionVerification.md`.

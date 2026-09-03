@@ -1,48 +1,19 @@
 # VirtualVehicle Requirements Specification
 
 **Document ID:** VV-SRS-001  
-**Version:** 1.0  
+**Version:** 1.2  
 **Status:** Baseline  
 **System:** VirtualVehicle Platform  
 
 ---
 
-## 1. Purpose
+## 1. Verification Workflow
 
-VirtualVehicle is a Software-in-the-Loop (SIL) automotive simulation and
-validation platform designed to simulate vehicle behavior, ECU interaction,
-CAN communication, sensor faults, and automated verification.
+Requirement → Implementation → Test Case → Execution → Evidence → PASS / FAIL
 
-This requirements specification defines the expected behavior of the
-VirtualVehicle platform and provides the foundation for requirements-based
-verification.
+Implementation alone does not constitute verification.
 
----
-
-## 2. Requirements Philosophy
-
-Each system behavior shall be defined by a uniquely identifiable requirement.
-
-Requirements are implemented by the software architecture and verified through
-automated test cases whenever applicable.
-
-The intended verification workflow is:
-
-Requirement
-→ Implementation
-→ Test Case
-→ Execution
-→ Evidence
-→ PASS / FAIL
-
-A feature being implemented does not automatically mean that the corresponding
-requirement has been verified.
-
----
-
-## 3. Requirement Status
-
-Requirements may have one of the following verification states:
+Verification states:
 
 - NOT IMPLEMENTED
 - IMPLEMENTED / UNVERIFIED
@@ -51,9 +22,7 @@ Requirements may have one of the following verification states:
 
 ---
 
-## 4. Requirement Categories
-
-The VirtualVehicle requirements are divided into the following domains:
+## 2. Requirement Categories
 
 | Prefix | Domain | Specification |
 |---|---|---|
@@ -70,105 +39,81 @@ The VirtualVehicle requirements are divided into the following domains:
 
 ---
 
-## 5. Requirement Identification
+## 3. Current Automated Test Coverage
 
-Every requirement shall have a unique identifier.
+**Suite result: 84 passed / 0 Failed**
 
-Format:
-
-PREFIX-REQ-NNN
-
-Examples:
-
-SYS-REQ-001
-
-ABS-REQ-002
-
-CAN-REQ-003
-
-VAL-REQ-001
-
-Requirement identifiers shall remain stable after being included in a released
-requirements baseline.
-
----
-
-## 6. Verification Methods
-
-Requirements may be verified using one of the following methods:
-
-### Test
-
-Automated or controlled execution demonstrating that the implementation
-satisfies the specified behavior.
-
-### Inspection
-
-Static examination of software architecture, configuration, source code,
-generated evidence, or documentation.
-
-### Analysis
-
-Evaluation of recorded data, timing information, statistics, or other
-quantitative evidence.
-
----
-
-## 7. Current Automated Test Coverage
-
-| Test Case | Requirement | Description |
+| Test Case | Primary Requirement | Description |
 |---|---|---|
+| TC_SYS_001 | SYS-REQ-001 | Simulation Time Progression |
+| TC_SYS_002 | SYS-REQ-005 | Simulation Reset |
+| TC_VEH_001 | VEH-REQ-007 | Acceleration Scenario |
+| TC_VEH_002 | SYS-REQ-002 | Cruise Scenario |
+| TC_VEH_003 | VEH-REQ-008 | Hard Braking Scenario |
+| TC_VEH_004 | SYS-REQ-002 | Recovery Scenario |
 | TC_ABS_001 | ABS-REQ-002 | ABS Emergency Braking |
 | TC_ABS_002 | ABS-REQ-004 | Front Left Wheel Sensor Dropout |
 | TC_ABS_003 | ABS-REQ-005 | Front Right Wheel Sensor Dropout |
-
-Additional test cases shall be added as requirements verification progresses.
+| TC_ABS_004 | ABS-REQ-003 | ABS Healthy State |
+| TC_SNS_001 | SNS-REQ-005 | Front Left Sensor Dropout |
+| TC_SNS_002 | SNS-REQ-004 | Front Right Sensor Dropout |
+| TC_SNS_003 | SNS-REQ-006 | Sensor Fault Recovery |
+| TC_PT_001 | PT-REQ-007 | Powertrain CAN Identifier |
+| TC_PT_002 | MSG-PT-REQ-006 | Powertrain Codec Roundtrip |
+| TC_STR_001 | STR-REQ-004 | Steering CAN Identifier |
+| TC_STR_002 | MSG-STR-REQ-003 | Steering Codec Roundtrip |
+| TC_DIA_001 | DIA-REQ-001 | Front-Left Diagnostic Fault Injection |
+| TC_DIA_002 | DIA-REQ-002 | Front-Right Diagnostic Fault Injection |
+| TC_DIA_003 | DIA-REQ-003 | Front-Left Diagnostic Fault Clearing |
+| TC_DIA_004 | DIA-REQ-004 | Front-Right Diagnostic Fault Clearing |
+| TC_DIA_005 | DIA-REQ-005 | ECU Health Observability |
+| TC_DIA_006 | DIA-REQ-006 | Runtime Fault Injection |
+| TC_DIA_007 | DIA-REQ-007 | Runtime Fault Recovery |
+| TC_CAN_001 | CAN-REQ-003 | CAN Arbitration Priority |
+| TC_CAN_002 | CAN-REQ-001 | CAN Bitrate |
+| TC_CAN_003 | CAN-REQ-008 | CAN Trace Recording |
+| TC_CAN_004 | CAN-REQ-014 | CAN Arbitration Statistics |
+| TC_CAN_005 | ABS-REQ-007 | ABS Message Periodicity |
+| TC_CAN_006 | PT-REQ-006 | Powertrain Message Periodicity |
+| TC_CAN_007 | STR-REQ-003 | Steering Message Periodicity |
+| TC_CAN_008 | CAN-REQ-018 | CAN Bus Utilization |
+| TC_CAN_009 | CAN-REQ-009 | CAN Trace Timing Evidence |
+| TC_CAN_010 | CAN-REQ-006 | CAN Transmission Duration |
+| TC_CAN_011 | CAN-REQ-007 | CAN Waiting Time |
+| TC_CAN_012 | CAN-REQ-013 | CAN Frame Count |
+| TC_CAN_013 | CAN-REQ-015 | CAN Average Waiting Time |
+| TC_CAN_014 | CAN-REQ-016 | CAN Maximum Waiting Time |
+| TC_CAN_015 | CAN-REQ-017 | CAN Total Transmission Time |
+| TC_CAN_016 | CAN-REQ-019 | CAN Per-Message Statistics |
+| TC_CAN_017 | CAN-REQ-005 | CAN Pending Frame Behavior |
+| TC_CAN_018 | CAN-REQ-012 | CAN Waiting-Time Trace Evidence |
+| TC_CAN_019 | CAN-REQ-004 | CAN Exclusive Bus Access |
+| TC_CAN_020 | CAN-REQ-010 | CAN Trace Identifier Evidence |
+| TC_CAN_021 | CAN-REQ-011 | CAN Trace Payload Evidence |
+| TC_MSG_001 | MSG-ABS-REQ-003 | ABS Codec Roundtrip |
 
 ---
 
-## 8. Requirements Baseline
+## 4. Traceability
 
-This specification represents:
+Project-level traceability is maintained in `TraceabilityMatrix.md`.
 
-VirtualVehicle Requirements Baseline v1.0
+The matrix distinguishes direct verification from supporting evidence so that
+implemented behavior is not incorrectly reported as formally verified.
 
-The baseline describes the capabilities of the current VirtualVehicle
-architecture.
+### Verification Evidence
 
-Future functionality shall be introduced through new or modified requirements
-before verification test cases are added.
+- `TraceabilityMatrix.md` — complete requirement-to-evidence mapping.
+- `InspectionVerification.md` — formal inspection records for requirements whose
+  verification method is Inspection.
 
-Potential future functionality may include:
+## Baseline v1.2 Verification Closure
 
-- Additional ECUs
-- Additional vehicle sensors
-- Diagnostic Trouble Codes (DTCs)
-- UDS diagnostics
-- CAN fault simulation
-- Ethernet communication
-- ADAS functionality
-- Additional SIL validation scenarios
+- Automated suite: **84 PASS / 0 FAIL**
+- Baseline requirements: **94**
+- Verified baseline requirements: **94**
+- Unverified baseline requirements: **0**
+- Inspection evidence: `InspectionVerification.md`
 
-These capabilities are not part of Requirements Baseline v1.0 unless explicitly
-defined by a requirement.
-
----
-
-## 9. Traceability
-
-The project shall maintain traceability between:
-
-Requirement
-→ Software Implementation
-→ Verification Test Case
-→ Verification Result
-
-Example:
-
-ABS-REQ-004
-→ AbsEcu / WheelSpeedSensor
-→ TC_ABS_002
-→ PASS / FAIL
-
-The traceability model will be expanded as automated verification coverage
-increases.
+The baseline is verification-closed for the currently defined VirtualVehicle
+requirements. Capabilities outside the baseline remain intentionally unclaimed.

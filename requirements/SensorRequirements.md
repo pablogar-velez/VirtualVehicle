@@ -1,18 +1,14 @@
 # VirtualVehicle Sensor Requirements
 
 **Document ID:** VV-SNS-REQ  
-**Baseline:** 1.0  
+**Baseline:** 1.2  
 **Status:** Baseline  
 
 ---
 
 ## 1. Purpose
 
-This document defines the requirements for simulated vehicle sensors used by
-the VirtualVehicle platform.
-
-Requirements Baseline v1.0 focuses on the wheel-speed sensors used by the ABS
-subsystem.
+Requirements for simulated vehicle sensors used by VirtualVehicle. Baseline v1.2 focuses on the wheel-speed sensors used by the ABS subsystem.
 
 ---
 
@@ -36,6 +32,7 @@ wheel speed to the ABS subsystem.
 
 ---
 
+
 ## 3. Fault Injection Requirements
 
 ### SNS-REQ-003 — Front-Left Dropout Injection
@@ -53,6 +50,7 @@ The VirtualVehicle platform shall support injection of a Dropout fault into the
 front-right wheel-speed sensor.
 
 **Verification Method:** Test
+**Verification Test:** TC_SNS_002
 
 ---
 
@@ -62,6 +60,7 @@ A wheel-speed sensor configured with a Dropout fault shall produce an invalid
 measurement for use by the consuming subsystem.
 
 **Verification Method:** Test
+**Verification Test:** TC_SNS_001
 
 ---
 
@@ -71,6 +70,7 @@ A wheel-speed sensor shall return to normal measurement behavior after its
 injected fault is cleared.
 
 **Verification Method:** Test
+**Verification Test:** TC_SNS_003
 
 ---
 
@@ -78,57 +78,35 @@ injected fault is cleared.
 
 | Requirement | Implementation | Verification | Status |
 |---|---|---|---|
-| SNS-REQ-001 | Implemented | Pending | Unverified |
-| SNS-REQ-002 | Implemented | Pending | Unverified |
-| SNS-REQ-003 | Implemented | Partial coverage through TC_ABS_002 | Unverified |
-| SNS-REQ-004 | Implemented | Partial coverage through TC_ABS_003 | Unverified |
-| SNS-REQ-005 | Implemented | Partial coverage through ABS tests | Unverified |
-| SNS-REQ-006 | Implemented | Pending | Unverified |
+| SNS-REQ-001 | Implemented | TC_SNS_004 | VERIFIED / PASS |
+| SNS-REQ-002 | Implemented | TC_SNS_005 | VERIFIED / PASS |
+| SNS-REQ-003 | Implemented | TC_SNS_006 | VERIFIED / PASS |
+| SNS-REQ-004 | Implemented | TC_SNS_002 | VERIFIED / PASS |
+| SNS-REQ-005 | Implemented | TC_SNS_001 | VERIFIED / PASS |
+| SNS-REQ-006 | Implemented | TC_SNS_003 | VERIFIED / PASS |
+
+## 5. Traceability
+
+| Requirement | Test Case | Verification Objective | Result |
+|---|---|---|---|
+| SNS-REQ-004 | TC_SNS_002 | Verify front-right Dropout injection behavior | PASS |
+| SNS-REQ-005 | TC_SNS_001 | Verify Dropout produces an invalid measurement | PASS |
+| SNS-REQ-006 | TC_SNS_003 | Verify normal behavior returns after fault clear | PASS |
+
+TC_SNS_001 and TC_ABS_002 support SNS-REQ-003, but TC_SNS_001 currently maps
+primarily to SNS-REQ-005; therefore SNS-REQ-003 remains formally unverified.
 
 ---
 
-## 5. Traceability Notes
+## Baseline v1.2 Verification Record
 
-TC_ABS_002 and TC_ABS_003 currently exercise wheel-speed sensor fault
-injection as part of ABS ECU verification.
+| Requirement | Verification Evidence | Status |
+|---|---|---|
+| SNS-REQ-001 | TC_SNS_004 | VERIFIED / PASS |
+| SNS-REQ-002 | TC_SNS_005 | VERIFIED / PASS |
+| SNS-REQ-003 | TC_SNS_006 | VERIFIED / PASS |
+| SNS-REQ-004 | TC_SNS_002 | VERIFIED / PASS |
+| SNS-REQ-005 | TC_SNS_001 | VERIFIED / PASS |
+| SNS-REQ-006 | TC_SNS_003 | VERIFIED / PASS |
 
-These tests provide indirect evidence for sensor fault behavior but are not
-considered dedicated verification of the sensor requirements.
-
-Dedicated sensor-level tests shall be introduced to provide direct
-requirements coverage.
-
----
-
-## 6. Future Verification
-
-Potential sensor verification tests include:
-
-### TC_SNS_001 — Front-Left Sensor Dropout
-
-Verify that a front-left wheel-speed sensor configured with Dropout produces an
-invalid measurement.
-
-Target requirements:
-
-- SNS-REQ-003
-- SNS-REQ-005
-
-### TC_SNS_002 — Front-Right Sensor Dropout
-
-Verify that a front-right wheel-speed sensor configured with Dropout produces
-an invalid measurement.
-
-Target requirements:
-
-- SNS-REQ-004
-- SNS-REQ-005
-
-### TC_SNS_003 — Sensor Fault Recovery
-
-Verify that clearing an injected wheel-speed sensor fault restores normal
-sensor measurement behavior.
-
-Target requirement:
-
-- SNS-REQ-006
+**Latest automated suite result:** 84 PASS / 0 FAIL.

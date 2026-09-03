@@ -1,7 +1,7 @@
 # VirtualVehicle ABS ECU Requirements
 
 **Document ID:** VV-ABS-REQ  
-**Baseline:** 1.0  
+**Baseline:** 1.2  
 **Status:** Baseline  
 
 ---
@@ -32,7 +32,7 @@ wheel-slip conditions.
 The ABS ECU shall activate ABS intervention when wheel slip requiring
 intervention is detected while braking.
 
-**Verification Method:** Test  
+**Verification Method:** Test
 **Verification Test:** TC_ABS_001
 
 ---
@@ -43,8 +43,10 @@ The ABS ECU shall report HEALTHY status when all required wheel-speed sensor
 inputs are valid and no monitored sensor fault is present.
 
 **Verification Method:** Test
+**Verification Test:** TC_ABS_004
 
 ---
+
 
 ## 3. Sensor Fault Requirements
 
@@ -53,8 +55,8 @@ inputs are valid and no monitored sensor fault is present.
 The ABS ECU shall transition to DEGRADED status within 20 ms after a
 front-left wheel-speed sensor dropout is detected.
 
-**Verification Method:** Test  
-**Verification Test:** TC_ABS_002  
+**Verification Method:** Test
+**Verification Test:** TC_ABS_002
 **Maximum Response Time:** 20 ms
 
 ---
@@ -64,11 +66,12 @@ front-left wheel-speed sensor dropout is detected.
 The ABS ECU shall transition to DEGRADED status within 20 ms after a
 front-right wheel-speed sensor dropout is detected.
 
-**Verification Method:** Test  
-**Verification Test:** TC_ABS_003  
+**Verification Method:** Test
+**Verification Test:** TC_ABS_003
 **Maximum Response Time:** 20 ms
 
 ---
+
 
 ## 4. ABS State Requirements
 
@@ -85,6 +88,7 @@ The ABS ECU shall expose whether ABS intervention is active.
 The ABS ECU shall periodically transmit its state through the Virtual CAN Bus.
 
 **Verification Method:** Test
+**Verification Test:** TC_CAN_005
 
 ---
 
@@ -98,42 +102,43 @@ The ABS ECU shall transmit ABS Wheel State using CAN identifier 0x080.
 
 ## 5. Verification Status
 
-| Requirement | Implementation | Verification Test | Status |
+| Requirement | Implementation | Verification | Status |
 |---|---|---|---|
-| ABS-REQ-001 | Implemented | Pending | Unverified |
-| ABS-REQ-002 | Implemented | TC_ABS_001 | Verified |
-| ABS-REQ-003 | Implemented | Pending | Unverified |
-| ABS-REQ-004 | Implemented | TC_ABS_002 | Verified |
-| ABS-REQ-005 | Implemented | TC_ABS_003 | Verified |
-| ABS-REQ-006 | Implemented | Pending | Unverified |
-| ABS-REQ-007 | Implemented | Pending | Unverified |
-| ABS-REQ-008 | Implemented | Pending | Unverified |
-
----
+| ABS-REQ-001 | Implemented | TC_ABS_007 | VERIFIED / PASS |
+| ABS-REQ-002 | Implemented | TC_ABS_001 | VERIFIED / PASS |
+| ABS-REQ-003 | Implemented | TC_ABS_004 | VERIFIED / PASS |
+| ABS-REQ-004 | Implemented | TC_ABS_002 | VERIFIED / PASS |
+| ABS-REQ-005 | Implemented | TC_ABS_003 | VERIFIED / PASS |
+| ABS-REQ-006 | Implemented | TC_ABS_005 | VERIFIED / PASS |
+| ABS-REQ-007 | Implemented | TC_CAN_005 | VERIFIED / PASS |
+| ABS-REQ-008 | Implemented | TC_ABS_006 | VERIFIED / PASS |
 
 ## 6. Traceability
 
-Current requirements-to-test traceability:
+| Requirement | Test Case | Verification Objective | Result |
+|---|---|---|---|
+| ABS-REQ-002 | TC_ABS_001 | Verify ABS activation during emergency braking | PASS |
+| ABS-REQ-003 | TC_ABS_004 | Verify HEALTHY state with valid wheel-speed inputs and no monitored fault | PASS |
+| ABS-REQ-004 | TC_ABS_002 | Verify FL sensor dropout detection within 20 ms | PASS |
+| ABS-REQ-005 | TC_ABS_003 | Verify FR sensor dropout detection within 20 ms | PASS |
+| ABS-REQ-007 | TC_CAN_005 | Verify periodic ABS CAN transmission requests | PASS |
 
-| Requirement | Test Case | Verification Objective |
-|---|---|---|
-| ABS-REQ-002 | TC_ABS_001 | Verify ABS activation during emergency braking |
-| ABS-REQ-004 | TC_ABS_002 | Verify FL sensor dropout detection within 20 ms |
-| ABS-REQ-005 | TC_ABS_003 | Verify FR sensor dropout detection within 20 ms |
-
-The remaining ABS requirements shall receive dedicated verification coverage
-as the automated validation suite is expanded.
+The 20 ms response-time limit is a VirtualVehicle project-defined design
+requirement for Baseline v1.2.
 
 ---
 
-## 7. Timing Requirements
+## Baseline v1.2 Verification Record
 
-Timing requirements are evaluated using VirtualVehicle simulation time rather
-than wall-clock execution time.
+| Requirement | Verification Evidence | Status |
+|---|---|---|
+| ABS-REQ-001 | TC_ABS_007 | VERIFIED / PASS |
+| ABS-REQ-002 | TC_ABS_001 | VERIFIED / PASS |
+| ABS-REQ-003 | TC_ABS_004 | VERIFIED / PASS |
+| ABS-REQ-004 | TC_ABS_002 | VERIFIED / PASS |
+| ABS-REQ-005 | TC_ABS_003 | VERIFIED / PASS |
+| ABS-REQ-006 | TC_ABS_005 | VERIFIED / PASS |
+| ABS-REQ-007 | TC_CAN_005 | VERIFIED / PASS |
+| ABS-REQ-008 | TC_ABS_006 | VERIFIED / PASS |
 
-For requirements ABS-REQ-004 and ABS-REQ-005:
-
-Maximum allowed response time = 20 ms
-
-The response time shall be measured from fault injection until the ABS ECU
-reports DEGRADED health status.
+**Latest automated suite result:** 84 PASS / 0 FAIL.

@@ -17,6 +17,9 @@ public:
     // ==================================================
 
     TestCase runSimulationTimeProgressionTest();
+    TestCase runSimulationResetTest();
+    TestCase runEcuCommunicationTest();
+    TestCase runValidationIsolationTest();
 
     // ==================================================
     // Vehicle / Scenario Tests
@@ -26,6 +29,13 @@ public:
     TestCase runCruiseScenarioTest();
     TestCase runHardBrakingScenarioTest();
     TestCase runRecoveryScenarioTest();
+    TestCase runVehicleSpeedStateTest();
+    TestCase runFrontLeftWheelSpeedStateTest();
+    TestCase runFrontRightWheelSpeedStateTest();
+    TestCase runBrakeInputStateTest();
+    TestCase runSteeringAngleStateTest();
+    TestCase runVehicleDynamicStateUpdateTest();
+    TestCase runIndependentWheelSpeedsTest();
 
     // ==================================================
     // ABS Tests
@@ -34,6 +44,10 @@ public:
     TestCase runAbsEmergencyBrakingTest();
     TestCase runFrontLeftWheelSensorDropoutTest();
     TestCase runFrontRightWheelSensorDropoutTest();
+    TestCase runAbsHealthyStateTest();
+    TestCase runAbsInterventionStateObservabilityTest();
+    TestCase runAbsCanIdentifierTest();
+    TestCase runAbsWheelSlipProcessingTest();
 
     // ==================================================
     // Sensor Tests
@@ -42,6 +56,9 @@ public:
     TestCase runFrontLeftSensorDropoutTest();
     TestCase runFrontRightSensorDropoutTest();
     TestCase runSensorFaultRecoveryTest();
+    TestCase runFrontLeftWheelSpeedMeasurementTest();
+    TestCase runFrontRightWheelSpeedMeasurementTest();
+    TestCase runFrontLeftDropoutInjectionTest();
 
     // ==================================================
     // Powertrain Tests
@@ -49,6 +66,11 @@ public:
 
     TestCase runPowertrainCanIdentifierTest();
     TestCase runPowertrainCodecRoundtripTest();
+    TestCase runPowertrainStateTest();
+    TestCase runPowertrainVehicleSpeedTest();
+    TestCase runPowertrainEngineSpeedTest();
+    TestCase runPowertrainGearStateTest();
+    TestCase runPowertrainBrakeStateTest();
 
     // ==================================================
     // Steering Tests
@@ -56,6 +78,8 @@ public:
 
     TestCase runSteeringCanIdentifierTest();
     TestCase runSteeringCodecRoundtripTest();
+    TestCase runSteeringStateTest();
+    TestCase runSteeringAngleTest();
 
     // ==================================================
     // CAN Tests
@@ -72,11 +96,57 @@ public:
     TestCase runCanBusUtilizationTest();
     TestCase runCanTraceTimingEvidenceTest();
 
+    TestCase runCanTransmissionDurationTest();
+    TestCase runCanWaitingTimeTest();
+    TestCase runCanFrameCountTest();
+    TestCase runCanAverageWaitingTimeTest();
+    TestCase runCanMaximumWaitingTimeTest();
+    TestCase runCanTotalTransmissionTimeTest();
+    TestCase runCanPerMessageStatisticsTest();
+    TestCase runCanPendingFrameBehaviorTest();
+    TestCase runCanWaitingTimeTraceEvidenceTest();
+    TestCase runCanExclusiveBusAccessTest();
+    TestCase runCanTraceIdentifierTest();
+    TestCase runCanTracePayloadTest();
+    TestCase runCanMultipleEcuRequestsTest();
+
+    // ==================================================
+    // Diagnostics Tests
+    // ==================================================
+
+    TestCase runFrontLeftDiagnosticFaultInjectionTest();
+    TestCase runFrontRightDiagnosticFaultInjectionTest();
+    TestCase runFrontLeftDiagnosticFaultClearTest();
+    TestCase runFrontRightDiagnosticFaultClearTest();
+    TestCase runDiagnosticHealthObservabilityTest();
+    TestCase runRuntimeFaultInjectionTest();
+    TestCase runRuntimeFaultRecoveryTest();
+
     // ==================================================
     // Message Tests
     // ==================================================
 
     TestCase runAbsCodecRoundtripTest();
+    TestCase runAbsMessageIdentifierTest();
+    TestCase runAbsMessageStateInformationTest();
+    TestCase runPowertrainMessageIdentifierTest();
+    TestCase runPowertrainMessageVehicleSpeedTest();
+    TestCase runPowertrainMessageEngineRpmTest();
+    TestCase runPowertrainMessageGearStateTest();
+    TestCase runPowertrainMessageBrakeStateTest();
+    TestCase runSteeringMessageIdentifierTest();
+    TestCase runSteeringMessageAngleTest();
+
+    // ==================================================
+    // Validation Framework Tests
+    // ==================================================
+
+    TestCase runIndividualTestExecutionVerification();
+    TestCase runValidationTestIsolationVerification();
+    TestCase runTestStatusVerification();
+    TestCase runExecutionTimeVerification();
+    TestCase runResponseTimeEvidenceVerification();
+    TestCase runTimingPassCriteriaVerification();
 
     // ==================================================
     // Dispatcher / Suite

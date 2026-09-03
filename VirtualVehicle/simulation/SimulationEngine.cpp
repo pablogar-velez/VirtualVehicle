@@ -734,6 +734,18 @@ void SimulationEngine::reset()
     frontRightWheelSensor =
         WheelSpeedSensor{};
 
+    powertrainEcu =
+        PowertrainEcu{};
+
+    absEcu =
+        AbsEcu{};
+
+    steeringEcu =
+        SteeringEcu{};
+
+    dashboardEcu =
+        DashboardEcu{};
+
     canBus =
         VirtualCanBus(
             canBitrate,

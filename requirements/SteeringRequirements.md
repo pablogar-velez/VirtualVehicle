@@ -1,18 +1,14 @@
 # VirtualVehicle Steering ECU Requirements
 
 **Document ID:** VV-STR-REQ  
-**Baseline:** 1.0  
+**Baseline:** 1.2  
 **Status:** Baseline  
 
 ---
 
 ## 1. Purpose
 
-This document defines the functional requirements for the VirtualVehicle
-Steering ECU.
-
-The Steering ECU obtains steering information from the simulated vehicle and
-periodically communicates steering state through the Virtual CAN Bus.
+The Steering ECU obtains steering information from the simulated vehicle and periodically communicates steering state through the Virtual CAN Bus.
 
 ---
 
@@ -34,14 +30,16 @@ The Steering state shall include steering-angle information.
 
 ---
 
+
 ## 3. CAN Communication Requirements
 
 ### STR-REQ-003 — Periodic Transmission
 
-The Steering ECU shall periodically transmit Steering State through the
-Virtual CAN Bus according to its configured transmission period.
+The Steering ECU shall periodically transmit Steering State through the Virtual
+CAN Bus according to its configured transmission period.
 
 **Verification Method:** Test
+**Verification Test:** TC_CAN_007
 
 ---
 
@@ -50,28 +48,35 @@ Virtual CAN Bus according to its configured transmission period.
 The Steering ECU shall transmit Steering State using CAN identifier 0x120.
 
 **Verification Method:** Test
+**Verification Test:** TC_STR_001
 
 ---
 
 ## 4. Verification Status
 
-| Requirement | Implementation | Verification |
-|---|---|---|
-| STR-REQ-001 | Implemented | Unverified |
-| STR-REQ-002 | Implemented | Unverified |
-| STR-REQ-003 | Implemented | Unverified |
-| STR-REQ-004 | Implemented | Unverified |
-
----
+| Requirement | Implementation | Verification | Status |
+|---|---|---|---|
+| STR-REQ-001 | Implemented | TC_STR_003 | VERIFIED / PASS |
+| STR-REQ-002 | Implemented | TC_STR_004 | VERIFIED / PASS |
+| STR-REQ-003 | Implemented | TC_CAN_007 | VERIFIED / PASS |
+| STR-REQ-004 | Implemented | TC_STR_001 | VERIFIED / PASS |
 
 ## 5. Traceability
 
-Dedicated Steering ECU verification test cases will be added to the automated
-validation suite.
+| Requirement | Test Case | Verification Objective | Result |
+|---|---|---|---|
+| STR-REQ-003 | TC_CAN_007 | Verify configured Steering transmission period | PASS |
+| STR-REQ-004 | TC_STR_001 | Verify Steering CAN identifier is 0x120 | PASS |
 
-Potential verification areas include:
+---
 
-- Steering-state generation
-- Steering-angle transmission
-- CAN identifier verification
-- Periodic transmission verification
+## Baseline v1.2 Verification Record
+
+| Requirement | Verification Evidence | Status |
+|---|---|---|
+| STR-REQ-001 | TC_STR_003 | VERIFIED / PASS |
+| STR-REQ-002 | TC_STR_004 | VERIFIED / PASS |
+| STR-REQ-003 | TC_CAN_007 | VERIFIED / PASS |
+| STR-REQ-004 | TC_STR_001 | VERIFIED / PASS |
+
+**Latest automated suite result:** 84 PASS / 0 FAIL.
