@@ -146,6 +146,51 @@ public:
     TestCase runDtcDeterminismTest();
 
     // ==================================================
+    // UDS Tests
+    // ==================================================
+
+    TestCase runUdsRequestRepresentationTest();
+    TestCase runUdsResponseRepresentationTest();
+    TestCase runUdsServerProcessingTest();
+    TestCase runUdsPositiveResponseSidTest();
+    TestCase runUdsNegativeResponseFormatTest();
+    TestCase runUdsUnsupportedServiceTest();
+
+    TestCase runUdsDiagnosticSessionControlSupportTest();
+    TestCase runUdsDefaultSessionTest();
+    TestCase runUdsExtendedSessionTest();
+    TestCase runUdsSessionStateUpdateTest();
+    TestCase runUdsUnsupportedSessionTest();
+
+    TestCase runUdsReadDtcInformationSupportTest();
+    TestCase runUdsReadActiveDtcsTest();
+    TestCase runUdsFrontLeftDtcReportingTest();
+    TestCase runUdsFrontRightDtcReportingTest();
+    TestCase runUdsNoActiveDtcResponseTest();
+
+    TestCase runUdsClearDiagnosticInformationSupportTest();
+    TestCase runUdsClearAllDtcsTest();
+    TestCase runUdsClearDiagnosticResponseTest();
+
+    TestCase runUdsReadDataByIdentifierSupportTest();
+    TestCase runUdsVehicleSpeedDidTest();
+    TestCase runUdsVehicleSpeedReadoutTest();
+    TestCase runUdsEngineSpeedDidTest();
+    TestCase runUdsEngineSpeedReadoutTest();
+    TestCase runUdsSteeringAngleDidTest();
+    TestCase runUdsSteeringAngleReadoutTest();
+    TestCase runUdsUnsupportedDidTest();
+
+    TestCase runUdsDtcManagerAccessTest();
+    TestCase runUdsDtcClearIntegrationTest();
+
+    TestCase runUdsRuntimeDiagnosticProcessingTest();
+    TestCase runUdsCurrentVehicleDataTest();
+
+    TestCase runUdsResetStateTest();
+    TestCase runUdsDeterminismTest();
+
+    // ==================================================
     // Message Tests
     // ==================================================
 

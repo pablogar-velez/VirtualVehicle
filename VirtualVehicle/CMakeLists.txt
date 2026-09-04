@@ -78,6 +78,7 @@ add_executable(
     # ========================================================
 
     "sensor/SensorFault.h"
+
     "sensor/WheelSpeedSensor.h"
     "sensor/WheelSpeedSensor.cpp"
 
@@ -88,8 +89,20 @@ add_executable(
     "diagnostics/DtcStatus.h"
     "diagnostics/Dtc.h"
     "diagnostics/DtcDefinitions.h"
+
     "diagnostics/DtcManager.h"
     "diagnostics/DtcManager.cpp"
+
+    # ========================================================
+    # UDS Diagnostics
+    # ========================================================
+
+    "diagnostics/UdsService.h"
+    "diagnostics/UdsRequest.h"
+    "diagnostics/UdsResponse.h"
+
+    "diagnostics/UdsServer.h"
+    "diagnostics/UdsServer.cpp"
 
     # ========================================================
     # Simulation
@@ -163,6 +176,12 @@ add_executable(
     "test/DtcTests.cpp"
     "test/MessageTests.cpp"
     "test/ValidationTests.cpp"
+
+    # ========================================================
+    # UDS Automated Tests
+    # ========================================================
+
+    "test/UdsTests.cpp"
 
     # ========================================================
     # Test Runner GUI

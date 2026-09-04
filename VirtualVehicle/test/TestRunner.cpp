@@ -262,6 +262,109 @@ TestCase TestRunner::runTest(
         return runDtcDeterminismTest();
 
     // ==================================================
+    // UDS
+    // ==================================================
+
+    if (testId == "TC_UDS_001")
+        return runUdsRequestRepresentationTest();
+
+    if (testId == "TC_UDS_002")
+        return runUdsResponseRepresentationTest();
+
+    if (testId == "TC_UDS_003")
+        return runUdsServerProcessingTest();
+
+    if (testId == "TC_UDS_004")
+        return runUdsPositiveResponseSidTest();
+
+    if (testId == "TC_UDS_005")
+        return runUdsNegativeResponseFormatTest();
+
+    if (testId == "TC_UDS_006")
+        return runUdsUnsupportedServiceTest();
+
+    if (testId == "TC_UDS_007")
+        return runUdsDiagnosticSessionControlSupportTest();
+
+    if (testId == "TC_UDS_008")
+        return runUdsDefaultSessionTest();
+
+    if (testId == "TC_UDS_009")
+        return runUdsExtendedSessionTest();
+
+    if (testId == "TC_UDS_010")
+        return runUdsSessionStateUpdateTest();
+
+    if (testId == "TC_UDS_011")
+        return runUdsUnsupportedSessionTest();
+
+    if (testId == "TC_UDS_012")
+        return runUdsReadDtcInformationSupportTest();
+
+    if (testId == "TC_UDS_013")
+        return runUdsReadActiveDtcsTest();
+
+    if (testId == "TC_UDS_014")
+        return runUdsFrontLeftDtcReportingTest();
+
+    if (testId == "TC_UDS_015")
+        return runUdsFrontRightDtcReportingTest();
+
+    if (testId == "TC_UDS_016")
+        return runUdsNoActiveDtcResponseTest();
+
+    if (testId == "TC_UDS_017")
+        return runUdsClearDiagnosticInformationSupportTest();
+
+    if (testId == "TC_UDS_018")
+        return runUdsClearAllDtcsTest();
+
+    if (testId == "TC_UDS_019")
+        return runUdsClearDiagnosticResponseTest();
+
+    if (testId == "TC_UDS_020")
+        return runUdsReadDataByIdentifierSupportTest();
+
+    if (testId == "TC_UDS_021")
+        return runUdsVehicleSpeedDidTest();
+
+    if (testId == "TC_UDS_022")
+        return runUdsVehicleSpeedReadoutTest();
+
+    if (testId == "TC_UDS_023")
+        return runUdsEngineSpeedDidTest();
+
+    if (testId == "TC_UDS_024")
+        return runUdsEngineSpeedReadoutTest();
+
+    if (testId == "TC_UDS_025")
+        return runUdsSteeringAngleDidTest();
+
+    if (testId == "TC_UDS_026")
+        return runUdsSteeringAngleReadoutTest();
+
+    if (testId == "TC_UDS_027")
+        return runUdsUnsupportedDidTest();
+
+    if (testId == "TC_UDS_028")
+        return runUdsDtcManagerAccessTest();
+
+    if (testId == "TC_UDS_029")
+        return runUdsDtcClearIntegrationTest();
+
+    if (testId == "TC_UDS_030")
+        return runUdsRuntimeDiagnosticProcessingTest();
+
+    if (testId == "TC_UDS_031")
+        return runUdsCurrentVehicleDataTest();
+
+    if (testId == "TC_UDS_032")
+        return runUdsResetStateTest();
+
+    if (testId == "TC_UDS_033")
+        return runUdsDeterminismTest();
+
+    // ==================================================
     // CAN
     // ==================================================
 
@@ -428,7 +531,7 @@ TestRunner::runAll()
     std::vector<TestCase> results;
 
     results.reserve(
-        102
+        135
     );
 
     // ==================================================
@@ -534,6 +637,51 @@ TestRunner::runAll()
     results.push_back(runRuntimeDtcRecoveryTest());
     results.push_back(runDtcResetTest());
     results.push_back(runDtcDeterminismTest());
+
+    // ==================================================
+    // UDS
+    // ==================================================
+
+    results.push_back(runUdsRequestRepresentationTest());
+    results.push_back(runUdsResponseRepresentationTest());
+    results.push_back(runUdsServerProcessingTest());
+    results.push_back(runUdsPositiveResponseSidTest());
+    results.push_back(runUdsNegativeResponseFormatTest());
+    results.push_back(runUdsUnsupportedServiceTest());
+
+    results.push_back(runUdsDiagnosticSessionControlSupportTest());
+    results.push_back(runUdsDefaultSessionTest());
+    results.push_back(runUdsExtendedSessionTest());
+    results.push_back(runUdsSessionStateUpdateTest());
+    results.push_back(runUdsUnsupportedSessionTest());
+
+    results.push_back(runUdsReadDtcInformationSupportTest());
+    results.push_back(runUdsReadActiveDtcsTest());
+    results.push_back(runUdsFrontLeftDtcReportingTest());
+    results.push_back(runUdsFrontRightDtcReportingTest());
+    results.push_back(runUdsNoActiveDtcResponseTest());
+
+    results.push_back(runUdsClearDiagnosticInformationSupportTest());
+    results.push_back(runUdsClearAllDtcsTest());
+    results.push_back(runUdsClearDiagnosticResponseTest());
+
+    results.push_back(runUdsReadDataByIdentifierSupportTest());
+    results.push_back(runUdsVehicleSpeedDidTest());
+    results.push_back(runUdsVehicleSpeedReadoutTest());
+    results.push_back(runUdsEngineSpeedDidTest());
+    results.push_back(runUdsEngineSpeedReadoutTest());
+    results.push_back(runUdsSteeringAngleDidTest());
+    results.push_back(runUdsSteeringAngleReadoutTest());
+    results.push_back(runUdsUnsupportedDidTest());
+
+    results.push_back(runUdsDtcManagerAccessTest());
+    results.push_back(runUdsDtcClearIntegrationTest());
+
+    results.push_back(runUdsRuntimeDiagnosticProcessingTest());
+    results.push_back(runUdsCurrentVehicleDataTest());
+
+    results.push_back(runUdsResetStateTest());
+    results.push_back(runUdsDeterminismTest());
 
     // ==================================================
     // CAN

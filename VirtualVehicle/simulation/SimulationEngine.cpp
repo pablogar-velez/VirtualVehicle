@@ -19,7 +19,8 @@ SimulationEngine::SimulationEngine(
     canBus(
         canBitrate,
         logLevel
-    )
+    ),
+    udsServer(dtcManager)
 {
     vehicleModel.setSteeringAngle(
         3.2f
@@ -34,6 +35,8 @@ SimulationEngine::SimulationEngine(
     steeringEcu.setSteeringState(
         steeringState
     );
+
+    updateUdsVehicleData();
 }
 
 // ==================================================
@@ -89,6 +92,8 @@ void SimulationEngine::update(
         processSteeringEcu(
             0.0
         );
+
+        updateUdsVehicleData();
 
         nextAbsTxMs =
             CanMessageDefinitions::
@@ -190,6 +195,12 @@ void SimulationEngine::update(
                 CanMessageDefinitions::
                 STEERING_STATE.periodMs;
         }
+
+        // --------------------------------------------------
+        // Update UDS runtime data
+        // --------------------------------------------------
+
+        updateUdsVehicleData();
 
         // --------------------------------------------------
         // CAN processing
@@ -684,6 +695,30 @@ void SimulationEngine::processSteeringEcu(
 }
 
 // ==================================================
+// UDS runtime vehicle data
+// ==================================================
+
+void SimulationEngine::updateUdsVehicleData()
+{
+    UdsVehicleData data;
+
+    data.vehicleSpeedKmh =
+        vehicleModel
+        .getVehicleSpeedKmh();
+
+    data.engineRpm =
+        vehicleState.engineRpm;
+
+    data.steeringAngleDeg =
+        vehicleModel
+        .getSteeringAngleDeg();
+
+    udsServer.setVehicleData(
+        data
+    );
+}
+
+// ==================================================
 // CAN bus
 // ==================================================
 
@@ -804,6 +839,12 @@ void SimulationEngine::reset()
     steeringEcu.setSteeringState(
         steeringState
     );
+
+    // Reset UDS session and cached diagnostic data.
+    // The UdsServer still references this same dtcManager object.
+    udsServer.reset();
+
+    updateUdsVehicleData();
 }
 
 // ==================================================
@@ -955,6 +996,18 @@ const DtcManager&
 SimulationEngine::getDtcManager() const
 {
     return dtcManager;
+}
+
+UdsServer&
+SimulationEngine::getUdsServer()
+{
+    return udsServer;
+}
+
+const UdsServer&
+SimulationEngine::getUdsServer() const
+{
+    return udsServer;
 }
 
 const std::vector<VehicleEvent>&

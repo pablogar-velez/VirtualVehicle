@@ -1,9 +1,9 @@
 # VirtualVehicle Requirements Traceability Matrix
 
 **Document ID:** VV-RTM-001  
-**Baseline:** 1.3  
+**Baseline:** 1.4  
 **Status:** Current Verification Record  
-**Latest Automated Suite Result:** 102 Passed / 0 Failed
+**Latest Automated Suite Result:** 135 Passed / 0 Failed
 
 ---
 
@@ -87,6 +87,39 @@ as supporting evidence and does not by itself change formal verification status.
 | TC_DTC_016 | DTC-REQ-016 | Runtime DTC Recovery | PASS |
 | TC_DTC_017 | DTC-REQ-017 | Diagnostic Reset | PASS |
 | TC_DTC_018 | DTC-REQ-018 | Deterministic Diagnostic Behavior | PASS |
+| TC_UDS_001 | UDS-REQ-001 | UDS Request Representation | PASS |
+| TC_UDS_002 | UDS-REQ-002 | UDS Response Representation | PASS |
+| TC_UDS_003 | UDS-REQ-003 | UDS Server Request Processing | PASS |
+| TC_UDS_004 | UDS-REQ-004 | Positive Response SID | PASS |
+| TC_UDS_005 | UDS-REQ-005 | Negative Response Format | PASS |
+| TC_UDS_006 | UDS-REQ-006 | Unsupported Service | PASS |
+| TC_UDS_007 | UDS-REQ-007 | Diagnostic Session Control Support | PASS |
+| TC_UDS_008 | UDS-REQ-008 | Default Diagnostic Session | PASS |
+| TC_UDS_009 | UDS-REQ-009 | Extended Diagnostic Session | PASS |
+| TC_UDS_010 | UDS-REQ-010 | Diagnostic Session State Update | PASS |
+| TC_UDS_011 | UDS-REQ-011 | Unsupported Diagnostic Session | PASS |
+| TC_UDS_012 | UDS-REQ-012 | Read DTC Information Support | PASS |
+| TC_UDS_013 | UDS-REQ-013 | Read Active DTCs | PASS |
+| TC_UDS_014 | UDS-REQ-014 | Front-Left DTC Reporting | PASS |
+| TC_UDS_015 | UDS-REQ-015 | Front-Right DTC Reporting | PASS |
+| TC_UDS_016 | UDS-REQ-016 | No Active DTC Response | PASS |
+| TC_UDS_017 | UDS-REQ-017 | Clear Diagnostic Information Support | PASS |
+| TC_UDS_018 | UDS-REQ-018 | Clear All DTCs Through UDS | PASS |
+| TC_UDS_019 | UDS-REQ-019 | Clear Diagnostic Positive Response | PASS |
+| TC_UDS_020 | UDS-REQ-020 | Read Data By Identifier Support | PASS |
+| TC_UDS_021 | UDS-REQ-021 | Vehicle Speed DID Definition | PASS |
+| TC_UDS_022 | UDS-REQ-022 | Vehicle Speed DID Readout | PASS |
+| TC_UDS_023 | UDS-REQ-023 | Engine RPM DID Definition | PASS |
+| TC_UDS_024 | UDS-REQ-024 | Engine RPM DID Readout | PASS |
+| TC_UDS_025 | UDS-REQ-025 | Steering Angle DID Definition | PASS |
+| TC_UDS_026 | UDS-REQ-026 | Steering Angle DID Readout | PASS |
+| TC_UDS_027 | UDS-REQ-027 | Unsupported DID | PASS |
+| TC_UDS_028 | UDS-REQ-028 | DTC Manager Access | PASS |
+| TC_UDS_029 | UDS-REQ-029 | DTC Clear Integration | PASS |
+| TC_UDS_030 | UDS-REQ-030 | Runtime Diagnostic Processing | PASS |
+| TC_UDS_031 | UDS-REQ-031 | Current Vehicle Data | PASS |
+| TC_UDS_032 | UDS-REQ-032 | UDS Reset State | PASS |
+| TC_UDS_033 | UDS-REQ-033 | Deterministic Diagnostic Response | PASS |
 | TC_CAN_001 | CAN-REQ-003 | CAN Arbitration Priority | PASS |
 | TC_CAN_002 | CAN-REQ-001 | CAN Bitrate | PASS |
 | TC_CAN_003 | CAN-REQ-008 | CAN Trace Recording | PASS |
@@ -155,7 +188,7 @@ as supporting evidence and does not by itself change formal verification status.
 | ABS-REQ-003 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_004 | — | VERIFIED / PASS |
 | ABS-REQ-004 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_002 | — | VERIFIED / PASS |
 | ABS-REQ-005 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_003 | — | VERIFIED / PASS |
-| ABS-REQ-006 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_005 | TC_ABS_001 | VERIFIED / PASS |
+| ABS-REQ-006 | AbsEu / WheelSpeedSensor / SimulationEngine | TC_ABS_005 | TC_ABS_001 | VERIFIED / PASS |
 | ABS-REQ-007 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_CAN_005 | — | VERIFIED / PASS |
 | ABS-REQ-008 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_006 | TC_MSG_001 | VERIFIED / PASS |
 | SNS-REQ-001 | WheelSpeedSensor / SimulationEngine | TC_SNS_004 | — | VERIFIED / PASS |
@@ -237,18 +270,56 @@ as supporting evidence and does not by itself change formal verification status.
 | DTC-REQ-017 | SimulationEngine / DtcManager | TC_DTC_017 | TC_SYS_002 | VERIFIED / PASS |
 | DTC-REQ-018 | SimulationEngine / DtcManager | TC_DTC_018 | TC_SYS_001 | VERIFIED / PASS |
 
-### 3.3 Validation Requirements
+### 3.3 UDS Requirements
+
+| Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
+|---|---|---|---|---|
+| UDS-REQ-001 | UdsRequest | TC_UDS_001 | — | VERIFIED / PASS |
+| UDS-REQ-002 | UdsResponse | TC_UDS_002 | — | VERIFIED / PASS |
+| UDS-REQ-003 | UdsServer | TC_UDS_003 | — | VERIFIED / PASS |
+| UDS-REQ-004 | UdsServer / UdsService | TC_UDS_004 | — | VERIFIED / PASS |
+| UDS-REQ-005 | UdsServer / UdsResponse / UdsService | TC_UDS_005 | — | VERIFIED / PASS |
+| UDS-REQ-006 | UdsServer / UdsService | TC_UDS_006 | — | VERIFIED / PASS |
+| UDS-REQ-007 | UdsServer / UdsService | TC_UDS_007 | — | VERIFIED / PASS |
+| UDS-REQ-008 | UdsServer / UdsService | TC_UDS_008 | — | VERIFIED / PASS |
+| UDS-REQ-009 | UdsServer / UdsService | TC_UDS_009 | — | VERIFIED / PASS |
+| UDS-REQ-010 | UdsServer | TC_UDS_010 | TC_UDS_009 | VERIFIED / PASS |
+| UDS-REQ-011 | UdsServer / UdsService | TC_UDS_011 | — | VERIFIED / PASS |
+| UDS-REQ-012 | UdsServer / UdsService / DtcManager | TC_UDS_012 | — | VERIFIED / PASS |
+| UDS-REQ-013 | UdsServer / DtcManager | TC_UDS_013 | — | VERIFIED / PASS |
+| UDS-REQ-014 | UdsServer / DtcManager / DtcDefinitions | TC_UDS_014 | TC_DTC_003 | VERIFIED / PASS |
+| UDS-REQ-015 | UdsServer / DtcManager / DtcDefinitions | TC_UDS_015 | TC_DTC_004 | VERIFIED / PASS |
+| UDS-REQ-016 | UdsServer / DtcManager | TC_UDS_016 | — | VERIFIED / PASS |
+| UDS-REQ-017 | UdsServer / UdsService | TC_UDS_017 | — | VERIFIED / PASS |
+| UDS-REQ-018 | UdsServer / DtcManager | TC_UDS_018 | TC_DTC_008 | VERIFIED / PASS |
+| UDS-REQ-019 | UdsServer | TC_UDS_019 | TC_UDS_017 | VERIFIED / PASS |
+| UDS-REQ-020 | UdsServer / UdsService | TC_UDS_020 | — | VERIFIED / PASS |
+| UDS-REQ-021 | UdsService | TC_UDS_021 | — | VERIFIED / PASS |
+| UDS-REQ-022 | UdsServer / SimulationEngine / VehicleModel | TC_UDS_022 | TC_UDS_031 | VERIFIED / PASS |
+| UDS-REQ-023 | UdsService | TC_UDS_023 | — | VERIFIED / PASS |
+| UDS-REQ-024 | UdsServer / SimulationEngine / VehicleState | TC_UDS_024 | TC_UDS_031 | VERIFIED / PASS |
+| UDS-REQ-025 | UdsService | TC_UDS_025 | — | VERIFIED / PASS |
+| UDS-REQ-026 | UdsServer / SimulationEngine / VehicleModel | TC_UDS_026 | TC_UDS_031 | VERIFIED / PASS |
+| UDS-REQ-027 | UdsServer / UdsService | TC_UDS_027 | — | VERIFIED / PASS |
+| UDS-REQ-028 | UdsServer / DtcManager | TC_UDS_028 | TC_UDS_013 | VERIFIED / PASS |
+| UDS-REQ-029 | UdsServer / DtcManager | TC_UDS_029 | TC_UDS_018 | VERIFIED / PASS |
+| UDS-REQ-030 | SimulationEngine / UdsServer | TC_UDS_030 | — | VERIFIED / PASS |
+| UDS-REQ-031 | SimulationEngine / UdsServer / VehicleModel | TC_UDS_031 | TC_UDS_022, TC_UDS_024, TC_UDS_026 | VERIFIED / PASS |
+| UDS-REQ-032 | SimulationEngine / UdsServer | TC_UDS_032 | TC_SYS_002 | VERIFIED / PASS |
+| UDS-REQ-033 | UdsServer / DtcManager / SimulationEngine | TC_UDS_033 | — | VERIFIED / PASS |
+
+### 3.4 Validation Requirements
 
 | Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
 |---|---|---|---|---|
 | VAL-REQ-001 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_001 | Operational individual-test execution | VERIFIED / PASS |
-| VAL-REQ-002 | TestRunner / TestCase / TestResult / TestRunnerWidget | Suite execution record: 102 PASS / 0 FAIL | 102-test suite execution | VERIFIED / PASS |
+| VAL-REQ-002 | TestRunner / TestCase / TestResult / TestRunnerWidget | Suite execution record: 135 PASS / 0 FAIL | 135-test suite execution | VERIFIED / PASS |
 | VAL-REQ-003 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_002 | Current isolated test architecture | VERIFIED / PASS |
-| VAL-REQ-004 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-003 | 102 unique IDs observed | VERIFIED / PASS |
+| VAL-REQ-004 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-003 | 135 unique IDs observed | VERIFIED / PASS |
 | VAL-REQ-005 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-004 | requirementId populated | VERIFIED / PASS |
 | VAL-REQ-006 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-005 | Expected evidence populated | VERIFIED / PASS |
 | VAL-REQ-007 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-006 | Actual evidence populated | VERIFIED / PASS |
-| VAL-REQ-008 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_003 | 102 PASS results observed | VERIFIED / PASS |
+| VAL-REQ-008 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_003 | 135 PASS results observed | VERIFIED / PASS |
 | VAL-REQ-009 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_004 | Execution-time evidence displayed | VERIFIED / PASS |
 | VAL-REQ-010 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_005 | TC_ABS_002, TC_ABS_003 | VERIFIED / PASS |
 | VAL-REQ-011 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-007 | Timing limit displayed | VERIFIED / PASS |
@@ -261,15 +332,16 @@ as supporting evidence and does not by itself change formal verification status.
 
 ## 4. Verification Summary
 
-**Automated tests:** 102  
-**Passed:** 102  
+**Automated tests:** 135  
+**Passed:** 135  
 **Failed:** 0  
-**Baseline requirements:** 112  
-**Verified requirements:** 112  
+**Baseline requirements:** 145  
+**Verified requirements:** 145  
 **Unverified baseline requirements:** 0
 
 Automated tests provide direct requirements-based evidence for the functional,
-CAN, diagnostics, DTC, message, sensor, ECU, and validation-framework behavior.
+CAN, diagnostics, DTC, UDS, message, sensor, ECU, and validation-framework
+behavior.
 
 Requirements whose defined verification method is Inspection are closed through
 the inspection records in `InspectionVerification.md`.
@@ -278,43 +350,52 @@ SYS-REQ-002 uses combined scenario evidence across TC_VEH_001 through
 TC_VEH_004.
 
 VAL-REQ-002 is closed by successful execution of the complete registered
-102-test suite.
+135-test suite.
 
 DTC-REQ-001 through DTC-REQ-018 are closed through TC_DTC_001 through
 TC_DTC_018.
+
+UDS-REQ-001 through UDS-REQ-033 are closed through TC_UDS_001 through
+TC_UDS_033.
 
 ---
 
 ## 5. Baseline Verification Closure
 
-Baseline v1.3 records full verification closure for the requirements currently
+Baseline v1.4 records full verification closure for the requirements currently
 defined by the VirtualVehicle project.
 
-Baseline v1.3 extends Baseline v1.2 with 18 Diagnostic Trouble Code
-requirements and 18 corresponding automated verification tests.
+Baseline v1.4 extends Baseline v1.3 with 33 Unified Diagnostic Services
+requirements and 33 corresponding automated verification tests.
 
 ### Closure Record
 
-- Previous baseline requirements: 94
-- New DTC requirements: 18
-- Total baseline requirements: 112
-- Previous automated tests: 84
-- New DTC automated tests: 18
-- Total automated tests: 102
-- Passed: 102
+- Previous baseline requirements: 112
+- New UDS requirements: 33
+- Total baseline requirements: 145
+- Previous automated tests: 102
+- New UDS automated tests: 33
+- Total automated tests: 135
+- Passed: 135
 - Failed: 0
-- Verified requirements: 112
+- Verified requirements: 145
 - Unverified requirements: 0
 
 The following features remain explicitly outside this baseline and are not
 claimed as verified requirements:
 
-- UDS diagnostic services
+- Full ISO 14229 compliance
 - ISO-TP transport
-- Diagnostic sessions and security access
+- Security Access
+- ECU Reset service
+- Communication Control
+- Routine Control
+- Request Download
+- Transfer Data
 - ECU reprogramming / flashing
 - AUTOSAR runtime behavior
 - Automotive Ethernet
+- Physical diagnostic hardware
 - Physical CAN transceiver or hardware-bus validation
 
 Future requirements for those capabilities shall be introduced in a new

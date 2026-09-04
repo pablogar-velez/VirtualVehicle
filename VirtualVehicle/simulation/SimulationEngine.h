@@ -17,6 +17,7 @@
 #include "../sensor/WheelSpeedSensor.h"
 
 #include "../diagnostics/DtcManager.h"
+#include "../diagnostics/UdsServer.h"
 
 #include "VehicleModel.h"
 #include "ScenarioController.h"
@@ -30,19 +31,8 @@ public:
         LogLevel logLevel = LogLevel::Events
     );
 
-    // ==================================================
-    // Interactive simulation
-    // ==================================================
-
-    void update(
-        double deltaTimeMs
-    );
-
+    void update(double deltaTimeMs);
     void reset();
-
-    // ==================================================
-    // Fault injection
-    // ==================================================
 
     void setFrontLeftWheelSensorFault(
         SensorFault fault
@@ -53,28 +43,14 @@ public:
     );
 
     void clearFrontLeftWheelSensorFault();
-
     void clearFrontRightWheelSensorFault();
 
-    // ==================================================
-    // Demo
-    // ==================================================
-
     void runDemo();
-
     void printResults() const;
-
-    // ==================================================
-    // Scenario control
-    // ==================================================
 
     void startScenario(
         DrivingScenario scenario
     );
-
-    // ==================================================
-    // State access
-    // ==================================================
 
     double getCurrentTimeMs() const;
 
@@ -90,30 +66,11 @@ public:
     const AbsState&
         getAbsState() const;
 
-    // ==================================================
-    // Diagnostics access
-    // ==================================================
-
-    const DtcManager&
-        getDtcManager() const;
-
-    // ==================================================
-    // Event access
-    // ==================================================
-
     const std::vector<VehicleEvent>&
         getEvents() const;
 
-    // ==================================================
-    // CAN trace access
-    // ==================================================
-
     const std::vector<CanTraceEntry>&
         getCanTrace() const;
-
-    // ==================================================
-    // CAN statistics access
-    // ==================================================
 
     const CanStatistics&
         getCanStatistics() const;
@@ -121,72 +78,46 @@ public:
     std::uint32_t
         getCanBitrate() const;
 
-private:
-    // ==================================================
-    // Configuration
-    // ==================================================
+    const DtcManager&
+        getDtcManager() const;
 
+    UdsServer&
+        getUdsServer();
+
+    const UdsServer&
+        getUdsServer() const;
+
+private:
     static constexpr std::uint32_t canBitrate =
         500000;
 
     LogLevel logLevel;
 
-    // ==================================================
-    // CAN network
-    // ==================================================
-
     VirtualCanBus canBus;
-
-    // ==================================================
-    // ECUs
-    // ==================================================
 
     PowertrainEcu powertrainEcu;
     AbsEcu absEcu;
     SteeringEcu steeringEcu;
     DashboardEcu dashboardEcu;
 
-    // ==================================================
-    // Simulation
-    // ==================================================
-
     VehicleModel vehicleModel;
     ScenarioController scenarioController;
     EventLogger eventLogger;
 
-    // ==================================================
-    // Sensors
-    // ==================================================
-
     WheelSpeedSensor frontLeftWheelSensor;
     WheelSpeedSensor frontRightWheelSensor;
 
-    // ==================================================
-    // Diagnostics
-    // ==================================================
-
     DtcManager dtcManager;
-
-    // ==================================================
-    // ECU application states
-    // ==================================================
+    UdsServer udsServer;
 
     VehicleState vehicleState{};
     SteeringState steeringState{};
-
-    // ==================================================
-    // Timing
-    // ==================================================
 
     double currentTimeMs{ 0.0 };
 
     double nextAbsTxMs{ 0.0 };
     double nextPowertrainTxMs{ 0.0 };
     double nextSteeringTxMs{ 0.0 };
-
-    // ==================================================
-    // Event detection
-    // ==================================================
 
     bool previousAbsActive{ false };
     bool previousBrakeApplied{ false };
@@ -196,14 +127,8 @@ private:
         AbsHealthStatus::Healthy
     };
 
-    // ==================================================
-    // Internal processing
-    // ==================================================
-
     void updateBrakeEvents();
-
     void updateVehicleEvents();
-
     void updateSensors();
 
     void processAbsEcu(
@@ -229,4 +154,6 @@ private:
     void advancePhysicsTo(
         double newTimeMs
     );
+
+    void updateUdsVehicleData();
 };
