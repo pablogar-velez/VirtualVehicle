@@ -7,6 +7,8 @@
 #include "../can/CanMessageDefinitions.h"
 #include "../can/CanTracePrinter.h"
 
+#include "../diagnostics/DtcDefinitions.h"
+
 // ==================================================
 // Constructor
 // ==================================================
@@ -451,6 +453,40 @@ void SimulationEngine::processAbsEcu(
     const WheelSpeedReading frontRightReading =
         frontRightWheelSensor.readSpeed();
 
+    // ==================================================
+    // Diagnostic fault monitoring
+    // ==================================================
+
+    if (!frontLeftReading.valid)
+    {
+        dtcManager.reportFault(
+            DtcDefinitions::FrontLeftWheelSpeedSensor,
+            eventTimeMs
+        );
+    }
+    else
+    {
+        dtcManager.reportHealthy(
+            DtcDefinitions::FrontLeftWheelSpeedSensor,
+            eventTimeMs
+        );
+    }
+
+    if (!frontRightReading.valid)
+    {
+        dtcManager.reportFault(
+            DtcDefinitions::FrontRightWheelSpeedSensor,
+            eventTimeMs
+        );
+    }
+    else
+    {
+        dtcManager.reportHealthy(
+            DtcDefinitions::FrontRightWheelSpeedSensor,
+            eventTimeMs
+        );
+    }
+
     absEcu.updateSensors(
         frontLeftReading,
         frontRightReading
@@ -734,6 +770,9 @@ void SimulationEngine::reset()
     frontRightWheelSensor =
         WheelSpeedSensor{};
 
+    dtcManager =
+        DtcManager{};
+
     powertrainEcu =
         PowertrainEcu{};
 
@@ -910,6 +949,12 @@ const AbsState&
 SimulationEngine::getAbsState() const
 {
     return absEcu.getState();
+}
+
+const DtcManager&
+SimulationEngine::getDtcManager() const
+{
+    return dtcManager;
 }
 
 const std::vector<VehicleEvent>&

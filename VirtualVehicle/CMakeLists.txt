@@ -2,20 +2,12 @@
 # VirtualVehicle executable
 # ============================================================
 
-# ------------------------------------------------------------
-# Qt
-# ------------------------------------------------------------
-
 find_package(
     Qt6
     REQUIRED
     COMPONENTS
     Widgets
 )
-
-# ------------------------------------------------------------
-# Executable
-# ------------------------------------------------------------
 
 add_executable(
     VirtualVehicle
@@ -86,9 +78,18 @@ add_executable(
     # ========================================================
 
     "sensor/SensorFault.h"
-
     "sensor/WheelSpeedSensor.h"
     "sensor/WheelSpeedSensor.cpp"
+
+    # ========================================================
+    # Diagnostics
+    # ========================================================
+
+    "diagnostics/DtcStatus.h"
+    "diagnostics/Dtc.h"
+    "diagnostics/DtcDefinitions.h"
+    "diagnostics/DtcManager.h"
+    "diagnostics/DtcManager.cpp"
 
     # ========================================================
     # Simulation
@@ -139,21 +140,43 @@ add_executable(
 
     "gui/widgets/StatisticsWidget.h"
     "gui/widgets/StatisticsWidget.cpp"
- "test/TestResult.h" "test/TestCase.h" "test/TestRunner.h" "test/TestRunner.cpp" "gui/widgets/TestRunnerWidget.h" "gui/widgets/TestRunnerWidget.cpp")
 
-# ------------------------------------------------------------
-# C++ standard
-# ------------------------------------------------------------
+    # ========================================================
+    # Automated Tests
+    # ========================================================
+
+    "test/TestResult.h"
+    "test/TestCase.h"
+    "test/TestConfig.h"
+
+    "test/TestRunner.h"
+    "test/TestRunner.cpp"
+
+    "test/SystemTests.cpp"
+    "test/VehicleTests.cpp"
+    "test/AbsTests.cpp"
+    "test/SensorTests.cpp"
+    "test/PowertrainTests.cpp"
+    "test/SteeringTests.cpp"
+    "test/CanTests.cpp"
+    "test/DiagnosticsTests.cpp"
+    "test/DtcTests.cpp"
+    "test/MessageTests.cpp"
+    "test/ValidationTests.cpp"
+
+    # ========================================================
+    # Test Runner GUI
+    # ========================================================
+
+    "gui/widgets/TestRunnerWidget.h"
+    "gui/widgets/TestRunnerWidget.cpp"
+)
 
 target_compile_features(
     VirtualVehicle
     PRIVATE
     cxx_std_20
 )
-
-# ------------------------------------------------------------
-# Qt libraries
-# ------------------------------------------------------------
 
 target_link_libraries(
     VirtualVehicle

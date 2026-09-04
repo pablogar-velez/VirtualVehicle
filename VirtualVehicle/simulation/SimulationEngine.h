@@ -16,6 +16,8 @@
 
 #include "../sensor/WheelSpeedSensor.h"
 
+#include "../diagnostics/DtcManager.h"
+
 #include "VehicleModel.h"
 #include "ScenarioController.h"
 #include "EventLogger.h"
@@ -89,6 +91,13 @@ public:
         getAbsState() const;
 
     // ==================================================
+    // Diagnostics access
+    // ==================================================
+
+    const DtcManager&
+        getDtcManager() const;
+
+    // ==================================================
     // Event access
     // ==================================================
 
@@ -151,6 +160,12 @@ private:
 
     WheelSpeedSensor frontLeftWheelSensor;
     WheelSpeedSensor frontRightWheelSensor;
+
+    // ==================================================
+    // Diagnostics
+    // ==================================================
+
+    DtcManager dtcManager;
 
     // ==================================================
     // ECU application states

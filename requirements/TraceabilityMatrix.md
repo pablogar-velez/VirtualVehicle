@@ -1,9 +1,9 @@
 # VirtualVehicle Requirements Traceability Matrix
 
 **Document ID:** VV-RTM-001  
-**Baseline:** 1.2  
+**Baseline:** 1.3  
 **Status:** Current Verification Record  
-**Latest Automated Suite Result:** 84 Passed / 0 Failed
+**Latest Automated Suite Result:** 102 Passed / 0 Failed
 
 ---
 
@@ -69,6 +69,24 @@ as supporting evidence and does not by itself change formal verification status.
 | TC_DIA_005 | DIA-REQ-005 | ECU Health Observability | PASS |
 | TC_DIA_006 | DIA-REQ-006 | Runtime Fault Injection | PASS |
 | TC_DIA_007 | DIA-REQ-007 | Runtime Fault Recovery | PASS |
+| TC_DTC_001 | DTC-REQ-001 | Front-Left DTC Definition | PASS |
+| TC_DTC_002 | DTC-REQ-002 | Front-Right DTC Definition | PASS |
+| TC_DTC_003 | DTC-REQ-003 | Front-Left DTC Activation | PASS |
+| TC_DTC_004 | DTC-REQ-004 | Front-Right DTC Activation | PASS |
+| TC_DTC_005 | DTC-REQ-005 | Front-Left DTC Recovery | PASS |
+| TC_DTC_006 | DTC-REQ-006 | Front-Right DTC Recovery | PASS |
+| TC_DTC_007 | DTC-REQ-007 | Individual DTC Clear | PASS |
+| TC_DTC_008 | DTC-REQ-008 | Clear All DTCs | PASS |
+| TC_DTC_009 | DTC-REQ-009 | First Detection Timestamp | PASS |
+| TC_DTC_010 | DTC-REQ-010 | Last Detection Timestamp | PASS |
+| TC_DTC_011 | DTC-REQ-011 | DTC Occurrence Count | PASS |
+| TC_DTC_012 | DTC-REQ-012 | DTC Lookup | PASS |
+| TC_DTC_013 | DTC-REQ-013 | DTC Collection Access | PASS |
+| TC_DTC_014 | DTC-REQ-014 | Active DTC Query | PASS |
+| TC_DTC_015 | DTC-REQ-015 | Runtime DTC Detection | PASS |
+| TC_DTC_016 | DTC-REQ-016 | Runtime DTC Recovery | PASS |
+| TC_DTC_017 | DTC-REQ-017 | Diagnostic Reset | PASS |
+| TC_DTC_018 | DTC-REQ-018 | Deterministic Diagnostic Behavior | PASS |
 | TC_CAN_001 | CAN-REQ-003 | CAN Arbitration Priority | PASS |
 | TC_CAN_002 | CAN-REQ-001 | CAN Bitrate | PASS |
 | TC_CAN_003 | CAN-REQ-008 | CAN Trace Recording | PASS |
@@ -107,9 +125,12 @@ as supporting evidence and does not by itself change formal verification status.
 | TC_VAL_004 | VAL-REQ-009 | Execution-Time Evidence | PASS |
 | TC_VAL_005 | VAL-REQ-010 | Response-Time Evidence | PASS |
 | TC_VAL_006 | VAL-REQ-012 | Timing Pass Criteria | PASS |
+
 ---
 
 ## 3. Requirement Traceability
+
+### 3.1 Existing Baseline Requirements
 
 | Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
 |---|---|---|---|---|
@@ -192,14 +213,42 @@ as supporting evidence and does not by itself change formal verification status.
 | DIA-REQ-005 | SimulationEngine / WheelSpeedSensor / AbsEcu | TC_DIA_005 | TC_ABS_002, TC_ABS_003 | VERIFIED / PASS |
 | DIA-REQ-006 | SimulationEngine / WheelSpeedSensor / AbsEcu | TC_DIA_006 | — | VERIFIED / PASS |
 | DIA-REQ-007 | SimulationEngine / WheelSpeedSensor / AbsEcu | TC_DIA_007 | TC_SNS_003 | VERIFIED / PASS |
+
+### 3.2 DTC Requirements
+
+| Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
+|---|---|---|---|---|
+| DTC-REQ-001 | DtcDefinitions / DtcManager | TC_DTC_001 | — | VERIFIED / PASS |
+| DTC-REQ-002 | DtcDefinitions / DtcManager | TC_DTC_002 | — | VERIFIED / PASS |
+| DTC-REQ-003 | WheelSpeedSensor / SimulationEngine / DtcManager | TC_DTC_003 | TC_DIA_001 | VERIFIED / PASS |
+| DTC-REQ-004 | WheelSpeedSensor / SimulationEngine / DtcManager | TC_DTC_004 | TC_DIA_002 | VERIFIED / PASS |
+| DTC-REQ-005 | WheelSpeedSensor / SimulationEngine / DtcManager | TC_DTC_005 | TC_DIA_003 | VERIFIED / PASS |
+| DTC-REQ-006 | WheelSpeedSensor / SimulationEngine / DtcManager | TC_DTC_006 | TC_DIA_004 | VERIFIED / PASS |
+| DTC-REQ-007 | DtcManager | TC_DTC_007 | — | VERIFIED / PASS |
+| DTC-REQ-008 | DtcManager | TC_DTC_008 | — | VERIFIED / PASS |
+| DTC-REQ-009 | Dtc / DtcManager | TC_DTC_009 | — | VERIFIED / PASS |
+| DTC-REQ-010 | Dtc / DtcManager | TC_DTC_010 | — | VERIFIED / PASS |
+| DTC-REQ-011 | Dtc / DtcManager | TC_DTC_011 | — | VERIFIED / PASS |
+| DTC-REQ-012 | DtcManager | TC_DTC_012 | — | VERIFIED / PASS |
+| DTC-REQ-013 | DtcManager | TC_DTC_013 | — | VERIFIED / PASS |
+| DTC-REQ-014 | DtcManager | TC_DTC_014 | — | VERIFIED / PASS |
+| DTC-REQ-015 | WheelSpeedSensor / SimulationEngine / DtcManager | TC_DTC_015 | TC_DIA_006 | VERIFIED / PASS |
+| DTC-REQ-016 | WheelSpeedSensor / SimulationEngine / DtcManager | TC_DTC_016 | TC_DIA_007 | VERIFIED / PASS |
+| DTC-REQ-017 | SimulationEngine / DtcManager | TC_DTC_017 | TC_SYS_002 | VERIFIED / PASS |
+| DTC-REQ-018 | SimulationEngine / DtcManager | TC_DTC_018 | TC_SYS_001 | VERIFIED / PASS |
+
+### 3.3 Validation Requirements
+
+| Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
+|---|---|---|---|---|
 | VAL-REQ-001 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_001 | Operational individual-test execution | VERIFIED / PASS |
-| VAL-REQ-002 | TestRunner / TestCase / TestResult / TestRunnerWidget | Suite execution record: 84 PASS / 0 FAIL | 84-test suite execution | VERIFIED / PASS |
+| VAL-REQ-002 | TestRunner / TestCase / TestResult / TestRunnerWidget | Suite execution record: 102 PASS / 0 FAIL | 102-test suite execution | VERIFIED / PASS |
 | VAL-REQ-003 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_002 | Current isolated test architecture | VERIFIED / PASS |
-| VAL-REQ-004 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-003 | 46 unique IDs observed | VERIFIED / PASS |
+| VAL-REQ-004 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-003 | 102 unique IDs observed | VERIFIED / PASS |
 | VAL-REQ-005 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-004 | requirementId populated | VERIFIED / PASS |
 | VAL-REQ-006 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-005 | Expected evidence populated | VERIFIED / PASS |
 | VAL-REQ-007 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-006 | Actual evidence populated | VERIFIED / PASS |
-| VAL-REQ-008 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_003 | 46 PASS results observed | VERIFIED / PASS |
+| VAL-REQ-008 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_003 | 102 PASS results observed | VERIFIED / PASS |
 | VAL-REQ-009 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_004 | Execution-time evidence displayed | VERIFIED / PASS |
 | VAL-REQ-010 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_005 | TC_ABS_002, TC_ABS_003 | VERIFIED / PASS |
 | VAL-REQ-011 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-007 | Timing limit displayed | VERIFIED / PASS |
@@ -212,37 +261,60 @@ as supporting evidence and does not by itself change formal verification status.
 
 ## 4. Verification Summary
 
-**Automated tests:** 84  
-**Passed:** 84  
+**Automated tests:** 102  
+**Passed:** 102  
 **Failed:** 0  
-**Baseline requirements:** 94  
-**Verified requirements:** 94  
+**Baseline requirements:** 112  
+**Verified requirements:** 112  
 **Unverified baseline requirements:** 0
 
 Automated tests provide direct requirements-based evidence for the functional,
-CAN, diagnostics, message, sensor, ECU, and validation-framework behavior.
+CAN, diagnostics, DTC, message, sensor, ECU, and validation-framework behavior.
+
 Requirements whose defined verification method is Inspection are closed through
 the inspection records in `InspectionVerification.md`.
 
 SYS-REQ-002 uses combined scenario evidence across TC_VEH_001 through
-TC_VEH_004. VAL-REQ-002 is closed by successful execution of the complete
-registered 84-test suite.
+TC_VEH_004.
+
+VAL-REQ-002 is closed by successful execution of the complete registered
+102-test suite.
+
+DTC-REQ-001 through DTC-REQ-018 are closed through TC_DTC_001 through
+TC_DTC_018.
 
 ---
 
 ## 5. Baseline Verification Closure
 
-Baseline v1.2 records full verification closure for the requirements currently
+Baseline v1.3 records full verification closure for the requirements currently
 defined by the VirtualVehicle project.
+
+Baseline v1.3 extends Baseline v1.2 with 18 Diagnostic Trouble Code
+requirements and 18 corresponding automated verification tests.
+
+### Closure Record
+
+- Previous baseline requirements: 94
+- New DTC requirements: 18
+- Total baseline requirements: 112
+- Previous automated tests: 84
+- New DTC automated tests: 18
+- Total automated tests: 102
+- Passed: 102
+- Failed: 0
+- Verified requirements: 112
+- Unverified requirements: 0
 
 The following features remain explicitly outside this baseline and are not
 claimed as verified requirements:
 
 - UDS diagnostic services
-- Diagnostic Trouble Codes (DTCs)
+- ISO-TP transport
 - Diagnostic sessions and security access
 - ECU reprogramming / flashing
 - AUTOSAR runtime behavior
+- Automotive Ethernet
 - Physical CAN transceiver or hardware-bus validation
 
 Future requirements for those capabilities shall be introduced in a new

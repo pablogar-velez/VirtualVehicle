@@ -123,6 +123,29 @@ public:
     TestCase runRuntimeFaultRecoveryTest();
 
     // ==================================================
+    // DTC Tests
+    // ==================================================
+
+    TestCase runFrontLeftDtcDefinitionTest();
+    TestCase runFrontRightDtcDefinitionTest();
+    TestCase runFrontLeftDtcActivationTest();
+    TestCase runFrontRightDtcActivationTest();
+    TestCase runFrontLeftDtcRecoveryTest();
+    TestCase runFrontRightDtcRecoveryTest();
+    TestCase runIndividualDtcClearTest();
+    TestCase runClearAllDtcsTest();
+    TestCase runDtcFirstDetectionTimestampTest();
+    TestCase runDtcLastDetectionTimestampTest();
+    TestCase runDtcOccurrenceCountTest();
+    TestCase runDtcLookupTest();
+    TestCase runDtcCollectionAccessTest();
+    TestCase runActiveDtcQueryTest();
+    TestCase runRuntimeDtcDetectionTest();
+    TestCase runRuntimeDtcRecoveryTest();
+    TestCase runDtcResetTest();
+    TestCase runDtcDeterminismTest();
+
+    // ==================================================
     // Message Tests
     // ==================================================
 
