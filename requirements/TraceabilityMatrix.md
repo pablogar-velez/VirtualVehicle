@@ -1,9 +1,9 @@
 # VirtualVehicle Requirements Traceability Matrix
 
 **Document ID:** VV-RTM-001  
-**Baseline:** 1.4  
-**Status:** Current Verification Record  
-**Latest Automated Suite Result:** 135 Passed / 0 Failed
+**Baseline:** 1.5  
+**Status:** Current Verification Record / Closed  
+**Latest Automated Suite Result:** 188 Passed / 0 Failed
 
 ---
 
@@ -14,8 +14,10 @@ requirements, implementation areas, automated verification test cases, and
 verification results.
 
 A requirement is marked **VERIFIED / PASS** only when the available evidence is
-sufficient for direct verification. Incidental or indirect exercise is recorded
-as supporting evidence and does not by itself change formal verification status.
+sufficient for direct verification.
+
+Incidental or indirect exercise is recorded as supporting evidence and does not
+by itself change formal verification status.
 
 ---
 
@@ -120,6 +122,59 @@ as supporting evidence and does not by itself change formal verification status.
 | TC_UDS_031 | UDS-REQ-031 | Current Vehicle Data | PASS |
 | TC_UDS_032 | UDS-REQ-032 | UDS Reset State | PASS |
 | TC_UDS_033 | UDS-REQ-033 | Deterministic Diagnostic Response | PASS |
+| TC_ISOTP_001 | ISOTP-REQ-001 | ISO-TP Transport Component | PASS |
+| TC_ISOTP_002 | ISOTP-REQ-002 | Classic CAN Frame Size | PASS |
+| TC_ISOTP_003 | ISOTP-REQ-003 | Standard CAN Identifier | PASS |
+| TC_ISOTP_004 | ISOTP-REQ-004 | Maximum ISO-TP Payload | PASS |
+| TC_ISOTP_005 | ISOTP-REQ-005 | Empty Payload Rejection | PASS |
+| TC_ISOTP_006 | ISOTP-REQ-006 | Single Frame Support | PASS |
+| TC_ISOTP_007 | ISOTP-REQ-007 | Single Frame Payload Capacity | PASS |
+| TC_ISOTP_008 | ISOTP-REQ-008 | Single Frame PCI | PASS |
+| TC_ISOTP_009 | ISOTP-REQ-009 | First Frame Support | PASS |
+| TC_ISOTP_010 | ISOTP-REQ-010 | First Frame Payload Length | PASS |
+| TC_ISOTP_011 | ISOTP-REQ-011 | First Frame Data Capacity | PASS |
+| TC_ISOTP_012 | ISOTP-REQ-012 | Consecutive Frame Support | PASS |
+| TC_ISOTP_013 | ISOTP-REQ-013 | Consecutive Frame Data Capacity | PASS |
+| TC_ISOTP_014 | ISOTP-REQ-014 | Initial Sequence Number | PASS |
+| TC_ISOTP_015 | ISOTP-REQ-015 | Sequence Number Increment | PASS |
+| TC_ISOTP_016 | ISOTP-REQ-016 | Sequence Number Rollover | PASS |
+| TC_ISOTP_017 | ISOTP-REQ-017 | Flow Control Frame Support | PASS |
+| TC_ISOTP_018 | ISOTP-REQ-018 | Flow Status | PASS |
+| TC_ISOTP_019 | ISOTP-REQ-019 | Flow Control Parameters | PASS |
+| TC_ISOTP_020 | ISOTP-REQ-020 | Single Frame Reassembly | PASS |
+| TC_ISOTP_021 | ISOTP-REQ-021 | Multi-Frame Reassembly | PASS |
+| TC_ISOTP_022 | ISOTP-REQ-022 | Sequence Validation | PASS |
+| TC_ISOTP_023 | ISOTP-REQ-023 | CAN Identifier Validation | PASS |
+| TC_ISOTP_024 | ISOTP-REQ-024 | Incomplete Message Detection | PASS |
+| TC_ISOTP_025 | ISOTP-REQ-025 | Deterministic Segmentation | PASS |
+| TC_ISOTP_026 | ISOTP-REQ-026 | Deterministic Reassembly | PASS |
+| TC_UDSTP_001 | UDSTP-REQ-001 | UDS Request Transport | PASS |
+| TC_UDSTP_002 | UDSTP-REQ-002 | UDS Response Transport | PASS |
+| TC_UDSTP_003 | UDSTP-REQ-003 | Request CAN Identifier | PASS |
+| TC_UDSTP_004 | UDSTP-REQ-004 | Response CAN Identifier | PASS |
+| TC_UDSTP_005 | UDSTP-REQ-005 | Request Serialization | PASS |
+| TC_UDSTP_006 | UDSTP-REQ-006 | Response Serialization | PASS |
+| TC_UDSTP_007 | UDSTP-REQ-007 | Positive Response Preservation | PASS |
+| TC_UDSTP_008 | UDSTP-REQ-008 | Negative Response Preservation | PASS |
+| TC_UDSTP_009 | UDSTP-REQ-009 | Request Identifier Validation | PASS |
+| TC_UDSTP_010 | UDSTP-REQ-010 | Response Identifier Validation | PASS |
+| TC_UDSTP_011 | UDSTP-REQ-011 | End-to-End UDS Processing | PASS |
+| TC_UDSTP_012 | UDSTP-REQ-012 | Deterministic Transport | PASS |
+| TC_UDSCAN_001 | UDSCAN-REQ-001 | CAN Transport Component | PASS |
+| TC_UDSCAN_002 | UDSCAN-REQ-002 | Request Transmission | PASS |
+| TC_UDSCAN_003 | UDSCAN-REQ-003 | Response Transmission | PASS |
+| TC_UDSCAN_004 | UDSCAN-REQ-004 | Request Identifier | PASS |
+| TC_UDSCAN_005 | UDSCAN-REQ-005 | Response Identifier | PASS |
+| TC_UDSCAN_006 | UDSCAN-REQ-006 | Request Reassembly | PASS |
+| TC_UDSCAN_007 | UDSCAN-REQ-007 | Response Reassembly | PASS |
+| TC_UDSCAN_008 | UDSCAN-REQ-008 | End-to-End Diagnostic Transaction | PASS |
+| TC_UDSCAN_009 | UDSCAN-REQ-009 | Diagnostic CAN Trace | PASS |
+| TC_UDSCAN_010 | UDSCAN-REQ-010 | Diagnostic CAN Timing | PASS |
+| TC_UDSCAN_011 | UDSCAN-REQ-011 | Transaction Evidence | PASS |
+| TC_UDSCAN_012 | UDSCAN-REQ-012 | Positive Response Preservation | PASS |
+| TC_UDSCAN_013 | UDSCAN-REQ-013 | Negative Response Preservation | PASS |
+| TC_UDSCAN_014 | UDSCAN-REQ-014 | Multi-Frame Diagnostic Transport | PASS |
+| TC_UDSCAN_015 | UDSCAN-REQ-015 | Deterministic CAN Diagnostic Transaction | PASS |
 | TC_CAN_001 | CAN-REQ-003 | CAN Arbitration Priority | PASS |
 | TC_CAN_002 | CAN-REQ-001 | CAN Bitrate | PASS |
 | TC_CAN_003 | CAN-REQ-008 | CAN Trace Recording | PASS |
@@ -188,7 +243,7 @@ as supporting evidence and does not by itself change formal verification status.
 | ABS-REQ-003 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_004 | — | VERIFIED / PASS |
 | ABS-REQ-004 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_002 | — | VERIFIED / PASS |
 | ABS-REQ-005 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_003 | — | VERIFIED / PASS |
-| ABS-REQ-006 | AbsEu / WheelSpeedSensor / SimulationEngine | TC_ABS_005 | TC_ABS_001 | VERIFIED / PASS |
+| ABS-REQ-006 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_005 | TC_ABS_001 | VERIFIED / PASS |
 | ABS-REQ-007 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_CAN_005 | — | VERIFIED / PASS |
 | ABS-REQ-008 | AbsEcu / WheelSpeedSensor / SimulationEngine | TC_ABS_006 | TC_MSG_001 | VERIFIED / PASS |
 | SNS-REQ-001 | WheelSpeedSensor / SimulationEngine | TC_SNS_004 | — | VERIFIED / PASS |
@@ -308,18 +363,86 @@ as supporting evidence and does not by itself change formal verification status.
 | UDS-REQ-032 | SimulationEngine / UdsServer | TC_UDS_032 | TC_SYS_002 | VERIFIED / PASS |
 | UDS-REQ-033 | UdsServer / DtcManager / SimulationEngine | TC_UDS_033 | — | VERIFIED / PASS |
 
-### 3.4 Validation Requirements
+### 3.4 ISO-TP Requirements
+
+| Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
+|---|---|---|---|---|
+| ISOTP-REQ-001 | IsoTpProtocol / IsoTpFrame | TC_ISOTP_001 | — | VERIFIED / PASS |
+| ISOTP-REQ-002 | IsoTpProtocol / CanFrame | TC_ISOTP_002 | — | VERIFIED / PASS |
+| ISOTP-REQ-003 | IsoTpProtocol / CanFrame | TC_ISOTP_003 | — | VERIFIED / PASS |
+| ISOTP-REQ-004 | IsoTpProtocol | TC_ISOTP_004 | — | VERIFIED / PASS |
+| ISOTP-REQ-005 | IsoTpProtocol | TC_ISOTP_005 | — | VERIFIED / PASS |
+| ISOTP-REQ-006 | IsoTpProtocol | TC_ISOTP_006 | — | VERIFIED / PASS |
+| ISOTP-REQ-007 | IsoTpProtocol | TC_ISOTP_007 | — | VERIFIED / PASS |
+| ISOTP-REQ-008 | IsoTpProtocol / IsoTpFrame | TC_ISOTP_008 | — | VERIFIED / PASS |
+| ISOTP-REQ-009 | IsoTpProtocol | TC_ISOTP_009 | — | VERIFIED / PASS |
+| ISOTP-REQ-010 | IsoTpProtocol / IsoTpFrame | TC_ISOTP_010 | — | VERIFIED / PASS |
+| ISOTP-REQ-011 | IsoTpProtocol | TC_ISOTP_011 | — | VERIFIED / PASS |
+| ISOTP-REQ-012 | IsoTpProtocol | TC_ISOTP_012 | — | VERIFIED / PASS |
+| ISOTP-REQ-013 | IsoTpProtocol | TC_ISOTP_013 | — | VERIFIED / PASS |
+| ISOTP-REQ-014 | IsoTpProtocol | TC_ISOTP_014 | — | VERIFIED / PASS |
+| ISOTP-REQ-015 | IsoTpProtocol | TC_ISOTP_015 | — | VERIFIED / PASS |
+| ISOTP-REQ-016 | IsoTpProtocol | TC_ISOTP_016 | — | VERIFIED / PASS |
+| ISOTP-REQ-017 | IsoTpProtocol / IsoTpFrame | TC_ISOTP_017 | — | VERIFIED / PASS |
+| ISOTP-REQ-018 | IsoTpProtocol / IsoTpFrame | TC_ISOTP_018 | — | VERIFIED / PASS |
+| ISOTP-REQ-019 | IsoTpProtocol / IsoTpFrame | TC_ISOTP_019 | — | VERIFIED / PASS |
+| ISOTP-REQ-020 | IsoTpProtocol | TC_ISOTP_020 | — | VERIFIED / PASS |
+| ISOTP-REQ-021 | IsoTpProtocol | TC_ISOTP_021 | — | VERIFIED / PASS |
+| ISOTP-REQ-022 | IsoTpProtocol | TC_ISOTP_022 | — | VERIFIED / PASS |
+| ISOTP-REQ-023 | IsoTpProtocol / CanFrame | TC_ISOTP_023 | — | VERIFIED / PASS |
+| ISOTP-REQ-024 | IsoTpProtocol | TC_ISOTP_024 | — | VERIFIED / PASS |
+| ISOTP-REQ-025 | IsoTpProtocol | TC_ISOTP_025 | — | VERIFIED / PASS |
+| ISOTP-REQ-026 | IsoTpProtocol | TC_ISOTP_026 | — | VERIFIED / PASS |
+
+### 3.5 UDS Transport Requirements
+
+| Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
+|---|---|---|---|---|
+| UDSTP-REQ-001 | UdsTransport / IsoTpProtocol | TC_UDSTP_001 | TC_ISOTP_001 | VERIFIED / PASS |
+| UDSTP-REQ-002 | UdsTransport / IsoTpProtocol | TC_UDSTP_002 | TC_ISOTP_001 | VERIFIED / PASS |
+| UDSTP-REQ-003 | UdsTransport | TC_UDSTP_003 | — | VERIFIED / PASS |
+| UDSTP-REQ-004 | UdsTransport | TC_UDSTP_004 | — | VERIFIED / PASS |
+| UDSTP-REQ-005 | UdsTransport | TC_UDSTP_005 | — | VERIFIED / PASS |
+| UDSTP-REQ-006 | UdsTransport | TC_UDSTP_006 | — | VERIFIED / PASS |
+| UDSTP-REQ-007 | UdsTransport / UdsResponse | TC_UDSTP_007 | TC_UDS_004 | VERIFIED / PASS |
+| UDSTP-REQ-008 | UdsTransport / UdsResponse | TC_UDSTP_008 | TC_UDS_005 | VERIFIED / PASS |
+| UDSTP-REQ-009 | UdsTransport | TC_UDSTP_009 | TC_ISOTP_023 | VERIFIED / PASS |
+| UDSTP-REQ-010 | UdsTransport | TC_UDSTP_010 | TC_ISOTP_023 | VERIFIED / PASS |
+| UDSTP-REQ-011 | UdsTransport / UdsServer / IsoTpProtocol | TC_UDSTP_011 | UDS and ISO-TP test groups | VERIFIED / PASS |
+| UDSTP-REQ-012 | UdsTransport / UdsServer | TC_UDSTP_012 | TC_UDS_033 | VERIFIED / PASS |
+
+### 3.6 UDS CAN Transport Requirements
+
+| Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
+|---|---|---|---|---|
+| UDSCAN-REQ-001 | UdsCanTransport / UdsTransport / VirtualCanBus | TC_UDSCAN_001 | UDSTP test group | VERIFIED / PASS |
+| UDSCAN-REQ-002 | UdsCanTransport / VirtualCanBus | TC_UDSCAN_002 | TC_UDSTP_001 | VERIFIED / PASS |
+| UDSCAN-REQ-003 | UdsCanTransport / VirtualCanBus | TC_UDSCAN_003 | TC_UDSTP_002 | VERIFIED / PASS |
+| UDSCAN-REQ-004 | UdsCanTransport / UdsTransport | TC_UDSCAN_004 | TC_UDSTP_003 | VERIFIED / PASS |
+| UDSCAN-REQ-005 | UdsCanTransport / UdsTransport | TC_UDSCAN_005 | TC_UDSTP_004 | VERIFIED / PASS |
+| UDSCAN-REQ-006 | UdsCanTransport / UdsTransport / IsoTpProtocol | TC_UDSCAN_006 | TC_ISOTP_021 | VERIFIED / PASS |
+| UDSCAN-REQ-007 | UdsCanTransport / UdsTransport / IsoTpProtocol | TC_UDSCAN_007 | TC_ISOTP_021 | VERIFIED / PASS |
+| UDSCAN-REQ-008 | UdsCanTransport / UdsTransport / VirtualCanBus / UdsServer | TC_UDSCAN_008 | TC_UDSTP_011 | VERIFIED / PASS |
+| UDSCAN-REQ-009 | UdsCanTransport / VirtualCanBus / CanTraceEntry | TC_UDSCAN_009 | TC_CAN_003 | VERIFIED / PASS |
+| UDSCAN-REQ-010 | UdsCanTransport / VirtualCanBus | TC_UDSCAN_010 | TC_CAN_010 | VERIFIED / PASS |
+| UDSCAN-REQ-011 | UdsCanTransport / UdsCanTransactionResult | TC_UDSCAN_011 | — | VERIFIED / PASS |
+| UDSCAN-REQ-012 | UdsCanTransport / UdsResponse | TC_UDSCAN_012 | TC_UDSTP_007 | VERIFIED / PASS |
+| UDSCAN-REQ-013 | UdsCanTransport / UdsResponse | TC_UDSCAN_013 | TC_UDSTP_008 | VERIFIED / PASS |
+| UDSCAN-REQ-014 | UdsCanTransport / UdsTransport / IsoTpProtocol / VirtualCanBus | TC_UDSCAN_014 | TC_ISOTP_021 | VERIFIED / PASS |
+| UDSCAN-REQ-015 | UdsCanTransport / VirtualCanBus / UdsServer | TC_UDSCAN_015 | TC_UDSTP_012 | VERIFIED / PASS |
+
+### 3.7 Validation Requirements
 
 | Requirement | Implementation Area | Direct Verification | Supporting Evidence | Status |
 |---|---|---|---|---|
 | VAL-REQ-001 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_001 | Operational individual-test execution | VERIFIED / PASS |
-| VAL-REQ-002 | TestRunner / TestCase / TestResult / TestRunnerWidget | Suite execution record: 135 PASS / 0 FAIL | 135-test suite execution | VERIFIED / PASS |
+| VAL-REQ-002 | TestRunner / TestCase / TestResult / TestRunnerWidget | Suite execution record: 188 PASS / 0 FAIL | 188-test suite execution | VERIFIED / PASS |
 | VAL-REQ-003 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_002 | Current isolated test architecture | VERIFIED / PASS |
-| VAL-REQ-004 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-003 | 135 unique IDs observed | VERIFIED / PASS |
+| VAL-REQ-004 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-003 | 188 unique IDs observed | VERIFIED / PASS |
 | VAL-REQ-005 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-004 | requirementId populated | VERIFIED / PASS |
 | VAL-REQ-006 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-005 | Expected evidence populated | VERIFIED / PASS |
 | VAL-REQ-007 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-006 | Actual evidence populated | VERIFIED / PASS |
-| VAL-REQ-008 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_003 | 135 PASS results observed | VERIFIED / PASS |
+| VAL-REQ-008 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_003 | 188 PASS results observed | VERIFIED / PASS |
 | VAL-REQ-009 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_004 | Execution-time evidence displayed | VERIFIED / PASS |
 | VAL-REQ-010 | TestRunner / TestCase / TestResult / TestRunnerWidget | TC_VAL_005 | TC_ABS_002, TC_ABS_003 | VERIFIED / PASS |
 | VAL-REQ-011 | TestRunner / TestCase / TestResult / TestRunnerWidget | Inspection IVR-007 | Timing limit displayed | VERIFIED / PASS |
@@ -332,16 +455,16 @@ as supporting evidence and does not by itself change formal verification status.
 
 ## 4. Verification Summary
 
-**Automated tests:** 135  
-**Passed:** 135  
+**Automated tests:** 188  
+**Passed:** 188  
 **Failed:** 0  
-**Baseline requirements:** 145  
-**Verified requirements:** 145  
+**Baseline requirements:** 198  
+**Verified requirements:** 198  
 **Unverified baseline requirements:** 0
 
 Automated tests provide direct requirements-based evidence for the functional,
-CAN, diagnostics, DTC, UDS, message, sensor, ECU, and validation-framework
-behavior.
+CAN, diagnostics, DTC, UDS, ISO-TP, UDS Transport, UDS CAN Transport, message,
+sensor, ECU, and validation-framework behavior.
 
 Requirements whose defined verification method is Inspection are closed through
 the inspection records in `InspectionVerification.md`.
@@ -350,7 +473,7 @@ SYS-REQ-002 uses combined scenario evidence across TC_VEH_001 through
 TC_VEH_004.
 
 VAL-REQ-002 is closed by successful execution of the complete registered
-135-test suite.
+188-test suite.
 
 DTC-REQ-001 through DTC-REQ-018 are closed through TC_DTC_001 through
 TC_DTC_018.
@@ -358,34 +481,63 @@ TC_DTC_018.
 UDS-REQ-001 through UDS-REQ-033 are closed through TC_UDS_001 through
 TC_UDS_033.
 
+ISOTP-REQ-001 through ISOTP-REQ-026 are closed through TC_ISOTP_001 through
+TC_ISOTP_026.
+
+UDSTP-REQ-001 through UDSTP-REQ-012 are closed through TC_UDSTP_001 through
+TC_UDSTP_012.
+
+UDSCAN-REQ-001 through UDSCAN-REQ-015 are closed through TC_UDSCAN_001 through
+TC_UDSCAN_015.
+
 ---
 
 ## 5. Baseline Verification Closure
 
-Baseline v1.4 records full verification closure for the requirements currently
+Baseline v1.5 records full verification closure for the requirements currently
 defined by the VirtualVehicle project.
 
-Baseline v1.4 extends Baseline v1.3 with 33 Unified Diagnostic Services
-requirements and 33 corresponding automated verification tests.
+Baseline v1.5 extends Baseline v1.4 with:
+
+- 26 ISO-TP requirements and 26 corresponding automated verification tests
+- 12 UDS Transport requirements and 12 corresponding automated verification tests
+- 15 UDS CAN Transport requirements and 15 corresponding automated verification tests
 
 ### Closure Record
 
-- Previous baseline requirements: 112
-- New UDS requirements: 33
-- Total baseline requirements: 145
-- Previous automated tests: 102
-- New UDS automated tests: 33
-- Total automated tests: 135
-- Passed: 135
+- Previous baseline requirements: 145
+- New ISO-TP requirements: 26
+- New UDS Transport requirements: 12
+- New UDS CAN Transport requirements: 15
+- Total baseline requirements: 198
+- Previous automated tests: 135
+- New ISO-TP automated tests: 26
+- New UDS Transport automated tests: 12
+- New UDS CAN Transport automated tests: 15
+- Total automated tests: 188
+- Passed: 188
 - Failed: 0
-- Verified requirements: 145
+- Verified requirements: 198
 - Unverified requirements: 0
 
-The following features remain explicitly outside this baseline and are not
+---
+
+## 6. Baseline Boundary
+
+The following features remain explicitly outside Baseline v1.5 and are not
 claimed as verified requirements:
 
 - Full ISO 14229 compliance
-- ISO-TP transport
+- Full ISO 15765-2 compliance
+- Runtime UDS CAN integration into the SimulationEngine shared ECU bus
+- Concurrent periodic ECU and diagnostic traffic verification
+- Parallel diagnostic clients
+- ISO-TP Flow Control runtime scheduling
+- ISO-TP Block Size enforcement
+- ISO-TP STmin timing enforcement
+- CAN FD ISO-TP
+- Extended ISO-TP addressing
+- Functional diagnostic addressing
 - Security Access
 - ECU Reset service
 - Communication Control
@@ -397,6 +549,26 @@ claimed as verified requirements:
 - Automotive Ethernet
 - Physical diagnostic hardware
 - Physical CAN transceiver or hardware-bus validation
+- Hardware-in-the-loop CAN validation
 
-Future requirements for those capabilities shall be introduced in a new
+Future requirements for these capabilities shall be introduced in a new
 baseline before implementation is claimed as requirements-verified.
+
+---
+
+## 7. Baseline Status
+
+```text
+VirtualVehicle Baseline v1.5
+
+Requirements:      198
+Verified:          198
+Unverified:          0
+
+Automated Tests:   188
+Passed:            188
+Failed:              0
+
+Status:
+VERIFICATION CLOSED
+```

@@ -365,6 +365,177 @@ TestCase TestRunner::runTest(
         return runUdsDeterminismTest();
 
     // ==================================================
+    // ISO-TP
+    // ==================================================
+
+    if (testId == "TC_ISOTP_001")
+        return runIsoTpTransportComponentTest();
+
+    if (testId == "TC_ISOTP_002")
+        return runIsoTpClassicCanFrameSizeTest();
+
+    if (testId == "TC_ISOTP_003")
+        return runIsoTpStandardCanIdentifierTest();
+
+    if (testId == "TC_ISOTP_004")
+        return runIsoTpMaximumPayloadTest();
+
+    if (testId == "TC_ISOTP_005")
+        return runIsoTpEmptyPayloadRejectionTest();
+
+    if (testId == "TC_ISOTP_006")
+        return runIsoTpSingleFrameSupportTest();
+
+    if (testId == "TC_ISOTP_007")
+        return runIsoTpSingleFramePayloadCapacityTest();
+
+    if (testId == "TC_ISOTP_008")
+        return runIsoTpSingleFramePciTest();
+
+    if (testId == "TC_ISOTP_009")
+        return runIsoTpFirstFrameSupportTest();
+
+    if (testId == "TC_ISOTP_010")
+        return runIsoTpFirstFramePayloadLengthTest();
+
+    if (testId == "TC_ISOTP_011")
+        return runIsoTpFirstFrameDataCapacityTest();
+
+    if (testId == "TC_ISOTP_012")
+        return runIsoTpConsecutiveFrameSupportTest();
+
+    if (testId == "TC_ISOTP_013")
+        return runIsoTpConsecutiveFrameDataCapacityTest();
+
+    if (testId == "TC_ISOTP_014")
+        return runIsoTpInitialSequenceNumberTest();
+
+    if (testId == "TC_ISOTP_015")
+        return runIsoTpSequenceNumberIncrementTest();
+
+    if (testId == "TC_ISOTP_016")
+        return runIsoTpSequenceNumberRolloverTest();
+
+    if (testId == "TC_ISOTP_017")
+        return runIsoTpFlowControlFrameSupportTest();
+
+    if (testId == "TC_ISOTP_018")
+        return runIsoTpFlowStatusTest();
+
+    if (testId == "TC_ISOTP_019")
+        return runIsoTpFlowControlParametersTest();
+
+    if (testId == "TC_ISOTP_020")
+        return runIsoTpSingleFrameReassemblyTest();
+
+    if (testId == "TC_ISOTP_021")
+        return runIsoTpMultiFrameReassemblyTest();
+
+    if (testId == "TC_ISOTP_022")
+        return runIsoTpSequenceValidationTest();
+
+    if (testId == "TC_ISOTP_023")
+        return runIsoTpCanIdentifierValidationTest();
+
+    if (testId == "TC_ISOTP_024")
+        return runIsoTpIncompleteMessageDetectionTest();
+
+    if (testId == "TC_ISOTP_025")
+        return runIsoTpDeterministicSegmentationTest();
+
+    if (testId == "TC_ISOTP_026")
+        return runIsoTpDeterministicReassemblyTest();
+
+    // ==================================================
+    // UDS Transport
+    // ==================================================
+
+    if (testId == "TC_UDSTP_001")
+        return runUdsTransportRequestTest();
+
+    if (testId == "TC_UDSTP_002")
+        return runUdsTransportResponseTest();
+
+    if (testId == "TC_UDSTP_003")
+        return runUdsTransportRequestCanIdTest();
+
+    if (testId == "TC_UDSTP_004")
+        return runUdsTransportResponseCanIdTest();
+
+    if (testId == "TC_UDSTP_005")
+        return runUdsTransportRequestSerializationTest();
+
+    if (testId == "TC_UDSTP_006")
+        return runUdsTransportResponseSerializationTest();
+
+    if (testId == "TC_UDSTP_007")
+        return runUdsTransportPositiveResponseTest();
+
+    if (testId == "TC_UDSTP_008")
+        return runUdsTransportNegativeResponseTest();
+
+    if (testId == "TC_UDSTP_009")
+        return runUdsTransportRequestIdentifierValidationTest();
+
+    if (testId == "TC_UDSTP_010")
+        return runUdsTransportResponseIdentifierValidationTest();
+
+    if (testId == "TC_UDSTP_011")
+        return runUdsTransportEndToEndTest();
+
+    if (testId == "TC_UDSTP_012")
+        return runUdsTransportDeterminismTest();
+
+    // ==================================================
+    // UDS CAN Transport
+    // ==================================================
+
+    if (testId == "TC_UDSCAN_001")
+        return runUdsCanTransportComponentTest();
+
+    if (testId == "TC_UDSCAN_002")
+        return runUdsCanRequestTransmissionTest();
+
+    if (testId == "TC_UDSCAN_003")
+        return runUdsCanResponseTransmissionTest();
+
+    if (testId == "TC_UDSCAN_004")
+        return runUdsCanRequestIdentifierTest();
+
+    if (testId == "TC_UDSCAN_005")
+        return runUdsCanResponseIdentifierTest();
+
+    if (testId == "TC_UDSCAN_006")
+        return runUdsCanRequestReassemblyTest();
+
+    if (testId == "TC_UDSCAN_007")
+        return runUdsCanResponseReassemblyTest();
+
+    if (testId == "TC_UDSCAN_008")
+        return runUdsCanEndToEndTransactionTest();
+
+    if (testId == "TC_UDSCAN_009")
+        return runUdsCanTraceEvidenceTest();
+
+    if (testId == "TC_UDSCAN_010")
+        return runUdsCanTimingTest();
+
+    if (testId == "TC_UDSCAN_011")
+        return runUdsCanTransactionEvidenceTest();
+
+    if (testId == "TC_UDSCAN_012")
+        return runUdsCanPositiveResponseTest();
+
+    if (testId == "TC_UDSCAN_013")
+        return runUdsCanNegativeResponseTest();
+
+    if (testId == "TC_UDSCAN_014")
+        return runUdsCanMultiFrameTransportTest();
+
+    if (testId == "TC_UDSCAN_015")
+        return runUdsCanDeterminismTest();
+
+    // ==================================================
     // CAN
     // ==================================================
 
@@ -491,7 +662,7 @@ TestCase TestRunner::runTest(
         return runTimingPassCriteriaVerification();
 
     // ==================================================
-    // Unknown
+    // Unknown Test
     // ==================================================
 
     TestCase test;
@@ -531,7 +702,7 @@ TestRunner::runAll()
     std::vector<TestCase> results;
 
     results.reserve(
-        135
+        188
     );
 
     // ==================================================
@@ -682,6 +853,80 @@ TestRunner::runAll()
 
     results.push_back(runUdsResetStateTest());
     results.push_back(runUdsDeterminismTest());
+
+    // ==================================================
+    // ISO-TP
+    // ==================================================
+
+    results.push_back(runIsoTpTransportComponentTest());
+    results.push_back(runIsoTpClassicCanFrameSizeTest());
+    results.push_back(runIsoTpStandardCanIdentifierTest());
+    results.push_back(runIsoTpMaximumPayloadTest());
+    results.push_back(runIsoTpEmptyPayloadRejectionTest());
+
+    results.push_back(runIsoTpSingleFrameSupportTest());
+    results.push_back(runIsoTpSingleFramePayloadCapacityTest());
+    results.push_back(runIsoTpSingleFramePciTest());
+
+    results.push_back(runIsoTpFirstFrameSupportTest());
+    results.push_back(runIsoTpFirstFramePayloadLengthTest());
+    results.push_back(runIsoTpFirstFrameDataCapacityTest());
+
+    results.push_back(runIsoTpConsecutiveFrameSupportTest());
+    results.push_back(runIsoTpConsecutiveFrameDataCapacityTest());
+    results.push_back(runIsoTpInitialSequenceNumberTest());
+    results.push_back(runIsoTpSequenceNumberIncrementTest());
+    results.push_back(runIsoTpSequenceNumberRolloverTest());
+
+    results.push_back(runIsoTpFlowControlFrameSupportTest());
+    results.push_back(runIsoTpFlowStatusTest());
+    results.push_back(runIsoTpFlowControlParametersTest());
+
+    results.push_back(runIsoTpSingleFrameReassemblyTest());
+    results.push_back(runIsoTpMultiFrameReassemblyTest());
+    results.push_back(runIsoTpSequenceValidationTest());
+    results.push_back(runIsoTpCanIdentifierValidationTest());
+    results.push_back(runIsoTpIncompleteMessageDetectionTest());
+
+    results.push_back(runIsoTpDeterministicSegmentationTest());
+    results.push_back(runIsoTpDeterministicReassemblyTest());
+
+    // ==================================================
+    // UDS Transport
+    // ==================================================
+
+    results.push_back(runUdsTransportRequestTest());
+    results.push_back(runUdsTransportResponseTest());
+    results.push_back(runUdsTransportRequestCanIdTest());
+    results.push_back(runUdsTransportResponseCanIdTest());
+    results.push_back(runUdsTransportRequestSerializationTest());
+    results.push_back(runUdsTransportResponseSerializationTest());
+    results.push_back(runUdsTransportPositiveResponseTest());
+    results.push_back(runUdsTransportNegativeResponseTest());
+    results.push_back(runUdsTransportRequestIdentifierValidationTest());
+    results.push_back(runUdsTransportResponseIdentifierValidationTest());
+    results.push_back(runUdsTransportEndToEndTest());
+    results.push_back(runUdsTransportDeterminismTest());
+
+    // ==================================================
+    // UDS CAN Transport
+    // ==================================================
+
+    results.push_back(runUdsCanTransportComponentTest());
+    results.push_back(runUdsCanRequestTransmissionTest());
+    results.push_back(runUdsCanResponseTransmissionTest());
+    results.push_back(runUdsCanRequestIdentifierTest());
+    results.push_back(runUdsCanResponseIdentifierTest());
+    results.push_back(runUdsCanRequestReassemblyTest());
+    results.push_back(runUdsCanResponseReassemblyTest());
+    results.push_back(runUdsCanEndToEndTransactionTest());
+    results.push_back(runUdsCanTraceEvidenceTest());
+    results.push_back(runUdsCanTimingTest());
+    results.push_back(runUdsCanTransactionEvidenceTest());
+    results.push_back(runUdsCanPositiveResponseTest());
+    results.push_back(runUdsCanNegativeResponseTest());
+    results.push_back(runUdsCanMultiFrameTransportTest());
+    results.push_back(runUdsCanDeterminismTest());
 
     // ==================================================
     // CAN
