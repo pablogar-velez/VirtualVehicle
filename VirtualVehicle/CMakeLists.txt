@@ -189,7 +189,7 @@ add_executable(
 
     "gui/widgets/TestRunnerWidget.h"
     "gui/widgets/TestRunnerWidget.cpp"
- "transport/IsoTpFrame.h" "transport/IsoTpProtocol.h" "transport/IsoTpProtocol.cpp" "test/IsoTpTests.cpp" "diagnostics/UdsTransport.h" "diagnostics/UdsTransport.cpp" "test/UdsTransportTest.cpp" "diagnostics/UdsCanTransport.cpp" "diagnostics/UdsCanTransport.h" "test/UdsCanTransportTests.cpp")
+ "transport/IsoTpFrame.h" "transport/IsoTpProtocol.h" "transport/IsoTpProtocol.cpp" "test/IsoTpTests.cpp" "diagnostics/UdsTransport.h" "diagnostics/UdsTransport.cpp" "test/UdsTransportTest.cpp" "diagnostics/UdsCanTransport.cpp" "diagnostics/UdsCanTransport.h" "test/UdsCanTransportTests.cpp" "test/UdsRuntimeIntegrationTests.cpp")
 
 target_compile_features(
     VirtualVehicle

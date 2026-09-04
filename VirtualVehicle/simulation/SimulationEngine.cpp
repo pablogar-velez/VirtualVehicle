@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <iomanip>
 #include <iostream>
+#include <stdexcept>
 
 #include "../can/CanMessageDefinitions.h"
 #include "../can/CanTracePrinter.h"
@@ -20,7 +21,8 @@ SimulationEngine::SimulationEngine(
         canBitrate,
         logLevel
     ),
-    udsServer(dtcManager)
+    udsServer(dtcManager),
+    udsTransport(udsServer)
 {
     vehicleModel.setSteeringAngle(
         3.2f
@@ -231,6 +233,415 @@ void SimulationEngine::startScenario(
         scenario,
         currentTimeMs,
         eventLogger
+    );
+}
+
+// ==================================================
+// Runtime UDS request submission
+// ==================================================
+
+void SimulationEngine::submitUdsRequest(
+    const UdsRequest& request)
+{
+    if (udsTransactionPending)
+    {
+        throw std::logic_error(
+            "A UDS runtime transaction is already pending."
+        );
+    }
+
+    // A new transaction replaces any previously
+    // completed response evidence.
+    udsResponseAvailable =
+        false;
+
+    completedUdsResponse =
+        UdsResponse{};
+
+    pendingUdsRequest =
+        request;
+
+    receivedUdsRequestFrames.clear();
+    receivedUdsResponseFrames.clear();
+
+    pendingUdsResponseFrames.clear();
+
+    pendingUdsRequestFrames =
+        udsTransport.createRequestFrames(
+            pendingUdsRequest
+        );
+
+    if (pendingUdsRequestFrames.empty())
+    {
+        throw std::runtime_error(
+            "UDS runtime request produced no ISO-TP CAN frames."
+        );
+    }
+
+    udsTransactionPending =
+        true;
+
+    // Only one ISO-TP frame is submitted at a time.
+    //
+    // This is intentional. Multiple ISO-TP frames with
+    // the same CAN identifier must preserve transport
+    // ordering and must not be inserted simultaneously
+    // into the arbitration queue.
+    queuePendingUdsRequestFrames(
+        currentTimeMs
+    );
+}
+
+// ==================================================
+// Runtime UDS transaction state
+// ==================================================
+
+bool SimulationEngine::hasPendingUdsTransaction() const
+{
+    return udsTransactionPending;
+}
+
+bool SimulationEngine::hasCompletedUdsResponse() const
+{
+    return udsResponseAvailable;
+}
+
+const UdsResponse&
+SimulationEngine::getCompletedUdsResponse() const
+{
+    if (!udsResponseAvailable)
+    {
+        throw std::logic_error(
+            "No completed UDS runtime response is available."
+        );
+    }
+
+    return completedUdsResponse;
+}
+
+void SimulationEngine::clearCompletedUdsResponse()
+{
+    udsResponseAvailable =
+        false;
+
+    completedUdsResponse =
+        UdsResponse{};
+}
+
+// ==================================================
+// Runtime UDS request CAN queue
+// ==================================================
+
+void SimulationEngine::queuePendingUdsRequestFrames(
+    double requestTimeMs)
+{
+    if (pendingUdsRequestFrames.empty())
+    {
+        return;
+    }
+
+    const CanFrame frame =
+        pendingUdsRequestFrames.front();
+
+    pendingUdsRequestFrames.erase(
+        pendingUdsRequestFrames.begin()
+    );
+
+    canBus.transmit(
+        frame,
+        requestTimeMs
+    );
+
+    if (
+        logLevel ==
+        LogLevel::Verbose
+        )
+    {
+        std::cout
+            << "["
+            << requestTimeMs
+            << " ms] UDS REQUEST -> 0x"
+            << std::hex
+            << frame.arbitrationId
+            << std::dec
+            << "\n";
+    }
+}
+
+// ==================================================
+// Runtime UDS response CAN queue
+// ==================================================
+
+void SimulationEngine::queueUdsResponseFrames(
+    const UdsResponse& response,
+    double requestTimeMs)
+{
+    pendingUdsResponseFrames =
+        udsTransport.createResponseFrames(
+            response
+        );
+
+    if (pendingUdsResponseFrames.empty())
+    {
+        throw std::runtime_error(
+            "UDS runtime response produced no ISO-TP CAN frames."
+        );
+    }
+
+    const CanFrame frame =
+        pendingUdsResponseFrames.front();
+
+    pendingUdsResponseFrames.erase(
+        pendingUdsResponseFrames.begin()
+    );
+
+    canBus.transmit(
+        frame,
+        requestTimeMs
+    );
+
+    if (
+        logLevel ==
+        LogLevel::Verbose
+        )
+    {
+        std::cout
+            << "["
+            << requestTimeMs
+            << " ms] UDS RESPONSE -> 0x"
+            << std::hex
+            << frame.arbitrationId
+            << std::dec
+            << "\n";
+    }
+}
+
+// ==================================================
+// Runtime UDS request completeness
+// ==================================================
+
+bool SimulationEngine::isUdsRequestComplete() const
+{
+    if (receivedUdsRequestFrames.empty())
+    {
+        return false;
+    }
+
+    try
+    {
+        udsTransport.decodeRequestFrames(
+            receivedUdsRequestFrames
+        );
+
+        return true;
+    }
+    catch (
+        const std::exception&
+        )
+    {
+        return false;
+    }
+}
+
+// ==================================================
+// Runtime UDS response completeness
+// ==================================================
+
+bool SimulationEngine::isUdsResponseComplete() const
+{
+    if (receivedUdsResponseFrames.empty())
+    {
+        return false;
+    }
+
+    try
+    {
+        udsTransport.decodeResponseFrames(
+            receivedUdsResponseFrames
+        );
+
+        return true;
+    }
+    catch (
+        const std::exception&
+        )
+    {
+        return false;
+    }
+}
+
+// ==================================================
+// Runtime UDS request frame processing
+// ==================================================
+
+void SimulationEngine::processUdsRequestFrame(
+    const CanFrame& frame,
+    double eventTimeMs)
+{
+    receivedUdsRequestFrames.push_back(
+        frame
+    );
+
+    // ==================================================
+    // Complete request
+    // ==================================================
+
+    if (isUdsRequestComplete())
+    {
+        const UdsRequest request =
+            udsTransport.decodeRequestFrames(
+                receivedUdsRequestFrames
+            );
+
+        // Ensure current vehicle values are available
+        // immediately before diagnostic processing.
+        updateUdsVehicleData();
+
+        const UdsResponse response =
+            udsServer.processRequest(
+                request
+            );
+
+        pendingUdsRequestFrames.clear();
+
+        queueUdsResponseFrames(
+            response,
+            eventTimeMs
+        );
+
+        return;
+    }
+
+    // ==================================================
+    // Continue ISO-TP request
+    // ==================================================
+
+    if (!pendingUdsRequestFrames.empty())
+    {
+        queuePendingUdsRequestFrames(
+            eventTimeMs
+        );
+    }
+}
+
+// ==================================================
+// Runtime UDS response frame processing
+// ==================================================
+
+void SimulationEngine::processUdsResponseFrame(
+    const CanFrame& frame)
+{
+    receivedUdsResponseFrames.push_back(
+        frame
+    );
+
+    // ==================================================
+    // Complete response
+    // ==================================================
+
+    if (isUdsResponseComplete())
+    {
+        completedUdsResponse =
+            udsTransport.decodeResponseFrames(
+                receivedUdsResponseFrames
+            );
+
+        pendingUdsResponseFrames.clear();
+
+        udsTransactionPending =
+            false;
+
+        udsResponseAvailable =
+            true;
+
+        return;
+    }
+
+    // ==================================================
+    // Continue ISO-TP response
+    // ==================================================
+
+    if (!pendingUdsResponseFrames.empty())
+    {
+        const CanFrame nextFrame =
+            pendingUdsResponseFrames.front();
+
+        pendingUdsResponseFrames.erase(
+            pendingUdsResponseFrames.begin()
+        );
+
+        const double requestTimeMs =
+            canBus.getBusyUntilMs();
+
+        canBus.transmit(
+            nextFrame,
+            requestTimeMs
+        );
+
+        if (
+            logLevel ==
+            LogLevel::Verbose
+            )
+        {
+            std::cout
+                << "["
+                << requestTimeMs
+                << " ms] UDS RESPONSE -> 0x"
+                << std::hex
+                << nextFrame.arbitrationId
+                << std::dec
+                << "\n";
+        }
+    }
+}
+
+// ==================================================
+// Runtime CAN routing
+// ==================================================
+
+void SimulationEngine::processReceivedCanFrame(
+    const CanFrame& frame,
+    double eventTimeMs)
+{
+    // ==================================================
+    // UDS physical request
+    // ==================================================
+
+    if (
+        frame.arbitrationId ==
+        udsRequestCanId
+        )
+    {
+        processUdsRequestFrame(
+            frame,
+            eventTimeMs
+        );
+
+        return;
+    }
+
+    // ==================================================
+    // UDS physical response
+    // ==================================================
+
+    if (
+        frame.arbitrationId ==
+        udsResponseCanId
+        )
+    {
+        processUdsResponseFrame(
+            frame
+        );
+
+        return;
+    }
+
+    // ==================================================
+    // Existing vehicle traffic
+    // ==================================================
+
+    dashboardEcu.receiveFrame(
+        frame
     );
 }
 
@@ -745,13 +1156,46 @@ void SimulationEngine::processCanBus(
                 busTimeMs
             );
 
-        dashboardEcu.receiveFrame(
-            frame
+        // The frame has completed transmission at
+        // busyUntilMs. Any diagnostic response generated
+        // as a result of this frame therefore requests the
+        // bus no earlier than that completion time.
+        const double frameCompletionTimeMs =
+            canBus.getBusyUntilMs();
+
+        processReceivedCanFrame(
+            frame,
+            frameCompletionTimeMs
         );
 
         busTimeMs =
             canBus.getBusyUntilMs();
     }
+}
+
+// ==================================================
+// Runtime UDS reset
+// ==================================================
+
+void SimulationEngine::resetUdsRuntimeState()
+{
+    udsTransactionPending =
+        false;
+
+    udsResponseAvailable =
+        false;
+
+    pendingUdsRequest =
+        UdsRequest{};
+
+    completedUdsResponse =
+        UdsResponse{};
+
+    pendingUdsRequestFrames.clear();
+    receivedUdsRequestFrames.clear();
+
+    pendingUdsResponseFrames.clear();
+    receivedUdsResponseFrames.clear();
 }
 
 // ==================================================
@@ -825,6 +1269,8 @@ void SimulationEngine::reset()
             canBitrate,
             logLevel
         );
+
+    resetUdsRuntimeState();
 
     vehicleModel.setSteeringAngle(
         3.2f

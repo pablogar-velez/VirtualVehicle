@@ -18,6 +18,9 @@
 
 #include "../diagnostics/DtcManager.h"
 #include "../diagnostics/UdsServer.h"
+#include "../diagnostics/UdsTransport.h"
+#include "../diagnostics/UdsRequest.h"
+#include "../diagnostics/UdsResponse.h"
 
 #include "VehicleModel.h"
 #include "ScenarioController.h"
@@ -51,6 +54,19 @@ public:
     void startScenario(
         DrivingScenario scenario
     );
+
+    void submitUdsRequest(
+        const UdsRequest& request
+    );
+
+    bool hasPendingUdsTransaction() const;
+
+    bool hasCompletedUdsResponse() const;
+
+    const UdsResponse&
+        getCompletedUdsResponse() const;
+
+    void clearCompletedUdsResponse();
 
     double getCurrentTimeMs() const;
 
@@ -91,6 +107,12 @@ private:
     static constexpr std::uint32_t canBitrate =
         500000;
 
+    static constexpr std::uint32_t udsRequestCanId =
+        0x7E0;
+
+    static constexpr std::uint32_t udsResponseCanId =
+        0x7E8;
+
     LogLevel logLevel;
 
     VirtualCanBus canBus;
@@ -109,6 +131,7 @@ private:
 
     DtcManager dtcManager;
     UdsServer udsServer;
+    UdsTransport udsTransport;
 
     VehicleState vehicleState{};
     SteeringState steeringState{};
@@ -126,6 +149,17 @@ private:
     AbsHealthStatus previousAbsHealthStatus{
         AbsHealthStatus::Healthy
     };
+
+    bool udsTransactionPending{ false };
+    bool udsResponseAvailable{ false };
+
+    UdsRequest pendingUdsRequest{};
+    UdsResponse completedUdsResponse{};
+
+    std::vector<CanFrame> pendingUdsRequestFrames;
+    std::vector<CanFrame> receivedUdsRequestFrames;
+    std::vector<CanFrame> pendingUdsResponseFrames;
+    std::vector<CanFrame> receivedUdsResponseFrames;
 
     void updateBrakeEvents();
     void updateVehicleEvents();
@@ -147,6 +181,33 @@ private:
         double eventTimeMs
     );
 
+    void processReceivedCanFrame(
+        const CanFrame& frame,
+        double eventTimeMs
+    );
+
+    void queuePendingUdsRequestFrames(
+        double requestTimeMs
+    );
+
+    void processUdsRequestFrame(
+        const CanFrame& frame,
+        double eventTimeMs
+    );
+
+    void processUdsResponseFrame(
+        const CanFrame& frame
+    );
+
+    void queueUdsResponseFrames(
+        const UdsResponse& response,
+        double requestTimeMs
+    );
+
+    bool isUdsRequestComplete() const;
+
+    bool isUdsResponseComplete() const;
+
     double getNextInternalEventTime(
         double targetTimeMs
     ) const;
@@ -156,4 +217,6 @@ private:
     );
 
     void updateUdsVehicleData();
+
+    void resetUdsRuntimeState();
 };

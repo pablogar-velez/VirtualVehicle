@@ -536,6 +536,97 @@ TestCase TestRunner::runTest(
         return runUdsCanDeterminismTest();
 
     // ==================================================
+    // UDS Runtime Integration
+    // ==================================================
+
+    if (testId == "TC_UDSRT_001")
+        return runUdsRuntimeRequestSubmissionTest();
+
+    if (testId == "TC_UDSRT_002")
+        return runUdsRuntimeRequestIdentifierTest();
+
+    if (testId == "TC_UDSRT_003")
+        return runUdsRuntimeRequestSegmentationTest();
+
+    if (testId == "TC_UDSRT_004")
+        return runUdsRuntimeSharedBusRequestTest();
+
+    if (testId == "TC_UDSRT_005")
+        return runUdsRuntimeSharedArbitrationTest();
+
+    if (testId == "TC_UDSRT_006")
+        return runUdsRuntimePriorityPreservationTest();
+
+    if (testId == "TC_UDSRT_007")
+        return runUdsRuntimeNoTrafficLossTest();
+
+    if (testId == "TC_UDSRT_008")
+        return runUdsRuntimeCentralRoutingTest();
+
+    if (testId == "TC_UDSRT_009")
+        return runUdsRuntimeVehicleRoutingTest();
+
+    if (testId == "TC_UDSRT_010")
+        return runUdsRuntimeRequestRoutingTest();
+
+    if (testId == "TC_UDSRT_011")
+        return runUdsRuntimeResponseRoutingTest();
+
+    if (testId == "TC_UDSRT_012")
+        return runUdsRuntimeReassemblyProcessingTest();
+
+    if (testId == "TC_UDSRT_013")
+        return runUdsRuntimeCurrentVehicleDataTest();
+
+    if (testId == "TC_UDSRT_014")
+        return runUdsRuntimeResponseGenerationTest();
+
+    if (testId == "TC_UDSRT_015")
+        return runUdsRuntimeResponseIdentifierTest();
+
+    if (testId == "TC_UDSRT_016")
+        return runUdsRuntimeSharedBusResponseTest();
+
+    if (testId == "TC_UDSRT_017")
+        return runUdsRuntimeResponseReassemblyTest();
+
+    if (testId == "TC_UDSRT_018")
+        return runUdsRuntimeTraceTest();
+
+    if (testId == "TC_UDSRT_019")
+        return runUdsRuntimeStatisticsTest();
+
+    if (testId == "TC_UDSRT_020")
+        return runUdsRuntimeTimingTest();
+
+    if (testId == "TC_UDSRT_021")
+        return runUdsRuntimePendingStateTest();
+
+    if (testId == "TC_UDSRT_022")
+        return runUdsRuntimeCompletionTest();
+
+    if (testId == "TC_UDSRT_023")
+        return runUdsRuntimeResultAccessTest();
+
+    if (testId == "TC_UDSRT_024")
+        return runUdsRuntimeResetStateTest();
+
+    if (testId == "TC_UDSRT_025")
+        return runUdsRuntimeResetCanIsolationTest();
+
+    if (testId == "TC_UDSRT_026")
+        return runUdsRuntimeEcuRegressionTest();
+
+    if (testId == "TC_UDSRT_027")
+        return runUdsRuntimeDiagnosticRegressionTest();
+
+    if (testId == "TC_UDSRT_028")
+        return runUdsRuntimeBaselineRegressionTest();
+
+    if (testId == "TC_UDSRT_029")
+        return runUdsRuntimeDeterminismTest();
+
+    // ==================================================
     // CAN
     // ==================================================
 
@@ -702,7 +793,7 @@ TestRunner::runAll()
     std::vector<TestCase> results;
 
     results.reserve(
-        188
+        217
     );
 
     // ==================================================
@@ -927,6 +1018,40 @@ TestRunner::runAll()
     results.push_back(runUdsCanNegativeResponseTest());
     results.push_back(runUdsCanMultiFrameTransportTest());
     results.push_back(runUdsCanDeterminismTest());
+
+    // ==================================================
+    // UDS Runtime Integration
+    // ==================================================
+
+    results.push_back(runUdsRuntimeRequestSubmissionTest());
+    results.push_back(runUdsRuntimeRequestIdentifierTest());
+    results.push_back(runUdsRuntimeRequestSegmentationTest());
+    results.push_back(runUdsRuntimeSharedBusRequestTest());
+    results.push_back(runUdsRuntimeSharedArbitrationTest());
+    results.push_back(runUdsRuntimePriorityPreservationTest());
+    results.push_back(runUdsRuntimeNoTrafficLossTest());
+    results.push_back(runUdsRuntimeCentralRoutingTest());
+    results.push_back(runUdsRuntimeVehicleRoutingTest());
+    results.push_back(runUdsRuntimeRequestRoutingTest());
+    results.push_back(runUdsRuntimeResponseRoutingTest());
+    results.push_back(runUdsRuntimeReassemblyProcessingTest());
+    results.push_back(runUdsRuntimeCurrentVehicleDataTest());
+    results.push_back(runUdsRuntimeResponseGenerationTest());
+    results.push_back(runUdsRuntimeResponseIdentifierTest());
+    results.push_back(runUdsRuntimeSharedBusResponseTest());
+    results.push_back(runUdsRuntimeResponseReassemblyTest());
+    results.push_back(runUdsRuntimeTraceTest());
+    results.push_back(runUdsRuntimeStatisticsTest());
+    results.push_back(runUdsRuntimeTimingTest());
+    results.push_back(runUdsRuntimePendingStateTest());
+    results.push_back(runUdsRuntimeCompletionTest());
+    results.push_back(runUdsRuntimeResultAccessTest());
+    results.push_back(runUdsRuntimeResetStateTest());
+    results.push_back(runUdsRuntimeResetCanIsolationTest());
+    results.push_back(runUdsRuntimeEcuRegressionTest());
+    results.push_back(runUdsRuntimeDiagnosticRegressionTest());
+    results.push_back(runUdsRuntimeBaselineRegressionTest());
+    results.push_back(runUdsRuntimeDeterminismTest());
 
     // ==================================================
     // CAN

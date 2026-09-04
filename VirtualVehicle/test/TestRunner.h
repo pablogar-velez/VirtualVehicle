@@ -250,6 +250,40 @@ public:
     TestCase runUdsCanDeterminismTest();
 
     // ==================================================
+    // UDS Runtime Integration Tests
+    // ==================================================
+
+    TestCase runUdsRuntimeRequestSubmissionTest();
+    TestCase runUdsRuntimeRequestIdentifierTest();
+    TestCase runUdsRuntimeRequestSegmentationTest();
+    TestCase runUdsRuntimeSharedBusRequestTest();
+    TestCase runUdsRuntimeSharedArbitrationTest();
+    TestCase runUdsRuntimePriorityPreservationTest();
+    TestCase runUdsRuntimeNoTrafficLossTest();
+    TestCase runUdsRuntimeCentralRoutingTest();
+    TestCase runUdsRuntimeVehicleRoutingTest();
+    TestCase runUdsRuntimeRequestRoutingTest();
+    TestCase runUdsRuntimeResponseRoutingTest();
+    TestCase runUdsRuntimeReassemblyProcessingTest();
+    TestCase runUdsRuntimeCurrentVehicleDataTest();
+    TestCase runUdsRuntimeResponseGenerationTest();
+    TestCase runUdsRuntimeResponseIdentifierTest();
+    TestCase runUdsRuntimeSharedBusResponseTest();
+    TestCase runUdsRuntimeResponseReassemblyTest();
+    TestCase runUdsRuntimeTraceTest();
+    TestCase runUdsRuntimeStatisticsTest();
+    TestCase runUdsRuntimeTimingTest();
+    TestCase runUdsRuntimePendingStateTest();
+    TestCase runUdsRuntimeCompletionTest();
+    TestCase runUdsRuntimeResultAccessTest();
+    TestCase runUdsRuntimeResetStateTest();
+    TestCase runUdsRuntimeResetCanIsolationTest();
+    TestCase runUdsRuntimeEcuRegressionTest();
+    TestCase runUdsRuntimeDiagnosticRegressionTest();
+    TestCase runUdsRuntimeBaselineRegressionTest();
+    TestCase runUdsRuntimeDeterminismTest();
+
+    // ==================================================
     // Message Tests
     // ==================================================
 
