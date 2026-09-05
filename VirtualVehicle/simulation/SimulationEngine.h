@@ -9,6 +9,9 @@
 #include "../can/CanTraceEntry.h"
 #include "../can/CanStatistics.h"
 
+#include "../ethernet/EthernetNode.h"
+#include "../ethernet/VirtualEthernetBus.h"
+
 #include "../ecu/PowertrainEcu.h"
 #include "../ecu/AbsEcu.h"
 #include "../ecu/SteeringEcu.h"
@@ -68,6 +71,13 @@ public:
 
     void clearCompletedUdsResponse();
 
+    bool submitEthernetFrame(
+        const MacAddress& sourceMac,
+        const MacAddress& destinationMac,
+        std::uint16_t etherType,
+        const std::vector<std::uint8_t>& payload
+    );
+
     double getCurrentTimeMs() const;
 
     const VehicleModel&
@@ -94,6 +104,15 @@ public:
     std::uint32_t
         getCanBitrate() const;
 
+    const VirtualEthernetBus&
+        getEthernetBus() const;
+
+    const EthernetNode&
+        getEthernetNodeA() const;
+
+    const EthernetNode&
+        getEthernetNodeB() const;
+
     const DtcManager&
         getDtcManager() const;
 
@@ -107,6 +126,9 @@ private:
     static constexpr std::uint32_t canBitrate =
         500000;
 
+    static constexpr std::uint64_t ethernetLinkRate =
+        100000000;
+
     static constexpr std::uint32_t udsRequestCanId =
         0x7E0;
 
@@ -116,6 +138,10 @@ private:
     LogLevel logLevel;
 
     VirtualCanBus canBus;
+
+    VirtualEthernetBus ethernetBus;
+    EthernetNode ethernetNodeA;
+    EthernetNode ethernetNodeB;
 
     PowertrainEcu powertrainEcu;
     AbsEcu absEcu;
@@ -207,6 +233,10 @@ private:
     bool isUdsRequestComplete() const;
 
     bool isUdsResponseComplete() const;
+
+    void processEthernetBus();
+
+    void initializeEthernetRuntime();
 
     double getNextInternalEventTime(
         double targetTimeMs

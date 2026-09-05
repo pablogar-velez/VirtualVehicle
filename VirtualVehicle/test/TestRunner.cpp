@@ -627,6 +627,85 @@ TestCase TestRunner::runTest(
         return runUdsRuntimeDeterminismTest();
 
     // ==================================================
+    // Automotive Ethernet
+    // ==================================================
+
+    if (testId == "TC_ETH_001")
+        return runEthernetFrameRepresentationTest();
+    if (testId == "TC_ETH_002")
+        return runEthernetSourceMacAddressTest();
+    if (testId == "TC_ETH_003")
+        return runEthernetDestinationMacAddressTest();
+    if (testId == "TC_ETH_004")
+        return runEthernetEtherTypeTest();
+    if (testId == "TC_ETH_005")
+        return runEthernetPayloadTest();
+    if (testId == "TC_ETH_006")
+        return runEthernetPayloadPreservationTest();
+    if (testId == "TC_ETH_007")
+        return runEthernetMacAddressRepresentationTest();
+    if (testId == "TC_ETH_008")
+        return runEthernetMacAddressEqualityTest();
+    if (testId == "TC_ETH_009")
+        return runEthernetDeterministicNodeAddressingTest();
+    if (testId == "TC_ETH_010")
+        return runVirtualEthernetBusComponentTest();
+    if (testId == "TC_ETH_011")
+        return runEthernetFrameTransmissionRequestTest();
+    if (testId == "TC_ETH_012")
+        return runEthernetFrameDeliveryTest();
+    if (testId == "TC_ETH_013")
+        return runEthernetUnknownDestinationTest();
+    if (testId == "TC_ETH_014")
+        return runEthernetMultipleNodesTest();
+    if (testId == "TC_ETH_015")
+        return runEthernetLinkRateTest();
+    if (testId == "TC_ETH_016")
+        return runEthernetTransmissionDurationTest();
+    if (testId == "TC_ETH_017")
+        return runEthernetBusTimeProgressionTest();
+    if (testId == "TC_ETH_018")
+        return runEthernetBusyStateTest();
+    if (testId == "TC_ETH_019")
+        return runEthernetTraceRecordingTest();
+    if (testId == "TC_ETH_020")
+        return runEthernetTraceAddressEvidenceTest();
+    if (testId == "TC_ETH_021")
+        return runEthernetTraceEtherTypeEvidenceTest();
+    if (testId == "TC_ETH_022")
+        return runEthernetTracePayloadEvidenceTest();
+    if (testId == "TC_ETH_023")
+        return runEthernetTraceTimingEvidenceTest();
+    if (testId == "TC_ETH_024")
+        return runEthernetFrameCountTest();
+    if (testId == "TC_ETH_025")
+        return runEthernetByteCountTest();
+    if (testId == "TC_ETH_026")
+        return runEthernetPerNodeStatisticsTest();
+    if (testId == "TC_ETH_027")
+        return runVirtualEthernetNodeTest();
+    if (testId == "TC_ETH_028")
+        return runEthernetNodeReceiveFilteringTest();
+    if (testId == "TC_ETH_029")
+        return runEthernetNodeTransmissionTest();
+    if (testId == "TC_ETH_030")
+        return runSimulationEthernetOwnershipTest();
+    if (testId == "TC_ETH_031")
+        return runCanEthernetCoexistenceTest();
+    if (testId == "TC_ETH_032")
+        return runEthernetRuntimeProcessingTest();
+    if (testId == "TC_ETH_033")
+        return runEthernetRuntimeResetTest();
+    if (testId == "TC_ETH_034")
+        return runEthernetCanRegressionTest();
+    if (testId == "TC_ETH_035")
+        return runEthernetDiagnosticRegressionTest();
+    if (testId == "TC_ETH_036")
+        return runEthernetBaselineRegressionTest();
+    if (testId == "TC_ETH_037")
+        return runEthernetDeterminismTest();
+
+    // ==================================================
     // CAN
     // ==================================================
 
@@ -793,7 +872,7 @@ TestRunner::runAll()
     std::vector<TestCase> results;
 
     results.reserve(
-        217
+        254
     );
 
     // ==================================================
@@ -1052,6 +1131,48 @@ TestRunner::runAll()
     results.push_back(runUdsRuntimeDiagnosticRegressionTest());
     results.push_back(runUdsRuntimeBaselineRegressionTest());
     results.push_back(runUdsRuntimeDeterminismTest());
+
+    // ==================================================
+    // Automotive Ethernet
+    // ==================================================
+
+    results.push_back(runEthernetFrameRepresentationTest());
+    results.push_back(runEthernetSourceMacAddressTest());
+    results.push_back(runEthernetDestinationMacAddressTest());
+    results.push_back(runEthernetEtherTypeTest());
+    results.push_back(runEthernetPayloadTest());
+    results.push_back(runEthernetPayloadPreservationTest());
+    results.push_back(runEthernetMacAddressRepresentationTest());
+    results.push_back(runEthernetMacAddressEqualityTest());
+    results.push_back(runEthernetDeterministicNodeAddressingTest());
+    results.push_back(runVirtualEthernetBusComponentTest());
+    results.push_back(runEthernetFrameTransmissionRequestTest());
+    results.push_back(runEthernetFrameDeliveryTest());
+    results.push_back(runEthernetUnknownDestinationTest());
+    results.push_back(runEthernetMultipleNodesTest());
+    results.push_back(runEthernetLinkRateTest());
+    results.push_back(runEthernetTransmissionDurationTest());
+    results.push_back(runEthernetBusTimeProgressionTest());
+    results.push_back(runEthernetBusyStateTest());
+    results.push_back(runEthernetTraceRecordingTest());
+    results.push_back(runEthernetTraceAddressEvidenceTest());
+    results.push_back(runEthernetTraceEtherTypeEvidenceTest());
+    results.push_back(runEthernetTracePayloadEvidenceTest());
+    results.push_back(runEthernetTraceTimingEvidenceTest());
+    results.push_back(runEthernetFrameCountTest());
+    results.push_back(runEthernetByteCountTest());
+    results.push_back(runEthernetPerNodeStatisticsTest());
+    results.push_back(runVirtualEthernetNodeTest());
+    results.push_back(runEthernetNodeReceiveFilteringTest());
+    results.push_back(runEthernetNodeTransmissionTest());
+    results.push_back(runSimulationEthernetOwnershipTest());
+    results.push_back(runCanEthernetCoexistenceTest());
+    results.push_back(runEthernetRuntimeProcessingTest());
+    results.push_back(runEthernetRuntimeResetTest());
+    results.push_back(runEthernetCanRegressionTest());
+    results.push_back(runEthernetDiagnosticRegressionTest());
+    results.push_back(runEthernetBaselineRegressionTest());
+    results.push_back(runEthernetDeterminismTest());
 
     // ==================================================
     // CAN

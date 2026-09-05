@@ -11,7 +11,7 @@ This document records formal inspection evidence for VirtualVehicle
 requirements whose defined verification method is Inspection or whose closure
 requires direct review of the validation interface / execution-control design.
 
-Inspection evidence complements, but does not replace, the 217 automated tests.
+Inspection evidence complements, but does not replace, the 254 automated tests.
 
 2. Inspection Records
 
@@ -43,7 +43,7 @@ IVR-003
 
 VAL-REQ-004
 
-TestRunner v1.6 contains 217 registered test identifiers; static inventory check confirms 217 identifiers and 217 unique values.
+TestRunner v1.7 contains 254 registered test identifiers; static inventory check confirms 254 identifiers and 254 unique values.
 
 PASS
 
@@ -51,7 +51,7 @@ IVR-004
 
 VAL-REQ-005
 
-Requirements-based test definitions populate requirementId; the 217-test inventory maps every test to a primary requirement.
+Requirements-based test definitions populate requirementId; the 254-test inventory maps every test to a primary requirement.
 
 PASS
 
@@ -67,7 +67,7 @@ IVR-006
 
 VAL-REQ-007
 
-Executed test definitions populate TestResult.actual; successful 217-test execution presents observed actual evidence for the executed cases.
+Executed test definitions populate TestResult.actual; successful 254-test execution presents observed actual evidence for the executed cases.
 
 PASS
 
@@ -108,7 +108,7 @@ PASS
 The complete registered automated validation suite was executed after the
 Baseline v1.6 runtime diagnostic integration expansion.
 
-Result: 217 PASS / 0 FAIL
+Result: 254 PASS / 0 FAIL
 
 The execution includes all existing system, vehicle, ECU, sensor, CAN,
 diagnostic, DTC, UDS, message, and validation test cases.
@@ -138,11 +138,11 @@ of the complete registered automated test suite.
 
 4. Static Validation Inventory Check
 
-The Baseline v1.6 TestRunner source was checked for duplicate identifiers.
+The Baseline v1.7 TestRunner source was checked for duplicate identifiers.
 
-Registered test identifiers: 217
+Registered test identifiers: 254
 
-Unique test identifiers: 217
+Unique test identifiers: 254
 
 Duplicate identifiers: 0
 
@@ -348,8 +348,7 @@ runtime integration.
 
 11. Verification Boundary
 
-This inspection record applies only to requirements currently defined and
-verification-closed in Baseline v1.6.
+This inspection record applies to requirements defined and verification-closed in Baseline v1.7, including the simplified Automotive Ethernet subsystem.
 
 It does not claim verification of:
 
@@ -395,16 +394,26 @@ Physical CAN transceiver or hardware-bus behavior
 
 Hardware-in-the-loop CAN validation
 
-12. Baseline v1.6 Verification Record
+12. Automotive Ethernet Verification
 
-VirtualVehicle Baseline v1.6
+Automotive Ethernet requirements ETH-REQ-001 through ETH-REQ-037 use automated verification.
 
-Automated Tests:        217
-Passed:                 217
+All 37 Ethernet verification tests TC_ETH_001 through TC_ETH_037 completed with PASS status.
+
+The complete Baseline v1.6 regression remained 217 PASS / 0 FAIL within the final Baseline v1.7 suite. ETH-REQ-036 uses TC_ETH_036 as a dedicated regression sentinel; formal closure evidence also includes execution of all 217 legacy v1.6 tests.
+
+The verified Ethernet scope includes frame/MAC representation, virtual bus delivery, 100 Mbit/s simplified timing, trace, statistics, EthernetNode behavior, SimulationEngine integration, reset, coexistence with CAN, regression preservation, and deterministic behavior.
+
+Baseline v1.7 Verification Record
+
+VirtualVehicle Baseline v1.7
+
+Automated Tests:        254
+Passed:                 254
 Failed:                   0
 
-Requirements:           227
-Verified:               227
+Requirements:           264
+Verified:               264
 Unverified:               0
 
 Previous v1.5 Regression:
@@ -413,6 +422,20 @@ Failed:                   0
 
 Inspection Records:      10
 Inspection PASS:          10
+
+Status:
+VERIFICATION CLOSED
+
+Automotive Ethernet:
+Requirements:            37
+Verified:                37
+Tests:                   37
+Passed:                  37
+Failed:                   0
+
+Baseline v1.6 Regression:
+Passed:                 217
+Failed:                   0
 
 Status:
 VERIFICATION CLOSED

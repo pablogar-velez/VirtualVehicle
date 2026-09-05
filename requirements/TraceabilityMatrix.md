@@ -1,11 +1,11 @@
 VirtualVehicle Requirements Traceability Matrix
 
 Document ID: VV-RTM-001
-Baseline: 1.6
+Baseline: 1.7
 Status: Current Verification Record / Closed
-Latest Automated Suite Result: 217 Passed / 0 Failed
+Latest Automated Suite Result: 254 Passed / 0 Failed
 
-1. Purpose
+Purpose
 
 This document provides project-level traceability between VirtualVehicle
 requirements, implementation areas, automated verification test cases, and
@@ -17,7 +17,7 @@ sufficient for direct verification.
 Incidental or indirect exercise is recorded as supporting evidence and does not
 by itself change formal verification status.
 
-2. Automated Test Inventory
+Automated Test Inventory
 
 Test Case
 
@@ -1763,7 +1763,7 @@ Timing Pass Criteria
 
 PASS
 
-3. Requirement Traceability
+Requirement Traceability
 
 3.1 Existing Baseline Requirements
 
@@ -4131,7 +4131,7 @@ Requirement ID displayed
 
 VERIFIED / PASS
 
-4. Verification Summary
+Verification Summary
 
 Automated tests: 217
 Passed: 217
@@ -4172,7 +4172,7 @@ UDSRT-REQ-001 through UDSRT-REQ-029 are closed through TC_UDSRT_001 through
 TC_UDSRT_029. UDSRT-REQ-028 is additionally supported by successful execution
 of the complete 188-test Baseline v1.5 regression suite.
 
-5. Baseline Verification Closure
+Baseline Verification Closure
 
 Baseline v1.6 records full verification closure for the requirements currently
 defined by the VirtualVehicle project.
@@ -4209,7 +4209,7 @@ Unverified requirements: 0
 
 Previous Baseline v1.5 regression: 188 PASS / 0 FAIL
 
-6. Baseline Boundary
+Baseline Boundary
 
 The following features remain explicitly outside Baseline v1.6 and are not
 claimed as verified requirements:
@@ -4259,7 +4259,7 @@ Hardware-in-the-loop CAN validation
 Future requirements for these capabilities shall be introduced in a new
 baseline before implementation is claimed as requirements-verified.
 
-7. Baseline Status
+Baseline Status
 
 VirtualVehicle Baseline v1.6
 
@@ -4273,3 +4273,318 @@ Failed:              0
 
 Status:
 VERIFICATION CLOSED
+
+Baseline v1.7 Automotive Ethernet Traceability
+
+TC_ETH_001
+
+ETH-REQ-001
+
+Ethernet Frame Representation
+
+PASS
+
+TC_ETH_002
+
+ETH-REQ-002
+
+Source MAC Address
+
+PASS
+
+TC_ETH_003
+
+ETH-REQ-003
+
+Destination MAC Address
+
+PASS
+
+TC_ETH_004
+
+ETH-REQ-004
+
+EtherType Field
+
+PASS
+
+TC_ETH_005
+
+ETH-REQ-005
+
+Ethernet Payload
+
+PASS
+
+TC_ETH_006
+
+ETH-REQ-006
+
+Payload Preservation
+
+PASS
+
+TC_ETH_007
+
+ETH-REQ-007
+
+MAC Address Representation
+
+PASS
+
+TC_ETH_008
+
+ETH-REQ-008
+
+MAC Address Equality
+
+PASS
+
+TC_ETH_009
+
+ETH-REQ-009
+
+Deterministic Node Addressing
+
+PASS
+
+TC_ETH_010
+
+ETH-REQ-010
+
+Virtual Ethernet Bus Component
+
+PASS
+
+TC_ETH_011
+
+ETH-REQ-011
+
+Frame Transmission Request
+
+PASS
+
+TC_ETH_012
+
+ETH-REQ-012
+
+Frame Delivery
+
+PASS
+
+TC_ETH_013
+
+ETH-REQ-013
+
+Unknown Destination Behavior
+
+PASS
+
+TC_ETH_014
+
+ETH-REQ-014
+
+Multiple Ethernet Nodes
+
+PASS
+
+TC_ETH_015
+
+ETH-REQ-015
+
+Configurable Ethernet Link Rate
+
+PASS
+
+TC_ETH_016
+
+ETH-REQ-016
+
+Ethernet Transmission Duration
+
+PASS
+
+TC_ETH_017
+
+ETH-REQ-017
+
+Ethernet Bus Time Progression
+
+PASS
+
+TC_ETH_018
+
+ETH-REQ-018
+
+Ethernet Busy State
+
+PASS
+
+TC_ETH_019
+
+ETH-REQ-019
+
+Ethernet Trace Recording
+
+PASS
+
+TC_ETH_020
+
+ETH-REQ-020
+
+Ethernet Trace Address Evidence
+
+PASS
+
+TC_ETH_021
+
+ETH-REQ-021
+
+Ethernet Trace EtherType Evidence
+
+PASS
+
+TC_ETH_022
+
+ETH-REQ-022
+
+Ethernet Trace Payload Evidence
+
+PASS
+
+TC_ETH_023
+
+ETH-REQ-023
+
+Ethernet Trace Timing Evidence
+
+PASS
+
+TC_ETH_024
+
+ETH-REQ-024
+
+Ethernet Frame Count
+
+PASS
+
+TC_ETH_025
+
+ETH-REQ-025
+
+Ethernet Transmitted Byte Count
+
+PASS
+
+TC_ETH_026
+
+ETH-REQ-026
+
+Per-Node Ethernet Statistics
+
+PASS
+
+TC_ETH_027
+
+ETH-REQ-027
+
+Virtual Ethernet Node
+
+PASS
+
+TC_ETH_028
+
+ETH-REQ-028
+
+Ethernet Node Receive Filtering
+
+PASS
+
+TC_ETH_029
+
+ETH-REQ-029
+
+Ethernet Node Transmission
+
+PASS
+
+TC_ETH_030
+
+ETH-REQ-030
+
+SimulationEngine Ethernet Ownership
+
+PASS
+
+TC_ETH_031
+
+ETH-REQ-031
+
+CAN and Ethernet Coexistence
+
+PASS
+
+TC_ETH_032
+
+ETH-REQ-032
+
+Ethernet Runtime Processing
+
+PASS
+
+TC_ETH_033
+
+ETH-REQ-033
+
+Ethernet Runtime Reset
+
+PASS
+
+TC_ETH_034
+
+ETH-REQ-034
+
+Existing CAN Regression
+
+PASS
+
+TC_ETH_035
+
+ETH-REQ-035
+
+Existing Diagnostic Regression
+
+PASS
+
+TC_ETH_036
+
+ETH-REQ-036
+
+Baseline v1.6 Regression
+
+PASS
+
+TC_ETH_037
+
+ETH-REQ-037
+
+Deterministic Ethernet Communication
+
+PASS
+
+ETH-REQ-036 regression evidence includes TC_ETH_036 as the dedicated regression sentinel and successful execution of the complete 217-test Baseline v1.6 suite within the 254-test Baseline v1.7 execution.
+
+Baseline v1.7 Verification Closure
+
+Automated Tests: 254
+Passed: 254
+Failed: 0
+
+Requirements: 264
+Verified: 264
+Unverified: 0
+
+Automotive Ethernet: 37 / 37 VERIFIED
+Baseline v1.6 Regression: 217 PASS / 0 FAIL
+
+Status: VERIFICATION CLOSED

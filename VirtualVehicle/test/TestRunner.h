@@ -284,6 +284,48 @@ public:
     TestCase runUdsRuntimeDeterminismTest();
 
     // ==================================================
+    // Automotive Ethernet Tests
+    // ==================================================
+
+    TestCase runEthernetFrameRepresentationTest();
+    TestCase runEthernetSourceMacAddressTest();
+    TestCase runEthernetDestinationMacAddressTest();
+    TestCase runEthernetEtherTypeTest();
+    TestCase runEthernetPayloadTest();
+    TestCase runEthernetPayloadPreservationTest();
+    TestCase runEthernetMacAddressRepresentationTest();
+    TestCase runEthernetMacAddressEqualityTest();
+    TestCase runEthernetDeterministicNodeAddressingTest();
+    TestCase runVirtualEthernetBusComponentTest();
+    TestCase runEthernetFrameTransmissionRequestTest();
+    TestCase runEthernetFrameDeliveryTest();
+    TestCase runEthernetUnknownDestinationTest();
+    TestCase runEthernetMultipleNodesTest();
+    TestCase runEthernetLinkRateTest();
+    TestCase runEthernetTransmissionDurationTest();
+    TestCase runEthernetBusTimeProgressionTest();
+    TestCase runEthernetBusyStateTest();
+    TestCase runEthernetTraceRecordingTest();
+    TestCase runEthernetTraceAddressEvidenceTest();
+    TestCase runEthernetTraceEtherTypeEvidenceTest();
+    TestCase runEthernetTracePayloadEvidenceTest();
+    TestCase runEthernetTraceTimingEvidenceTest();
+    TestCase runEthernetFrameCountTest();
+    TestCase runEthernetByteCountTest();
+    TestCase runEthernetPerNodeStatisticsTest();
+    TestCase runVirtualEthernetNodeTest();
+    TestCase runEthernetNodeReceiveFilteringTest();
+    TestCase runEthernetNodeTransmissionTest();
+    TestCase runSimulationEthernetOwnershipTest();
+    TestCase runCanEthernetCoexistenceTest();
+    TestCase runEthernetRuntimeProcessingTest();
+    TestCase runEthernetRuntimeResetTest();
+    TestCase runEthernetCanRegressionTest();
+    TestCase runEthernetDiagnosticRegressionTest();
+    TestCase runEthernetBaselineRegressionTest();
+    TestCase runEthernetDeterminismTest();
+
+    // ==================================================
     // Message Tests
     // ==================================================
 

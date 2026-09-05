@@ -21,6 +21,15 @@ SimulationEngine::SimulationEngine(
         canBitrate,
         logLevel
     ),
+    ethernetBus(
+        ethernetLinkRate
+    ),
+    ethernetNodeA(
+        MacAddress{ 0x02, 0x00, 0x00, 0x00, 0x00, 0x01 }
+    ),
+    ethernetNodeB(
+        MacAddress{ 0x02, 0x00, 0x00, 0x00, 0x00, 0x02 }
+    ),
     udsServer(dtcManager),
     udsTransport(udsServer)
 {
@@ -37,6 +46,8 @@ SimulationEngine::SimulationEngine(
     steeringEcu.setSteeringState(
         steeringState
     );
+
+    initializeEthernetRuntime();
 
     updateUdsVehicleData();
 }
@@ -112,6 +123,8 @@ void SimulationEngine::update(
         processCanBus(
             0.0
         );
+
+        processEthernetBus();
     }
 
     // ==================================================
@@ -211,6 +224,8 @@ void SimulationEngine::update(
         processCanBus(
             currentTimeMs
         );
+
+        processEthernetBus();
 
         if (
             currentTimeMs >=
@@ -326,6 +341,49 @@ void SimulationEngine::clearCompletedUdsResponse()
 
     completedUdsResponse =
         UdsResponse{};
+}
+
+// ==================================================
+// Runtime Ethernet frame submission
+// ==================================================
+
+bool SimulationEngine::submitEthernetFrame(
+    const MacAddress& sourceMac,
+    const MacAddress& destinationMac,
+    std::uint16_t etherType,
+    const std::vector<std::uint8_t>& payload)
+{
+    if (
+        sourceMac ==
+        ethernetNodeA.getMacAddress()
+        )
+    {
+        return ethernetNodeA.transmit(
+            ethernetBus,
+            destinationMac,
+            etherType,
+            payload,
+            currentTimeMs
+        );
+    }
+
+    if (
+        sourceMac ==
+        ethernetNodeB.getMacAddress()
+        )
+    {
+        return ethernetNodeB.transmit(
+            ethernetBus,
+            destinationMac,
+            etherType,
+            payload,
+            currentTimeMs
+        );
+    }
+
+    throw std::invalid_argument(
+        "Ethernet source MAC is not configured in SimulationEngine."
+    );
 }
 
 // ==================================================
@@ -1199,6 +1257,44 @@ void SimulationEngine::resetUdsRuntimeState()
 }
 
 // ==================================================
+// Runtime Ethernet processing
+// ==================================================
+
+void SimulationEngine::processEthernetBus()
+{
+    if (
+        currentTimeMs <
+        ethernetBus.getBusyUntilMs()
+        )
+    {
+        return;
+    }
+
+    ethernetNodeA.processReceivedFrames(
+        ethernetBus
+    );
+
+    ethernetNodeB.processReceivedFrames(
+        ethernetBus
+    );
+}
+
+// ==================================================
+// Runtime Ethernet initialization
+// ==================================================
+
+void SimulationEngine::initializeEthernetRuntime()
+{
+    ethernetBus.registerNode(
+        ethernetNodeA.getMacAddress()
+    );
+
+    ethernetBus.registerNode(
+        ethernetNodeB.getMacAddress()
+    );
+}
+
+// ==================================================
 // Reset
 // ==================================================
 
@@ -1269,6 +1365,16 @@ void SimulationEngine::reset()
             canBitrate,
             logLevel
         );
+
+    ethernetBus =
+        VirtualEthernetBus(
+            ethernetLinkRate
+        );
+
+    ethernetNodeA.clearReceivedFrames();
+    ethernetNodeB.clearReceivedFrames();
+
+    initializeEthernetRuntime();
 
     resetUdsRuntimeState();
 
@@ -1436,6 +1542,24 @@ const AbsState&
 SimulationEngine::getAbsState() const
 {
     return absEcu.getState();
+}
+
+const VirtualEthernetBus&
+SimulationEngine::getEthernetBus() const
+{
+    return ethernetBus;
+}
+
+const EthernetNode&
+SimulationEngine::getEthernetNodeA() const
+{
+    return ethernetNodeA;
+}
+
+const EthernetNode&
+SimulationEngine::getEthernetNodeB() const
+{
+    return ethernetNodeB;
 }
 
 const DtcManager&

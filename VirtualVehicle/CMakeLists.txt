@@ -189,7 +189,7 @@ add_executable(
 
     "gui/widgets/TestRunnerWidget.h"
     "gui/widgets/TestRunnerWidget.cpp"
- "transport/IsoTpFrame.h" "transport/IsoTpProtocol.h" "transport/IsoTpProtocol.cpp" "test/IsoTpTests.cpp" "diagnostics/UdsTransport.h" "diagnostics/UdsTransport.cpp" "test/UdsTransportTest.cpp" "diagnostics/UdsCanTransport.cpp" "diagnostics/UdsCanTransport.h" "test/UdsCanTransportTests.cpp" "test/UdsRuntimeIntegrationTests.cpp")
+ "transport/IsoTpFrame.h" "transport/IsoTpProtocol.h" "transport/IsoTpProtocol.cpp" "test/IsoTpTests.cpp" "diagnostics/UdsTransport.h" "diagnostics/UdsTransport.cpp" "test/UdsTransportTest.cpp" "diagnostics/UdsCanTransport.cpp" "diagnostics/UdsCanTransport.h" "test/UdsCanTransportTests.cpp" "test/UdsRuntimeIntegrationTests.cpp" "ethernet/MacAddress.h" "ethernet/EthernetFrame.h" "ethernet/VirtualEthernetBus.h" "ethernet/VirtualEthernetBus.cpp" "test/EthernetTest.cpp" "ethernet/EthernetTiming.h" "ethernet/EthernetTiming.cpp" "ethernet/EthernetTraceEntry.h" "ethernet/EthernetStatistics.h" "ethernet/EthernetStatistics.cpp" "ethernet/EthernetNode.h" "ethernet/EthernetNode.cpp")
 
 target_compile_features(
     VirtualVehicle
