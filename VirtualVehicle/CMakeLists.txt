@@ -6,7 +6,7 @@ find_package(
     Qt6
     REQUIRED
     COMPONENTS
-    Widgets
+        Widgets
 )
 
 add_executable(
@@ -25,35 +25,24 @@ add_executable(
 
     "can/CanFrame.h"
     "can/PendingCanFrame.h"
-
     "can/CanArbitration.h"
     "can/CanArbitration.cpp"
-
     "can/CanTiming.h"
     "can/CanTiming.cpp"
-
     "can/CanStatistics.h"
     "can/CanStatistics.cpp"
-
     "can/CanMessageRegistry.h"
     "can/CanMessageRegistry.cpp"
-
     "can/CanMessageDefinitions.h"
-
     "can/VehicleStateCodec.h"
     "can/VehicleStateCodec.cpp"
-
     "can/AbsStateCodec.h"
     "can/AbsStateCodec.cpp"
-
     "can/SteeringStateCodec.h"
     "can/SteeringStateCodec.cpp"
-
     "can/VirtualCanBus.h"
     "can/VirtualCanBus.cpp"
-
     "can/CanTraceEntry.h"
-
     "can/CanTracePrinter.h"
     "can/CanTracePrinter.cpp"
 
@@ -63,13 +52,10 @@ add_executable(
 
     "ecu/PowertrainEcu.h"
     "ecu/PowertrainEcu.cpp"
-
     "ecu/AbsEcu.h"
     "ecu/AbsEcu.cpp"
-
     "ecu/SteeringEcu.h"
     "ecu/SteeringEcu.cpp"
-
     "ecu/DashboardEcu.h"
     "ecu/DashboardEcu.cpp"
 
@@ -78,18 +64,16 @@ add_executable(
     # ========================================================
 
     "sensor/SensorFault.h"
-
     "sensor/WheelSpeedSensor.h"
     "sensor/WheelSpeedSensor.cpp"
 
     # ========================================================
-    # Diagnostics
+    # Diagnostics / DTC
     # ========================================================
 
     "diagnostics/DtcStatus.h"
     "diagnostics/Dtc.h"
     "diagnostics/DtcDefinitions.h"
-
     "diagnostics/DtcManager.h"
     "diagnostics/DtcManager.cpp"
 
@@ -100,9 +84,36 @@ add_executable(
     "diagnostics/UdsService.h"
     "diagnostics/UdsRequest.h"
     "diagnostics/UdsResponse.h"
-
     "diagnostics/UdsServer.h"
     "diagnostics/UdsServer.cpp"
+    "diagnostics/UdsTransport.h"
+    "diagnostics/UdsTransport.cpp"
+    "diagnostics/UdsCanTransport.h"
+    "diagnostics/UdsCanTransport.cpp"
+
+    # ========================================================
+    # Transport
+    # ========================================================
+
+    "transport/IsoTpFrame.h"
+    "transport/IsoTpProtocol.h"
+    "transport/IsoTpProtocol.cpp"
+
+    # ========================================================
+    # Automotive Ethernet
+    # ========================================================
+
+    "ethernet/MacAddress.h"
+    "ethernet/EthernetFrame.h"
+    "ethernet/EthernetTiming.h"
+    "ethernet/EthernetTiming.cpp"
+    "ethernet/EthernetTraceEntry.h"
+    "ethernet/EthernetStatistics.h"
+    "ethernet/EthernetStatistics.cpp"
+    "ethernet/EthernetNode.h"
+    "ethernet/EthernetNode.cpp"
+    "ethernet/VirtualEthernetBus.h"
+    "ethernet/VirtualEthernetBus.cpp"
 
     # ========================================================
     # Simulation
@@ -110,16 +121,12 @@ add_executable(
 
     "simulation/VehicleModel.h"
     "simulation/VehicleModel.cpp"
-
     "simulation/EventLogger.h"
     "simulation/EventLogger.cpp"
-
     "simulation/ScenarioController.h"
     "simulation/ScenarioController.cpp"
-
     "simulation/SimulationEngine.h"
     "simulation/SimulationEngine.cpp"
-
     "simulation/LogLevel.h"
 
     # ========================================================
@@ -135,24 +142,20 @@ add_executable(
 
     "gui/widgets/VehicleStateWidget.h"
     "gui/widgets/VehicleStateWidget.cpp"
-
     "gui/widgets/AbsStateWidget.h"
     "gui/widgets/AbsStateWidget.cpp"
-
     "gui/widgets/ScenarioControlWidget.h"
     "gui/widgets/ScenarioControlWidget.cpp"
-
     "gui/widgets/FaultInjectionWidget.h"
     "gui/widgets/FaultInjectionWidget.cpp"
-
     "gui/widgets/EventLogWidget.h"
     "gui/widgets/EventLogWidget.cpp"
-
     "gui/widgets/CanMonitorWidget.h"
     "gui/widgets/CanMonitorWidget.cpp"
-
     "gui/widgets/StatisticsWidget.h"
     "gui/widgets/StatisticsWidget.cpp"
+    "gui/widgets/TestRunnerWidget.h"
+    "gui/widgets/TestRunnerWidget.cpp"
 
     # ========================================================
     # Automated Tests
@@ -161,10 +164,8 @@ add_executable(
     "test/TestResult.h"
     "test/TestCase.h"
     "test/TestConfig.h"
-
     "test/TestRunner.h"
     "test/TestRunner.cpp"
-
     "test/SystemTests.cpp"
     "test/VehicleTests.cpp"
     "test/AbsTests.cpp"
@@ -178,27 +179,30 @@ add_executable(
     "test/ValidationTests.cpp"
 
     # ========================================================
-    # UDS Automated Tests
+    # Diagnostic / Transport Tests
     # ========================================================
 
     "test/UdsTests.cpp"
+    "test/IsoTpTests.cpp"
+    "test/UdsTransportTest.cpp"
+    "test/UdsCanTransportTests.cpp"
+    "test/UdsRuntimeIntegrationTests.cpp"
 
     # ========================================================
-    # Test Runner GUI
+    # Automotive Ethernet Tests
     # ========================================================
 
-    "gui/widgets/TestRunnerWidget.h"
-    "gui/widgets/TestRunnerWidget.cpp"
- "transport/IsoTpFrame.h" "transport/IsoTpProtocol.h" "transport/IsoTpProtocol.cpp" "test/IsoTpTests.cpp" "diagnostics/UdsTransport.h" "diagnostics/UdsTransport.cpp" "test/UdsTransportTest.cpp" "diagnostics/UdsCanTransport.cpp" "diagnostics/UdsCanTransport.h" "test/UdsCanTransportTests.cpp" "test/UdsRuntimeIntegrationTests.cpp" "ethernet/MacAddress.h" "ethernet/EthernetFrame.h" "ethernet/VirtualEthernetBus.h" "ethernet/VirtualEthernetBus.cpp" "test/EthernetTest.cpp" "ethernet/EthernetTiming.h" "ethernet/EthernetTiming.cpp" "ethernet/EthernetTraceEntry.h" "ethernet/EthernetStatistics.h" "ethernet/EthernetStatistics.cpp" "ethernet/EthernetNode.h" "ethernet/EthernetNode.cpp")
+    "test/EthernetTest.cpp"
+ "gui/widgets/AutomotiveGaugeWidget.h")
 
 target_compile_features(
     VirtualVehicle
     PRIVATE
-    cxx_std_20
+        cxx_std_20
 )
 
 target_link_libraries(
     VirtualVehicle
     PRIVATE
-    Qt6::Widgets
+        Qt6::Widgets
 )

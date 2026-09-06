@@ -3,8 +3,10 @@
 #include <QGroupBox>
 
 #include "../../VirtualVehicle.h"
+#include "AutomotiveGaugeWidget.h"
 
 class QLabel;
+class GearIndicatorWidget;
 
 class VehicleStateWidget : public QGroupBox
 {
@@ -18,8 +20,13 @@ public:
     );
 
 private:
-    QLabel* speedValueLabel{};
-    QLabel* rpmValueLabel{};
-    QLabel* gearValueLabel{};
     QLabel* brakeValueLabel{};
+    GearIndicatorWidget* gearIndicatorWidget{};
+
+    AutomotiveGaugeWidget* speedGauge{};
+    AutomotiveGaugeWidget* rpmGauge{};
+
+    void updateBrakeStyle(
+        bool brakeApplied
+    );
 };

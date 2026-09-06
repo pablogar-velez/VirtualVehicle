@@ -58,6 +58,13 @@ public:
         DrivingScenario scenario
     );
 
+    void startAutomaticDriveCycle();
+    void stopAutomaticDriveCycle();
+
+    bool isAutomaticDriveCycleEnabled() const;
+
+    DrivingScenario getCurrentScenario() const;
+
     void submitUdsRequest(
         const UdsRequest& request
     );
@@ -135,6 +142,24 @@ private:
     static constexpr std::uint32_t udsResponseCanId =
         0x7E8;
 
+    static constexpr float automaticHighSpeedKmh =
+        100.0f;
+
+    static constexpr float automaticLowSpeedKmh =
+        70.0f;
+
+    static constexpr float automaticAccelerationThrottlePercent =
+        55.0f;
+
+    static constexpr float automaticDecelerationBrakePercent =
+        12.0f;
+
+    static constexpr double automaticHighCruiseDurationMs =
+        3500.0;
+
+    static constexpr double automaticLowCruiseDurationMs =
+        2200.0;
+
     LogLevel logLevel;
 
     VirtualCanBus canBus;
@@ -186,6 +211,32 @@ private:
     std::vector<CanFrame> receivedUdsRequestFrames;
     std::vector<CanFrame> pendingUdsResponseFrames;
     std::vector<CanFrame> receivedUdsResponseFrames;
+
+    enum class AutomaticDrivePhase
+    {
+        Acceleration,
+        HighCruise,
+        GentleDeceleration,
+        LowCruise
+    };
+
+    bool automaticDriveCycleEnabled{ false };
+
+    AutomaticDrivePhase automaticDrivePhase{
+        AutomaticDrivePhase::Acceleration
+    };
+
+    double automaticPhaseStartTimeMs{ 0.0 };
+
+    float manualCruiseTargetKmh{ 0.0f };
+
+    void updateAutomaticDriveCycle();
+    void applyAutomaticDriveControl();
+    void applyManualDriveControl();
+
+    void setAutomaticDrivePhase(
+        AutomaticDrivePhase phase
+    );
 
     void updateBrakeEvents();
     void updateVehicleEvents();

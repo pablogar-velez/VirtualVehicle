@@ -30,6 +30,7 @@ void ScenarioController::update(
         vehicleModel.setThrottle(0.0f);
         vehicleModel.setBrake(0.0f);
         vehicleModel.setFrontLeftWheelSlip(false);
+        vehicleModel.setCoasting(false);
 
         break;
 
@@ -38,6 +39,7 @@ void ScenarioController::update(
         vehicleModel.setThrottle(70.0f);
         vehicleModel.setBrake(0.0f);
         vehicleModel.setFrontLeftWheelSlip(false);
+        vehicleModel.setCoasting(false);
 
         break;
 
@@ -46,6 +48,7 @@ void ScenarioController::update(
         vehicleModel.setThrottle(25.0f);
         vehicleModel.setBrake(0.0f);
         vehicleModel.setFrontLeftWheelSlip(false);
+        vehicleModel.setCoasting(false);
 
         break;
 
@@ -53,9 +56,8 @@ void ScenarioController::update(
 
         vehicleModel.setThrottle(0.0f);
         vehicleModel.setBrake(90.0f);
-
-        // Simplified wheel-slip condition.
         vehicleModel.setFrontLeftWheelSlip(true);
+        vehicleModel.setCoasting(false);
 
         break;
 
@@ -64,6 +66,7 @@ void ScenarioController::update(
         vehicleModel.setThrottle(0.0f);
         vehicleModel.setBrake(0.0f);
         vehicleModel.setFrontLeftWheelSlip(false);
+        vehicleModel.setCoasting(true);
 
         break;
     }

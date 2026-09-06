@@ -7,7 +7,8 @@
 
 class QLabel;
 class QPushButton;
-class QTabWidget;
+class QStackedWidget;
+class QWidget;
 
 class VehicleStateWidget;
 class AbsStateWidget;
@@ -21,103 +22,80 @@ class TestRunnerWidget;
 class MainWindow : public QMainWindow
 {
 public:
-    explicit MainWindow(
-        QWidget* parent = nullptr
-    );
+    explicit MainWindow(QWidget* parent = nullptr);
 
 private:
-    // ==================================================
-    // Backend
-    // ==================================================
-
     SimulationEngine engine;
-
     QTimer simulationTimer;
+    QTimer uiRefreshTimer;
 
     bool simulationPaused{ false };
-
-    // ==================================================
-    // Header
-    // ==================================================
+    bool darkModeEnabled{ false };
 
     QLabel* timeValueLabel{};
     QLabel* simulationStatusLabel{};
 
+    QPushButton* autoDriveButton{};
     QPushButton* pauseResumeButton{};
     QPushButton* resetButton{};
+    QPushButton* themeToggleButton{};
 
-    // ==================================================
-    // Navigation
-    // ==================================================
+    QWidget* sidebarWidget{};
 
-    QTabWidget* tabWidget{};
+    QPushButton* dashboardNavigationButton{};
+    QPushButton* canNavigationButton{};
+    QPushButton* diagnosticsNavigationButton{};
+    QPushButton* networkNavigationButton{};
+    QPushButton* testRunnerNavigationButton{};
 
-    // ==================================================
-    // Dashboard
-    // ==================================================
+    QStackedWidget* pageStack{};
 
     VehicleStateWidget* vehicleStateWidget{};
     AbsStateWidget* absStateWidget{};
     ScenarioControlWidget* scenarioControlWidget{};
     EventLogWidget* eventLogWidget{};
 
-    // ==================================================
-    // CAN Monitor
-    // ==================================================
+    QLabel* powertrainEcuStatusLabel{};
+    QLabel* absEcuStatusLabel{};
+    QLabel* steeringEcuStatusLabel{};
+    QLabel* dashboardEcuStatusLabel{};
+
+    QLabel* canBusHealthLabel{};
+    QLabel* ethernetHealthLabel{};
+    QLabel* diagnosticsHealthLabel{};
+    QLabel* driveModeHealthLabel{};
 
     CanMonitorWidget* canMonitorWidget{};
-
-    // ==================================================
-    // Diagnostics
-    // ==================================================
-
     FaultInjectionWidget* faultInjectionWidget{};
-
-    // ==================================================
-    // Statistics
-    // ==================================================
-
     StatisticsWidget* statisticsWidget{};
-
-    // ==================================================
-    // Test Runner
-    // ==================================================
-
     TestRunnerWidget* testRunnerWidget{};
 
-    // ==================================================
-    // Setup
-    // ==================================================
-
     void setupUi();
-
     void setupConnections();
 
-    void createDashboardTab();
+    QWidget* createHeader();
+    QWidget* createSidebar();
 
-    void createCanMonitorTab();
+    QWidget* createDashboardPage();
+    QWidget* createEcuStatusCard();
+    QWidget* createSystemHealthCard();
 
-    void createDiagnosticsTab();
+    QWidget* createCanMonitorPage();
+    QWidget* createDiagnosticsPage();
+    QWidget* createNetworkPage();
+    QWidget* createTestRunnerPage();
 
-    void createStatisticsTab();
+    void showPage(int pageIndex);
+    void updateNavigationSelection();
 
-    void createTestRunnerTab();
-
-    // ==================================================
-    // Runtime
-    // ==================================================
+    void toggleTheme();
+    void applyTheme();
 
     void updateSimulation();
-
     void refreshUi();
 
     void togglePauseResume();
-
     void resetSimulation();
-
-    // ==================================================
-    // Automated Tests
-    // ==================================================
 
     void runAllTests();
     void runSelectedTest();

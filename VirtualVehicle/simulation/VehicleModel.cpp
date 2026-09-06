@@ -26,6 +26,12 @@ void VehicleModel::setFrontLeftWheelSlip(
     frontLeftWheelSlip = active;
 }
 
+void VehicleModel::setCoasting(
+    bool active)
+{
+    coastingActive = active;
+}
+
 void VehicleModel::update(
     double deltaTimeMs)
 {
@@ -34,17 +40,33 @@ void VehicleModel::update(
             deltaTimeMs / 1000.0
             );
 
-    // Simplified longitudinal dynamics.
+    // ==================================================
+    // Simplified longitudinal dynamics
+    // ==================================================
 
     const float throttleAcceleration =
-        (throttlePercent / 100.0f) * 4.0f;
+        (throttlePercent / 100.0f) *
+        4.0f;
 
     const float brakingDeceleration =
-        (brakePercent / 100.0f) * 8.0f;
+        (brakePercent / 100.0f) *
+        8.0f;
+
+    // Recovery uses a small rolling-resistance model so
+    // the vehicle naturally loses speed without applying
+    // the service brake.
+    const float coastingDeceleration =
+        (
+            coastingActive &&
+            speedKmh > 0.0f
+            )
+        ? 0.65f
+        : 0.0f;
 
     const float accelerationMs2 =
         throttleAcceleration -
-        brakingDeceleration;
+        brakingDeceleration -
+        coastingDeceleration;
 
     speedKmh +=
         accelerationMs2 *
@@ -86,4 +108,15 @@ float VehicleModel::getSteeringAngleDeg() const
 float VehicleModel::getBrakePercent() const
 {
     return brakePercent;
+}
+
+
+float VehicleModel::getThrottlePercent() const
+{
+    return throttlePercent;
+}
+
+bool VehicleModel::isCoasting() const
+{
+    return coastingActive;
 }

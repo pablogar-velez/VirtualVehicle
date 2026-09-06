@@ -72,12 +72,27 @@ void SimulationEngine::update(
         deltaTimeMs;
 
     // ==================================================
-    // Apply current scenario
+    // Automatic drive cycle
     // ==================================================
 
-    scenarioController.update(
-        vehicleModel
-    );
+    updateAutomaticDriveCycle();
+
+    // ==================================================
+    // Apply vehicle controls
+    //
+    // Manual scenarios keep their original behavior.
+    // Automatic driving uses a separate bounded control
+    // loop so verification scenarios are not modified.
+    // ==================================================
+
+    if (automaticDriveCycleEnabled)
+    {
+        applyAutomaticDriveControl();
+    }
+    else
+    {
+        applyManualDriveControl();
+    }
 
     updateBrakeEvents();
 
@@ -244,10 +259,462 @@ void SimulationEngine::update(
 void SimulationEngine::startScenario(
     DrivingScenario scenario)
 {
+    // A direct user-selected scenario becomes a manual
+    // override and stops the automatic drive cycle.
+    automaticDriveCycleEnabled =
+        false;
+
+    if (
+        scenario ==
+        DrivingScenario::Cruise
+        )
+    {
+        // Hold approximately the current road speed.
+        // Clamp an abnormally high speed so Cruise can
+        // also recover from a previous runaway state.
+        manualCruiseTargetKmh =
+            std::clamp(
+                vehicleModel.getVehicleSpeedKmh(),
+                20.0f,
+                80.0f
+            );
+    }
+
     scenarioController.startScenario(
         scenario,
         currentTimeMs,
         eventLogger
+    );
+}
+
+// ==================================================
+// Automatic drive cycle
+// ==================================================
+
+void SimulationEngine::startAutomaticDriveCycle()
+{
+    automaticDriveCycleEnabled =
+        true;
+
+    setAutomaticDrivePhase(
+        AutomaticDrivePhase::Acceleration
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "DRIVE",
+        "Automatic drive cycle started"
+    );
+}
+
+void SimulationEngine::stopAutomaticDriveCycle()
+{
+    automaticDriveCycleEnabled =
+        false;
+}
+
+bool SimulationEngine::isAutomaticDriveCycleEnabled() const
+{
+    return automaticDriveCycleEnabled;
+}
+
+DrivingScenario SimulationEngine::getCurrentScenario() const
+{
+    return scenarioController.getCurrentScenario();
+}
+
+void SimulationEngine::setAutomaticDrivePhase(
+    AutomaticDrivePhase phase)
+{
+    if (
+        automaticDrivePhase ==
+        phase
+        )
+    {
+        automaticPhaseStartTimeMs =
+            currentTimeMs;
+
+        return;
+    }
+
+    automaticDrivePhase =
+        phase;
+
+    automaticPhaseStartTimeMs =
+        currentTimeMs;
+
+    switch (automaticDrivePhase)
+    {
+    case AutomaticDrivePhase::Acceleration:
+
+        eventLogger.log(
+            currentTimeMs,
+            "DRIVE",
+            "Acceleration phase"
+        );
+
+        break;
+
+    case AutomaticDrivePhase::HighCruise:
+
+        eventLogger.log(
+            currentTimeMs,
+            "DRIVE",
+            "High-speed cruise phase"
+        );
+
+        break;
+
+    case AutomaticDrivePhase::GentleDeceleration:
+
+        eventLogger.log(
+            currentTimeMs,
+            "DRIVE",
+            "Gentle deceleration phase"
+        );
+
+        break;
+
+    case AutomaticDrivePhase::LowCruise:
+
+        eventLogger.log(
+            currentTimeMs,
+            "DRIVE",
+            "Low-speed cruise phase"
+        );
+
+        break;
+    }
+}
+
+void SimulationEngine::updateAutomaticDriveCycle()
+{
+    if (!automaticDriveCycleEnabled)
+    {
+        return;
+    }
+
+    const float speedKmh =
+        vehicleModel.getVehicleSpeedKmh();
+
+    const double phaseElapsedMs =
+        currentTimeMs -
+        automaticPhaseStartTimeMs;
+
+    switch (automaticDrivePhase)
+    {
+    case AutomaticDrivePhase::Acceleration:
+
+        if (
+            speedKmh >=
+            automaticHighSpeedKmh
+            )
+        {
+            setAutomaticDrivePhase(
+                AutomaticDrivePhase::HighCruise
+            );
+        }
+
+        break;
+
+    case AutomaticDrivePhase::HighCruise:
+
+        if (
+            phaseElapsedMs >=
+            automaticHighCruiseDurationMs
+            )
+        {
+            setAutomaticDrivePhase(
+                AutomaticDrivePhase::GentleDeceleration
+            );
+        }
+
+        break;
+
+    case AutomaticDrivePhase::GentleDeceleration:
+
+        if (
+            speedKmh <=
+            automaticLowSpeedKmh
+            )
+        {
+            setAutomaticDrivePhase(
+                AutomaticDrivePhase::LowCruise
+            );
+        }
+
+        break;
+
+    case AutomaticDrivePhase::LowCruise:
+
+        if (
+            phaseElapsedMs >=
+            automaticLowCruiseDurationMs
+            )
+        {
+            setAutomaticDrivePhase(
+                AutomaticDrivePhase::Acceleration
+            );
+        }
+
+        break;
+    }
+}
+
+void SimulationEngine::applyAutomaticDriveControl()
+{
+    vehicleModel.setFrontLeftWheelSlip(
+        false
+    );
+
+    vehicleModel.setCoasting(
+        false
+    );
+
+    switch (automaticDrivePhase)
+    {
+    case AutomaticDrivePhase::Acceleration:
+
+        vehicleModel.setThrottle(
+            automaticAccelerationThrottlePercent
+        );
+
+        vehicleModel.setBrake(
+            0.0f
+        );
+
+        break;
+
+    case AutomaticDrivePhase::HighCruise:
+
+        // The current simplified VehicleModel has no
+        // aerodynamic drag or rolling resistance.
+        // Zero throttle therefore preserves speed.
+        vehicleModel.setThrottle(
+            0.0f
+        );
+
+        vehicleModel.setBrake(
+            0.0f
+        );
+
+        break;
+
+    case AutomaticDrivePhase::GentleDeceleration:
+
+        vehicleModel.setThrottle(
+            0.0f
+        );
+
+        vehicleModel.setBrake(
+            automaticDecelerationBrakePercent
+        );
+
+        break;
+
+    case AutomaticDrivePhase::LowCruise:
+
+        vehicleModel.setThrottle(
+            0.0f
+        );
+
+        vehicleModel.setBrake(
+            0.0f
+        );
+
+        break;
+    }
+}
+
+void SimulationEngine::applyManualDriveControl()
+{
+    const DrivingScenario scenario =
+        scenarioController.getCurrentScenario();
+
+    const float currentSpeedKmh =
+        vehicleModel.getVehicleSpeedKmh();
+
+    constexpr float accelerationTargetKmh =
+        110.0f;
+
+    constexpr float accelerationDeadBandKmh =
+        1.0f;
+
+    constexpr float cruiseDeadBandKmh =
+        0.5f;
+
+    constexpr float recoveryFloorKmh =
+        45.0f;
+
+    // ==================================================
+    // Manual Acceleration
+    //
+    // A slower, more road-like acceleration command.
+    // The vehicle converges to approximately 110 km/h
+    // instead of increasing speed indefinitely.
+    // ==================================================
+
+    if (
+        scenario ==
+        DrivingScenario::Acceleration
+        )
+    {
+        vehicleModel.setFrontLeftWheelSlip(
+            false
+        );
+
+        if (
+            currentSpeedKmh <
+            accelerationTargetKmh -
+            accelerationDeadBandKmh
+            )
+        {
+            vehicleModel.setThrottle(
+                45.0f
+            );
+
+            vehicleModel.setBrake(
+                0.0f
+            );
+
+            vehicleModel.setCoasting(
+                false
+            );
+        }
+        else if (
+            currentSpeedKmh >
+            accelerationTargetKmh +
+            accelerationDeadBandKmh
+            )
+        {
+            vehicleModel.setThrottle(
+                0.0f
+            );
+
+            vehicleModel.setBrake(
+                0.0f
+            );
+
+            vehicleModel.setCoasting(
+                true
+            );
+        }
+        else
+        {
+            vehicleModel.setThrottle(
+                0.0f
+            );
+
+            vehicleModel.setBrake(
+                0.0f
+            );
+
+            vehicleModel.setCoasting(
+                false
+            );
+        }
+
+        return;
+    }
+
+    // ==================================================
+    // Manual Cruise
+    // ==================================================
+
+    if (
+        scenario ==
+        DrivingScenario::Cruise
+        )
+    {
+        vehicleModel.setFrontLeftWheelSlip(
+            false
+        );
+
+        vehicleModel.setCoasting(
+            false
+        );
+
+        if (
+            currentSpeedKmh <
+            manualCruiseTargetKmh -
+            cruiseDeadBandKmh
+            )
+        {
+            vehicleModel.setThrottle(
+                12.0f
+            );
+
+            vehicleModel.setBrake(
+                0.0f
+            );
+        }
+        else if (
+            currentSpeedKmh >
+            manualCruiseTargetKmh +
+            cruiseDeadBandKmh
+            )
+        {
+            vehicleModel.setThrottle(
+                0.0f
+            );
+
+            vehicleModel.setBrake(
+                10.0f
+            );
+        }
+        else
+        {
+            vehicleModel.setThrottle(
+                0.0f
+            );
+
+            vehicleModel.setBrake(
+                0.0f
+            );
+        }
+
+        return;
+    }
+
+    // ==================================================
+    // Manual Recovery
+    //
+    // Recovery now represents gentle coast-down after a
+    // maneuver. It decelerates naturally toward a usable
+    // road speed and then holds instead of falling to 0.
+    // ==================================================
+
+    if (
+        scenario ==
+        DrivingScenario::Recovery
+        )
+    {
+        vehicleModel.setFrontLeftWheelSlip(
+            false
+        );
+
+        vehicleModel.setThrottle(
+            0.0f
+        );
+
+        vehicleModel.setBrake(
+            0.0f
+        );
+
+        vehicleModel.setCoasting(
+            currentSpeedKmh >
+            recoveryFloorKmh
+        );
+
+        return;
+    }
+
+    // ==================================================
+    // Idle / Hard Braking
+    // ==================================================
+
+    scenarioController.update(
+        vehicleModel
     );
 }
 
@@ -1091,9 +1558,11 @@ void SimulationEngine::processPowertrainEcu(
         ? 1
         : vehicleState.speedKmh < 40.0f
         ? 2
-        : vehicleState.speedKmh < 70.0f
+        : vehicleState.speedKmh < 60.0f
         ? 3
-        : 4;
+        : vehicleState.speedKmh < 80.0f
+        ? 4
+        : 5;
 
     vehicleState.brakeApplied =
         vehicleModel
@@ -1323,6 +1792,18 @@ void SimulationEngine::reset()
 
     previousAbsHealthStatus =
         AbsHealthStatus::Healthy;
+
+    automaticDriveCycleEnabled =
+        false;
+
+    automaticDrivePhase =
+        AutomaticDrivePhase::Acceleration;
+
+    automaticPhaseStartTimeMs =
+        0.0;
+
+    manualCruiseTargetKmh =
+        0.0f;
 
     vehicleState =
         VehicleState{};

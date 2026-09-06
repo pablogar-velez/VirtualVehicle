@@ -9,6 +9,11 @@ public:
 
     void setFrontLeftWheelSlip(bool active);
 
+    // Enables a small simulated rolling-resistance effect.
+    // Used by Recovery so the vehicle can coast down with
+    // brake pressure remaining at 0%.
+    void setCoasting(bool active);
+
     void update(double deltaTimeMs);
 
     float getVehicleSpeedKmh() const;
@@ -19,6 +24,8 @@ public:
     float getSteeringAngleDeg() const;
 
     float getBrakePercent() const;
+    float getThrottlePercent() const;
+    bool isCoasting() const;
 
 private:
     float speedKmh{ 0.0f };
@@ -29,4 +36,5 @@ private:
     float steeringAngleDeg{ 0.0f };
 
     bool frontLeftWheelSlip{ false };
+    bool coastingActive{ false };
 };
