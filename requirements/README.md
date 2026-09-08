@@ -1,11 +1,11 @@
 VirtualVehicle Requirements Specification
 
 Document ID: VV-SRS-001
-Version: 1.6
-Status: Baseline / Verification Closed
+Version: 1.8
+Status: Development Baseline / Verification Open
 System: VirtualVehicle Platform
 
-1. Verification Workflow
+Verification Workflow
 
 Requirement → Implementation → Test Case → Execution → Evidence → PASS / FAIL
 
@@ -24,7 +24,7 @@ VERIFICATION FAILED
 A requirement shall only be classified as VERIFIED / PASS when the defined
 verification evidence has been successfully executed or inspected.
 
-2. Requirement Categories
+Requirement Categories
 
 Prefix
 
@@ -92,6 +92,12 @@ Diagnostic Trouble Codes
 
 DtcRequirements.md
 
+DFX
+
+Diagnostic Fault Expansion
+
+DiagnosticFaultExpansionRequirements.md
+
 UDS
 
 Unified Diagnostic Services
@@ -122,13 +128,19 @@ UDS Runtime Integration
 
 UdsRuntimeIntegrationRequirements.md
 
+ETH
+
+Automotive Ethernet
+
+AutomotiveEthernetRequirements.md
+
 VAL
 
 Automated Validation
 
 ValidationRequirements.md
 
-3. Baseline v1.6 Scope
+Baseline v1.7 Scope
 
 Baseline v1.6 extends the verified VirtualVehicle platform with runtime UDS
 diagnostic traffic integrated into the SimulationEngine shared VirtualCanBus.
@@ -262,45 +274,45 @@ model for software-in-the-loop simulation and verification.
 
 It does not claim full ISO 14229 or ISO 15765-2 compliance.
 
-4. Diagnostic Architecture
+Diagnostic Architecture
 
 The verified Baseline v1.6 diagnostic runtime architecture is:
 
-                     SimulationEngine
-                          |
-        +-----------------+-----------------+
-        |                 |                 |
-        v                 v                 v
-     ABS ECU        Powertrain ECU     Steering ECU
-     0x080              0x100              0x120
-        |                 |                 |
-        +-----------------+-----------------+
-                          |
-                          v
-                     VirtualCanBus
-                          |
-                          v
-                 CAN Arbitration / Timing
-                          |
-                          v
-                    Runtime CAN Router
-                     /             \
-                    /               \
-                   v                 v
-          Vehicle CAN Frames    Diagnostic Frames
-                   |             0x7E0 / 0x7E8
-                   v                 |
-             Dashboard ECU           v
-                                 ISO-TP / UDS
-                                      |
-                                      v
-                                  UdsServer
-                                      |
-                                      v
-                              Diagnostic Response
-                                      |
-                                      v
-                                 VirtualCanBus
+                 SimulationEngine
+                      |
+    +-----------------+-----------------+
+    |                 |                 |
+    v                 v                 v
+ ABS ECU        Powertrain ECU     Steering ECU
+ 0x080              0x100              0x120
+    |                 |                 |
+    +-----------------+-----------------+
+                      |
+                      v
+                 VirtualCanBus
+                      |
+                      v
+             CAN Arbitration / Timing
+                      |
+                      v
+                Runtime CAN Router
+                 /             \
+                /               \
+               v                 v
+      Vehicle CAN Frames    Diagnostic Frames
+               |             0x7E0 / 0x7E8
+               v                 |
+         Dashboard ECU           v
+                             ISO-TP / UDS
+                                  |
+                                  v
+                              UdsServer
+                                  |
+                                  v
+                          Diagnostic Response
+                                  |
+                                  v
+                             VirtualCanBus
 
 Diagnostic traffic participates in the same VirtualCanBus arbitration and timing
 model as periodic ECU traffic.
@@ -308,9 +320,9 @@ model as periodic ECU traffic.
 The previously verified isolated UdsCanTransport remains part of the architecture,
 but Baseline v1.6 additionally verifies the shared SimulationEngine runtime path.
 
-5. Current Automated Test Coverage
+Current Automated Test Coverage
 
-Suite result: 217 Passed / 0 Failed
+Suite result: 254 Passed / 0 Failed
 
 The Baseline v1.6 automated validation suite contains:
 
@@ -416,9 +428,9 @@ TC_VAL_001 – TC_VAL_006
 
 6
 
-Total automated tests: 217
+Total automated tests: 254
 
-6. UDS Automated Verification
+UDS Automated Verification
 
 Test Case
 
@@ -628,7 +640,7 @@ All UDS tests completed with PASS status.
 
 Result: 33 PASS / 0 FAIL
 
-7. ISO-TP Automated Verification
+ISO-TP Automated Verification
 
 Test Range
 
@@ -700,7 +712,7 @@ All ISO-TP tests completed with PASS status.
 
 Result: 26 PASS / 0 FAIL
 
-8. UDS Transport Automated Verification
+UDS Transport Automated Verification
 
 Test Case
 
@@ -784,7 +796,7 @@ All UDS Transport tests completed with PASS status.
 
 Result: 12 PASS / 0 FAIL
 
-9. UDS CAN Transport Automated Verification
+UDS CAN Transport Automated Verification
 
 Test Case
 
@@ -886,7 +898,7 @@ All UDS CAN Transport tests completed with PASS status.
 
 Result: 15 PASS / 0 FAIL
 
-10. UDS Runtime Integration Automated Verification
+UDS Runtime Integration Automated Verification
 
 Test Case
 
@@ -1074,7 +1086,7 @@ Result: 29 PASS / 0 FAIL
 
 The complete Baseline v1.5 regression also remained 188 PASS / 0 FAIL.
 
-11. Traceability
+Traceability
 
 Project-level traceability is maintained in TraceabilityMatrix.md.
 
@@ -1097,7 +1109,7 @@ TestResult expected / actual fields — test execution evidence.
 TestResult timing fields — execution and response timing evidence where
 applicable.
 
-12. Baseline Evolution
+Baseline Evolution
 
 Baseline v1.2
 
@@ -1159,13 +1171,13 @@ Automated tests: 217
 
 Verified requirements: 227
 
-13. Baseline v1.6 Verification Closure
+Baseline v1.7 Verification Closure
 
-Automated suite: 217 PASS / 0 FAIL
+Automated suite: 254 PASS / 0 FAIL
 
-Baseline requirements: 227
+Baseline requirements: 264
 
-Verified baseline requirements: 227
+Verified baseline requirements: 264
 
 Unverified baseline requirements: 0
 
@@ -1200,7 +1212,7 @@ Inspection evidence: InspectionVerification.md
 Baseline v1.6 is verification-closed for the currently defined VirtualVehicle
 requirements.
 
-14. Baseline Boundary
+Baseline Boundary
 
 The following capabilities remain outside Baseline v1.6 and are not claimed as
 requirements-verified:
@@ -1250,7 +1262,7 @@ Hardware-in-the-loop CAN validation
 Future requirements for these capabilities shall be introduced in a subsequent
 baseline before implementation is claimed as requirements-verified.
 
-15. Baseline Status
+Baseline Status
 
 VirtualVehicle Baseline v1.6
 
@@ -1264,3 +1276,126 @@ Unverified:               0
 
 Status:
 VERIFICATION CLOSED
+
+Baseline v1.7 Automotive Ethernet Verification
+
+Baseline v1.7 adds a deterministic virtual Automotive Ethernet communication subsystem while preserving the complete verified v1.6 CAN and diagnostic baseline.
+
+Verified Ethernet capabilities include:
+
+Ethernet frame representation
+
+48-bit MAC addressing and deterministic node addressing
+
+VirtualEthernetBus frame transmission and destination delivery
+
+100 Mbit/s simulated link timing
+
+Deterministic transmission duration and bus busy timing
+
+Ethernet trace evidence for addresses, EtherType, payload, and timing
+
+Frame, payload-byte, and per-node statistics
+
+Reusable EthernetNode abstraction
+
+SimulationEngine Ethernet ownership, runtime processing, and reset
+
+CAN and Ethernet coexistence
+
+Legacy CAN and diagnostic regression preservation
+
+Complete Baseline v1.6 regression preservation
+
+Deterministic Ethernet and system behavior
+
+Ethernet verification result: 37 PASS / 0 FAIL
+
+Complete Baseline v1.6 regression: 217 PASS / 0 FAIL
+
+Baseline v1.7 total automated suite: 254 PASS / 0 FAIL
+
+Baseline v1.7 requirements: 264 / 264 VERIFIED
+
+Status: VERIFICATION CLOSED
+
+Baseline v1.8 Diagnostic Fault Expansion
+
+Baseline v1.8 extends the verification-closed Baseline v1.7 with deterministic
+runtime communication-fault injection for:
+
+ABS CAN communication
+
+Powertrain CAN communication
+
+Steering CAN communication
+
+Automotive Ethernet Node A communication
+
+The new fault-expansion requirement set is maintained in:
+
+DiagnosticFaultExpansionRequirements.md
+
+Requirement prefix:
+
+DFX
+
+The v1.8 implementation provides:
+
+Communication fault injection state
+
+Communication DTC activation
+
+Periodic CAN message suppression for ABS, Powertrain, and Steering
+
+Communication restoration after fault clear
+
+Ethernet Node A source/destination blocking
+
+Ethernet Node A communication restoration
+
+Distinct communication DTC registration
+
+SimulationEngine reset behavior for injected communication faults
+
+Deterministic communication-fault behavior
+
+Baseline v1.7 regression preservation
+
+Baseline v1.8 Verification Target
+
+Parent verified baseline:
+
+Automated Tests: 254
+Passed:          254
+Failed:            0
+
+Requirements:    264
+Verified:        264
+Unverified:        0
+
+New v1.8 Diagnostic Fault Expansion:
+
+New Requirements: 15
+
+New Dedicated Tests:
+15
+
+Target complete v1.8 suite:
+
+Automated Tests: 269
+Required PASS:   269
+Required FAIL:     0
+
+Requirements:    279
+
+Current v1.8 verification status:
+
+IMPLEMENTED / VERIFICATION OPEN
+
+The 15 new DFX requirements shall remain IMPLEMENTED / UNVERIFIED until the
+dedicated TC_DFX_001 through TC_DFX_015 tests and the complete 254-test Baseline
+v1.7 regression have successfully executed.
+
+Formal v1.8 closure shall only be recorded after the complete 269-test suite
+passes with zero failures.

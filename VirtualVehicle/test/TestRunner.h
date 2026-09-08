@@ -284,6 +284,30 @@ public:
     TestCase runUdsRuntimeDeterminismTest();
 
     // ==================================================
+    // Diagnostic Fault Expansion v1.8 Tests
+    // ==================================================
+
+    TestCase runAbsCanFaultInjectionTest();
+    TestCase runAbsCanTransmissionSuppressionTest();
+    TestCase runAbsCanRecoveryTest();
+
+    TestCase runPowertrainCanFaultInjectionTest();
+    TestCase runPowertrainCanTransmissionSuppressionTest();
+    TestCase runPowertrainCanRecoveryTest();
+
+    TestCase runSteeringCanFaultInjectionTest();
+    TestCase runSteeringCanTransmissionSuppressionTest();
+    TestCase runSteeringCanRecoveryTest();
+
+    TestCase runEthernetNodeAFaultTest();
+    TestCase runEthernetNodeARecoveryTest();
+
+    TestCase runCommunicationDtcRegistrationTest();
+    TestCase runCommunicationFaultResetTest();
+    TestCase runCommunicationFaultDeterminismTest();
+    TestCase runDiagnosticFaultBaselineRegressionTest();
+
+    // ==================================================
     // Automotive Ethernet Tests
     // ==================================================
 

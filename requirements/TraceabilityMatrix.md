@@ -1,8 +1,8 @@
 VirtualVehicle Requirements Traceability Matrix
 
 Document ID: VV-RTM-001
-Baseline: 1.7
-Status: Current Verification Record / Closed
+Baseline: 1.8
+Status: Current Verification Record / Verification Open
 Latest Automated Suite Result: 254 Passed / 0 Failed
 
 Purpose
@@ -4588,3 +4588,158 @@ Automotive Ethernet: 37 / 37 VERIFIED
 Baseline v1.6 Regression: 217 PASS / 0 FAIL
 
 Status: VERIFICATION CLOSED
+
+Baseline v1.8 Diagnostic Fault Expansion Traceability
+
+The following mappings define the v1.8 diagnostic fault expansion verification
+set. These requirements are IMPLEMENTED / UNVERIFIED until the corresponding
+tests have executed successfully.
+
+Test Case
+
+Primary Requirement
+
+Verification Area
+
+Current Status
+
+TC_DFX_001
+
+DFX-REQ-001
+
+ABS CAN Fault Injection
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_002
+
+DFX-REQ-002
+
+ABS CAN Transmission Suppression
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_003
+
+DFX-REQ-003
+
+ABS CAN Fault Recovery
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_004
+
+DFX-REQ-004
+
+Powertrain CAN Fault Injection
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_005
+
+DFX-REQ-005
+
+Powertrain CAN Transmission Suppression
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_006
+
+DFX-REQ-006
+
+Powertrain CAN Fault Recovery
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_007
+
+DFX-REQ-007
+
+Steering CAN Fault Injection
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_008
+
+DFX-REQ-008
+
+Steering CAN Transmission Suppression
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_009
+
+DFX-REQ-009
+
+Steering CAN Fault Recovery
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_010
+
+DFX-REQ-010
+
+Ethernet Node A Communication Fault
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_011
+
+DFX-REQ-011
+
+Ethernet Node A Fault Recovery
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_012
+
+DFX-REQ-012
+
+Distinct Communication DTC Registration
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_013
+
+DFX-REQ-013
+
+Diagnostic Fault Reset
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_014
+
+DFX-REQ-014
+
+Deterministic Fault Behavior
+
+IMPLEMENTED / UNVERIFIED
+
+TC_DFX_015
+
+DFX-REQ-015
+
+Baseline v1.7 Regression Sentinel
+
+IMPLEMENTED / UNVERIFIED
+
+v1.8 Verification Target
+
+Previous verified requirements: 264
+
+New DFX requirements: 15
+
+Target requirements: 279
+
+Previous automated tests: 254
+
+New DFX automated tests: 15
+
+Target automated tests: 269
+
+DFX-REQ-015 closure requires TC_DFX_015 plus successful execution of the
+complete 254-test Baseline v1.7 regression suite.
+
+Current v1.8 status:
+
+VERIFICATION OPEN

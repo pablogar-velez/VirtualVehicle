@@ -51,6 +51,23 @@ public:
     void clearFrontLeftWheelSensorFault();
     void clearFrontRightWheelSensorFault();
 
+    void injectAbsCanCommunicationFault();
+    void clearAbsCanCommunicationFault();
+
+    void injectPowertrainCanCommunicationFault();
+    void clearPowertrainCanCommunicationFault();
+
+    void injectSteeringCanCommunicationFault();
+    void clearSteeringCanCommunicationFault();
+
+    void injectEthernetNodeACommunicationFault();
+    void clearEthernetNodeACommunicationFault();
+
+    bool isAbsCanCommunicationFaultActive() const;
+    bool isPowertrainCanCommunicationFaultActive() const;
+    bool isSteeringCanCommunicationFaultActive() const;
+    bool isEthernetNodeACommunicationFaultActive() const;
+
     void runDemo();
     void printResults() const;
 
@@ -196,6 +213,11 @@ private:
     bool previousAbsActive{ false };
     bool previousBrakeApplied{ false };
     bool vehicleWasMoving{ false };
+
+    bool absCanCommunicationFaultActive{ false };
+    bool powertrainCanCommunicationFaultActive{ false };
+    bool steeringCanCommunicationFaultActive{ false };
+    bool ethernetNodeACommunicationFaultActive{ false };
 
     AbsHealthStatus previousAbsHealthStatus{
         AbsHealthStatus::Healthy

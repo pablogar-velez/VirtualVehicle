@@ -1569,7 +1569,7 @@ QWidget* MainWindow::createDiagnosticsPage()
     );
 
     diagnosticsLayout->setSpacing(
-        16
+        14
     );
 
     QLabel* titleLabel =
@@ -1583,7 +1583,7 @@ QWidget* MainWindow::createDiagnosticsPage()
 
     QLabel* subtitleLabel =
         new QLabel(
-            "Fault injection and diagnostic behavior"
+            "DTC management, fault injection and UDS communication"
         );
 
     subtitleLabel->setObjectName(
@@ -1601,11 +1601,15 @@ QWidget* MainWindow::createDiagnosticsPage()
     faultInjectionWidget =
         new FaultInjectionWidget();
 
-    diagnosticsLayout->addWidget(
-        faultInjectionWidget
+    faultInjectionWidget->setSizePolicy(
+        QSizePolicy::Expanding,
+        QSizePolicy::Expanding
     );
 
-    diagnosticsLayout->addStretch();
+    diagnosticsLayout->addWidget(
+        faultInjectionWidget,
+        1
+    );
 
     return diagnosticsPage;
 }
@@ -1982,6 +1986,130 @@ void MainWindow::setupConnections()
         [this]()
         {
             engine.clearFrontRightWheelSensorFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getAbsCanDropoutButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.injectAbsCanCommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getClearAbsCanFaultButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.clearAbsCanCommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getPowertrainCanDropoutButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.injectPowertrainCanCommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getClearPowertrainCanFaultButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.clearPowertrainCanCommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getSteeringCanDropoutButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.injectSteeringCanCommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getClearSteeringCanFaultButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.clearSteeringCanCommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getEthernetNodeADropoutButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.injectEthernetNodeACommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getClearEthernetNodeAFaultButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.clearEthernetNodeACommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getClearAllFaultsButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            engine.clearFrontLeftWheelSensorFault();
+            engine.clearFrontRightWheelSensorFault();
+
+            engine.clearAbsCanCommunicationFault();
+            engine.clearPowertrainCanCommunicationFault();
+            engine.clearSteeringCanCommunicationFault();
+            engine.clearEthernetNodeACommunicationFault();
+        }
+    );
+
+    connect(
+        faultInjectionWidget->getSendUdsRequestButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            if (
+                engine.hasPendingUdsTransaction()
+                )
+            {
+                return;
+            }
+
+            const UdsRequest request =
+                faultInjectionWidget
+                ->buildSelectedUdsRequest();
+
+            faultInjectionWidget
+                ->showSubmittedRequest(
+                    request
+                );
+
+            engine.submitUdsRequest(
+                request
+            );
         }
     );
 
@@ -2818,6 +2946,7 @@ void MainWindow::resetSimulation()
 
     eventLogWidget->clear();
     canMonitorWidget->clear();
+    faultInjectionWidget->clearRuntimeView();
 
     simulationPaused =
         false;
@@ -3022,9 +3151,33 @@ void MainWindow::refreshUi()
         break;
 
     case 2:
-        // Diagnostics currently reacts to user actions.
-        // No periodic table refresh is required here.
+    {
+        faultInjectionWidget->updateDiagnostics(
+            engine.getDtcManager(),
+            engine.getUdsServer().getCurrentSession(),
+            engine.hasPendingUdsTransaction()
+        );
+
+        if (
+            engine.hasCompletedUdsResponse()
+            )
+        {
+            faultInjectionWidget
+                ->showUdsResponse(
+                    engine.getCompletedUdsResponse()
+                );
+
+            engine.clearCompletedUdsResponse();
+
+            faultInjectionWidget->updateDiagnostics(
+                engine.getDtcManager(),
+                engine.getUdsServer().getCurrentSession(),
+                false
+            );
+        }
+
         break;
+    }
 
     case 3:
         statisticsWidget->updateStatistics(

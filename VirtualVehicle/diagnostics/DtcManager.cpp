@@ -26,6 +26,54 @@ DtcManager::DtcManager()
             0
         }
     );
+
+    dtcs.push_back(
+        {
+            DtcDefinitions::AbsCanCommunication,
+            "ABS CAN Communication",
+            "ABS ECU periodic CAN transmission is unavailable.",
+            DtcStatus::Inactive,
+            0.0,
+            0.0,
+            0
+        }
+    );
+
+    dtcs.push_back(
+        {
+            DtcDefinitions::PowertrainCanCommunication,
+            "Powertrain CAN Communication",
+            "Powertrain ECU periodic CAN transmission is unavailable.",
+            DtcStatus::Inactive,
+            0.0,
+            0.0,
+            0
+        }
+    );
+
+    dtcs.push_back(
+        {
+            DtcDefinitions::SteeringCanCommunication,
+            "Steering CAN Communication",
+            "Steering ECU periodic CAN transmission is unavailable.",
+            DtcStatus::Inactive,
+            0.0,
+            0.0,
+            0
+        }
+    );
+
+    dtcs.push_back(
+        {
+            DtcDefinitions::EthernetNodeACommunication,
+            "Ethernet Node A Communication",
+            "Automotive Ethernet Node A communication is unavailable.",
+            DtcStatus::Inactive,
+            0.0,
+            0.0,
+            0
+        }
+    );
 }
 
 void DtcManager::reportFault(
@@ -46,7 +94,6 @@ void DtcManager::reportFault(
 
     if (!wasActive)
     {
-        // First detection after initialization or clear.
         if (dtc->occurrenceCount == 0)
         {
             dtc->firstDetectedTimeMs =

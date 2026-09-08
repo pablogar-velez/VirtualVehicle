@@ -821,6 +821,19 @@ bool SimulationEngine::submitEthernetFrame(
     const std::vector<std::uint8_t>& payload)
 {
     if (
+        ethernetNodeACommunicationFaultActive &&
+        (
+            sourceMac ==
+            ethernetNodeA.getMacAddress() ||
+            destinationMac ==
+            ethernetNodeA.getMacAddress()
+            )
+        )
+    {
+        return false;
+    }
+
+    if (
         sourceMac ==
         ethernetNodeA.getMacAddress()
         )
@@ -1224,6 +1237,182 @@ void SimulationEngine::clearFrontRightWheelSensorFault()
     );
 }
 
+void SimulationEngine::injectAbsCanCommunicationFault()
+{
+    if (absCanCommunicationFaultActive)
+    {
+        return;
+    }
+
+    absCanCommunicationFaultActive =
+        true;
+
+    dtcManager.reportFault(
+        DtcDefinitions::AbsCanCommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "ABS CAN communication dropout injected"
+    );
+}
+
+void SimulationEngine::clearAbsCanCommunicationFault()
+{
+    absCanCommunicationFaultActive =
+        false;
+
+    dtcManager.reportHealthy(
+        DtcDefinitions::AbsCanCommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "ABS CAN communication restored"
+    );
+}
+
+void SimulationEngine::injectPowertrainCanCommunicationFault()
+{
+    if (powertrainCanCommunicationFaultActive)
+    {
+        return;
+    }
+
+    powertrainCanCommunicationFaultActive =
+        true;
+
+    dtcManager.reportFault(
+        DtcDefinitions::PowertrainCanCommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "Powertrain CAN communication dropout injected"
+    );
+}
+
+void SimulationEngine::clearPowertrainCanCommunicationFault()
+{
+    powertrainCanCommunicationFaultActive =
+        false;
+
+    dtcManager.reportHealthy(
+        DtcDefinitions::PowertrainCanCommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "Powertrain CAN communication restored"
+    );
+}
+
+void SimulationEngine::injectSteeringCanCommunicationFault()
+{
+    if (steeringCanCommunicationFaultActive)
+    {
+        return;
+    }
+
+    steeringCanCommunicationFaultActive =
+        true;
+
+    dtcManager.reportFault(
+        DtcDefinitions::SteeringCanCommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "Steering CAN communication dropout injected"
+    );
+}
+
+void SimulationEngine::clearSteeringCanCommunicationFault()
+{
+    steeringCanCommunicationFaultActive =
+        false;
+
+    dtcManager.reportHealthy(
+        DtcDefinitions::SteeringCanCommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "Steering CAN communication restored"
+    );
+}
+
+void SimulationEngine::injectEthernetNodeACommunicationFault()
+{
+    if (ethernetNodeACommunicationFaultActive)
+    {
+        return;
+    }
+
+    ethernetNodeACommunicationFaultActive =
+        true;
+
+    dtcManager.reportFault(
+        DtcDefinitions::EthernetNodeACommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "Ethernet Node A communication dropout injected"
+    );
+}
+
+void SimulationEngine::clearEthernetNodeACommunicationFault()
+{
+    ethernetNodeACommunicationFaultActive =
+        false;
+
+    dtcManager.reportHealthy(
+        DtcDefinitions::EthernetNodeACommunication,
+        currentTimeMs
+    );
+
+    eventLogger.log(
+        currentTimeMs,
+        "FAULT",
+        "Ethernet Node A communication restored"
+    );
+}
+
+bool SimulationEngine::isAbsCanCommunicationFaultActive() const
+{
+    return absCanCommunicationFaultActive;
+}
+
+bool SimulationEngine::isPowertrainCanCommunicationFaultActive() const
+{
+    return powertrainCanCommunicationFaultActive;
+}
+
+bool SimulationEngine::isSteeringCanCommunicationFaultActive() const
+{
+    return steeringCanCommunicationFaultActive;
+}
+
+bool SimulationEngine::isEthernetNodeACommunicationFaultActive() const
+{
+    return ethernetNodeACommunicationFaultActive;
+}
+
 // ==================================================
 // Physics
 // ==================================================
@@ -1529,10 +1718,13 @@ void SimulationEngine::processAbsEcu(
             << "\n";
     }
 
-    absEcu.transmitAbsState(
-        canBus,
-        eventTimeMs
-    );
+    if (!absCanCommunicationFaultActive)
+    {
+        absEcu.transmitAbsState(
+            canBus,
+            eventTimeMs
+        );
+    }
 }
 
 // ==================================================
@@ -1589,10 +1781,13 @@ void SimulationEngine::processPowertrainEcu(
             << "\n";
     }
 
-    powertrainEcu.transmitVehicleState(
-        canBus,
-        eventTimeMs
-    );
+    if (!powertrainCanCommunicationFaultActive)
+    {
+        powertrainEcu.transmitVehicleState(
+            canBus,
+            eventTimeMs
+        );
+    }
 }
 
 // ==================================================
@@ -1626,10 +1821,13 @@ void SimulationEngine::processSteeringEcu(
             << "\n";
     }
 
-    steeringEcu.transmitSteeringState(
-        canBus,
-        eventTimeMs
-    );
+    if (!steeringCanCommunicationFaultActive)
+    {
+        steeringEcu.transmitSteeringState(
+            canBus,
+            eventTimeMs
+        );
+    }
 }
 
 // ==================================================
@@ -1788,6 +1986,18 @@ void SimulationEngine::reset()
         false;
 
     vehicleWasMoving =
+        false;
+
+    absCanCommunicationFaultActive =
+        false;
+
+    powertrainCanCommunicationFaultActive =
+        false;
+
+    steeringCanCommunicationFaultActive =
+        false;
+
+    ethernetNodeACommunicationFaultActive =
         false;
 
     previousAbsHealthStatus =

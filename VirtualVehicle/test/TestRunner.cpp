@@ -262,6 +262,55 @@ TestCase TestRunner::runTest(
         return runDtcDeterminismTest();
 
     // ==================================================
+    // Diagnostic Fault Expansion v1.8
+    // ==================================================
+
+    if (testId == "TC_DFX_001")
+        return runAbsCanFaultInjectionTest();
+
+    if (testId == "TC_DFX_002")
+        return runAbsCanTransmissionSuppressionTest();
+
+    if (testId == "TC_DFX_003")
+        return runAbsCanRecoveryTest();
+
+    if (testId == "TC_DFX_004")
+        return runPowertrainCanFaultInjectionTest();
+
+    if (testId == "TC_DFX_005")
+        return runPowertrainCanTransmissionSuppressionTest();
+
+    if (testId == "TC_DFX_006")
+        return runPowertrainCanRecoveryTest();
+
+    if (testId == "TC_DFX_007")
+        return runSteeringCanFaultInjectionTest();
+
+    if (testId == "TC_DFX_008")
+        return runSteeringCanTransmissionSuppressionTest();
+
+    if (testId == "TC_DFX_009")
+        return runSteeringCanRecoveryTest();
+
+    if (testId == "TC_DFX_010")
+        return runEthernetNodeAFaultTest();
+
+    if (testId == "TC_DFX_011")
+        return runEthernetNodeARecoveryTest();
+
+    if (testId == "TC_DFX_012")
+        return runCommunicationDtcRegistrationTest();
+
+    if (testId == "TC_DFX_013")
+        return runCommunicationFaultResetTest();
+
+    if (testId == "TC_DFX_014")
+        return runCommunicationFaultDeterminismTest();
+
+    if (testId == "TC_DFX_015")
+        return runDiagnosticFaultBaselineRegressionTest();
+
+    // ==================================================
     // UDS
     // ==================================================
 
@@ -978,6 +1027,30 @@ TestRunner::runAll()
     results.push_back(runRuntimeDtcRecoveryTest());
     results.push_back(runDtcResetTest());
     results.push_back(runDtcDeterminismTest());
+
+    // ==================================================
+    // Diagnostic Fault Expansion v1.8
+    // ==================================================
+
+    results.push_back(runAbsCanFaultInjectionTest());
+    results.push_back(runAbsCanTransmissionSuppressionTest());
+    results.push_back(runAbsCanRecoveryTest());
+
+    results.push_back(runPowertrainCanFaultInjectionTest());
+    results.push_back(runPowertrainCanTransmissionSuppressionTest());
+    results.push_back(runPowertrainCanRecoveryTest());
+
+    results.push_back(runSteeringCanFaultInjectionTest());
+    results.push_back(runSteeringCanTransmissionSuppressionTest());
+    results.push_back(runSteeringCanRecoveryTest());
+
+    results.push_back(runEthernetNodeAFaultTest());
+    results.push_back(runEthernetNodeARecoveryTest());
+
+    results.push_back(runCommunicationDtcRegistrationTest());
+    results.push_back(runCommunicationFaultResetTest());
+    results.push_back(runCommunicationFaultDeterminismTest());
+    results.push_back(runDiagnosticFaultBaselineRegressionTest());
 
     // ==================================================
     // UDS

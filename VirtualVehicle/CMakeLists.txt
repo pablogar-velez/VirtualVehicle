@@ -193,7 +193,7 @@ add_executable(
     # ========================================================
 
     "test/EthernetTest.cpp"
- "gui/widgets/AutomotiveGaugeWidget.h")
+ "gui/widgets/AutomotiveGaugeWidget.h" "test/DiagnosticFaultExpansionTests.cpp")
 
 target_compile_features(
     VirtualVehicle
