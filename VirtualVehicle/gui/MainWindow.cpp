@@ -2204,6 +2204,64 @@ void MainWindow::applyTheme()
                     padding-right: 8px;
                 }
 
+                QFrame#CanSummaryCard,
+                QFrame#CanControlBar,
+                QFrame#CanInspectorPanel,
+                QFrame#CanInspectorField
+                {
+                    background-color: #18232D;
+                    border: 1px solid #2B3947;
+                    border-radius: 8px;
+                }
+
+                QLabel#CanSummaryLabel,
+                QLabel#CanInspectorLabel,
+                QLabel#CanInspectorSubtitle,
+                QLabel#CanControlLabel,
+                QLabel#CanFrameCount
+                {
+                    color: #93A4B5;
+                }
+
+                QLabel#CanSummaryValue,
+                QLabel#CanInspectorValue,
+                QLabel#CanSectionTitle
+                {
+                    color: #EAF0F5;
+                    font-weight: 600;
+                }
+
+                QPushButton#CanActionButton
+                {
+                    background-color: #1A2530;
+                    border: 1px solid #344453;
+                    border-radius: 7px;
+                    padding: 7px 12px;
+                }
+
+                QPushButton#CanActionButton[active="true"]
+                {
+                    background-color: #6B4D2B;
+                    border-color: #A2743A;
+                }
+
+                QPushButton#CanPrimaryButton
+                {
+                    background-color: #355D86;
+                    border: 1px solid #456F99;
+                    color: #FFFFFF;
+                    border-radius: 7px;
+                    padding: 7px 12px;
+                    font-weight: 600;
+                }
+
+                QTableWidget#CanTraceTable
+                {
+                    border: 1px solid #2B3947;
+                    border-radius: 8px;
+                    alternate-background-color: #17212B;
+                }
+
                 QLabel#StatusIcon
                 {
                     background: transparent;
@@ -2489,6 +2547,64 @@ void MainWindow::applyTheme()
                 {
                     padding-left: 8px;
                     padding-right: 8px;
+                }
+
+                QFrame#CanSummaryCard,
+                QFrame#CanControlBar,
+                QFrame#CanInspectorPanel,
+                QFrame#CanInspectorField
+                {
+                    background-color: #FFFFFF;
+                    border: 1px solid #DCE3EA;
+                    border-radius: 8px;
+                }
+
+                QLabel#CanSummaryLabel,
+                QLabel#CanInspectorLabel,
+                QLabel#CanInspectorSubtitle,
+                QLabel#CanControlLabel,
+                QLabel#CanFrameCount
+                {
+                    color: #708090;
+                }
+
+                QLabel#CanSummaryValue,
+                QLabel#CanInspectorValue,
+                QLabel#CanSectionTitle
+                {
+                    color: #17202B;
+                    font-weight: 600;
+                }
+
+                QPushButton#CanActionButton
+                {
+                    background-color: #FFFFFF;
+                    border: 1px solid #CDD8E2;
+                    border-radius: 7px;
+                    padding: 7px 12px;
+                }
+
+                QPushButton#CanActionButton[active="true"]
+                {
+                    background-color: #FFF1DF;
+                    border-color: #D7A05D;
+                }
+
+                QPushButton#CanPrimaryButton
+                {
+                    background-color: #456E97;
+                    border: 1px solid #456E97;
+                    color: #FFFFFF;
+                    border-radius: 7px;
+                    padding: 7px 12px;
+                    font-weight: 600;
+                }
+
+                QTableWidget#CanTraceTable
+                {
+                    border: 1px solid #DCE3EA;
+                    border-radius: 8px;
+                    alternate-background-color: #F6F8FA;
                 }
 
                 QLabel#StatusIcon
@@ -2897,7 +3013,10 @@ void MainWindow::refreshUi()
 
     case 1:
         canMonitorWidget->updateTrace(
-            engine.getCanTrace()
+            engine.getCanTrace(),
+            engine.getCanStatistics(),
+            engine.getCanBitrate(),
+            engine.getCurrentTimeMs()
         );
 
         break;
