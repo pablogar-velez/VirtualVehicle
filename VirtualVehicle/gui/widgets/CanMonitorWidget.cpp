@@ -19,6 +19,7 @@
 #include <QProgressBar>
 #include <QPixmap>
 #include <QSet>
+#include <QSignalBlocker>
 #include <QSplitter>
 #include <QStyle>
 #include <QTableWidget>
@@ -29,6 +30,72 @@
 
 namespace
 {
+    QString formatSimulationTimestamp(
+        double timeMs)
+    {
+        if (timeMs < 0.0)
+        {
+            timeMs = 0.0;
+        }
+
+        const qint64 totalMilliseconds =
+            static_cast<qint64>(
+                timeMs +
+                0.5
+                );
+
+        const qint64 hours =
+            totalMilliseconds /
+            3600000LL;
+
+        const qint64 minutes =
+            (
+                totalMilliseconds /
+                60000LL
+                ) %
+            60LL;
+
+        const qint64 seconds =
+            (
+                totalMilliseconds /
+                1000LL
+                ) %
+            60LL;
+
+        const qint64 milliseconds =
+            totalMilliseconds %
+            1000LL;
+
+        return
+            QString(
+                "%1:%2:%3.%4"
+            )
+            .arg(
+                hours,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                minutes,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                seconds,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                milliseconds,
+                3,
+                10,
+                QLatin1Char('0')
+            );
+    }
+
     QFrame* createSummaryCard(
         const QString& title,
         QLabel*& valueLabel)
@@ -1028,6 +1095,18 @@ void CanMonitorWidget::updateTrace(
         return;
     }
 
+    if (
+        displayedTraceCount >
+        trace.size()
+        )
+    {
+        displayedTraceCount =
+            0;
+
+        filterDirty =
+            true;
+    }
+
     if (filterDirty)
     {
         rebuildView(
@@ -1040,33 +1119,80 @@ void CanMonitorWidget::updateTrace(
         return;
     }
 
-    while (
+    // ==================================================
+    // Fast catch-up
+    // ==================================================
+    //
+    // If the CAN page has not been refreshed for a while,
+    // do not append thousands of historical rows only to
+    // remove them again. Rebuild directly from the latest
+    // visible window.
+    // ==================================================
+
+    const std::size_t pendingEntries =
+        trace.size() -
+        displayedTraceCount;
+
+    if (
+        !showAllRows &&
+        pendingEntries >
+        static_cast<std::size_t>(
+            maxVisibleRows
+            )
+        )
+    {
+        synchronizeVisibleWindow(
+            trace
+        );
+
+        return;
+    }
+
+    if (
         displayedTraceCount <
         trace.size()
         )
     {
-        const CanTraceEntry& entry =
-            trace[
-                displayedTraceCount
-            ];
+        canTable->setUpdatesEnabled(
+            false
+        );
 
-        if (
-            matchesCurrentFilter(
-                entry
-            )
+        const QSignalBlocker blocker(
+            canTable
+        );
+
+        while (
+            displayedTraceCount <
+            trace.size()
             )
         {
-            appendTraceEntry(
-                entry
-            );
+            const CanTraceEntry& entry =
+                trace[
+                    displayedTraceCount
+                ];
+
+            if (
+                matchesCurrentFilter(
+                    entry
+                )
+                )
+            {
+                appendTraceEntry(
+                    entry
+                );
+            }
+
+            ++displayedTraceCount;
         }
 
-        ++displayedTraceCount;
-    }
+        if (!showAllRows)
+        {
+            trimOldRows();
+        }
 
-    if (!showAllRows)
-    {
-        trimOldRows();
+        canTable->setUpdatesEnabled(
+            true
+        );
     }
 
     if (
@@ -1094,12 +1220,9 @@ void CanMonitorWidget::appendTraceEntry(
 
     QTableWidgetItem* txStartItem =
         new QTableWidgetItem(
-            QString::number(
-                entry.txStartTimeMs,
-                'f',
-                3
-            ) +
-            " ms"
+            formatSimulationTimestamp(
+                entry.txStartTimeMs
+            )
         );
 
     QTableWidgetItem* canIdItem =
@@ -1262,33 +1385,50 @@ bool CanMonitorWidget::matchesCurrentFilter(
 void CanMonitorWidget::updateAvailableIds(
     const std::vector<CanTraceEntry>& trace)
 {
-    QSet<std::uint32_t> existingIds;
-
-    for (
-        int index = 1;
-        index < idFilterCombo->count();
-        ++index
+    // If the backend trace was reset, restart the
+    // incremental ID scan and rebuild the known-ID set
+    // from the combo box.
+    if (
+        idScanCount >
+        trace.size()
         )
     {
-        existingIds.insert(
-            static_cast<std::uint32_t>(
-                idFilterCombo
-                ->itemData(index)
-                .toUInt()
-                )
-        );
+        idScanCount =
+            0;
+
+        knownCanIds.clear();
+
+        for (
+            int index = 1;
+            index < idFilterCombo->count();
+            ++index
+            )
+        {
+            knownCanIds.insert(
+                static_cast<std::uint32_t>(
+                    idFilterCombo
+                    ->itemData(index)
+                    .toUInt()
+                    )
+            );
+        }
     }
 
     for (
-        const CanTraceEntry& entry :
-        trace
+        std::size_t index = idScanCount;
+        index < trace.size();
+        ++index
         )
     {
-        if (
-            existingIds.contains(
+        const CanTraceEntry& entry =
+            trace[index];
+
+        const auto insertResult =
+            knownCanIds.insert(
                 entry.arbitrationId
-            )
-            )
+            );
+
+        if (!insertResult.second)
         {
             continue;
         }
@@ -1313,75 +1453,105 @@ void CanMonitorWidget::updateAvailableIds(
                 entry.arbitrationId
                 )
         );
-
-        existingIds.insert(
-            entry.arbitrationId
-        );
     }
+
+    idScanCount =
+        trace.size();
 }
 
 void CanMonitorWidget::rebuildView(
     const std::vector<CanTraceEntry>& trace)
 {
+    canTable->setUpdatesEnabled(
+        false
+    );
+
+    const QSignalBlocker blocker(
+        canTable
+    );
+
     canTable->setRowCount(
         0
     );
 
     clearInspector();
 
-    std::vector<const CanTraceEntry*>
-        matchingEntries;
-
-    matchingEntries.reserve(
-        trace.size()
-    );
-
-    for (
-        const CanTraceEntry& entry :
-        trace
-        )
+    if (showAllRows)
     {
-        if (
-            matchesCurrentFilter(
-                entry
-            )
+        // "Show All" is an explicit user request, so a
+        // complete traversal is intentional in this mode.
+        for (
+            const CanTraceEntry& entry :
+            trace
             )
         {
-            matchingEntries.push_back(
-                &entry
+            if (
+                matchesCurrentFilter(
+                    entry
+                )
+                )
+            {
+                appendTraceEntry(
+                    entry
+                );
+            }
+        }
+    }
+    else
+    {
+        // Normal mode only needs the newest visible
+        // matching frames. Walk backwards and stop as
+        // soon as 500 matching frames have been found.
+        std::vector<const CanTraceEntry*>
+            newestMatchingEntries;
+
+        newestMatchingEntries.reserve(
+            maxVisibleRows
+        );
+
+        for (
+            auto iterator =
+            trace.rbegin();
+            iterator != trace.rend() &&
+            newestMatchingEntries.size() <
+            static_cast<std::size_t>(
+                maxVisibleRows
+                );
+            ++iterator
+            )
+        {
+            if (
+                matchesCurrentFilter(
+                    *iterator
+                )
+                )
+            {
+                newestMatchingEntries.push_back(
+                    &(*iterator)
+                );
+            }
+        }
+
+        for (
+            auto iterator =
+            newestMatchingEntries.rbegin();
+            iterator !=
+            newestMatchingEntries.rend();
+            ++iterator
+            )
+        {
+            appendTraceEntry(
+                **iterator
             );
         }
     }
 
-    std::size_t startIndex =
-        0;
-
-    if (
-        !showAllRows &&
-        matchingEntries.size() >
-        static_cast<std::size_t>(
-            maxVisibleRows
-            )
-        )
-    {
-        startIndex =
-            matchingEntries.size() -
-            maxVisibleRows;
-    }
-
-    for (
-        std::size_t index = startIndex;
-        index < matchingEntries.size();
-        ++index
-        )
-    {
-        appendTraceEntry(
-            *matchingEntries[index]
-        );
-    }
-
     displayedTraceCount =
         trace.size();
+
+    canTable->setUpdatesEnabled(
+        true
+    );
 
     if (
         canTable->rowCount() >
@@ -1397,6 +1567,14 @@ void CanMonitorWidget::rebuildView(
     selectLatestFrameIfNeeded();
 
     updateFrameCount();
+}
+
+void CanMonitorWidget::synchronizeVisibleWindow(
+    const std::vector<CanTraceEntry>& trace)
+{
+    rebuildView(
+        trace
+    );
 }
 
 void CanMonitorWidget::trimOldRows()
@@ -1735,12 +1913,9 @@ void CanMonitorWidget::updateInspectorFromRow(
     );
 
     inspectorTxStartLabel->setText(
-        QString::number(
-            txStart,
-            'f',
-            3
-        ) +
-        " ms"
+        formatSimulationTimestamp(
+            txStart
+        )
     );
 
     inspectorWaitLabel->setText(
@@ -2008,6 +2183,11 @@ void CanMonitorWidget::clear()
     latestTraceSize =
         0;
 
+    idScanCount =
+        0;
+
+    knownCanIds.clear();
+
     currentTrace =
         nullptr;
 
@@ -2035,6 +2215,17 @@ void CanMonitorWidget::clear()
     showAllButton->setText(
         "Show All"
     );
+
+    while (
+        idFilterCombo->count() >
+        1
+        )
+    {
+        idFilterCombo->removeItem(
+            idFilterCombo->count() -
+            1
+        );
+    }
 
     idFilterCombo->setCurrentIndex(
         0

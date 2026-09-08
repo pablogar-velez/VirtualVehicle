@@ -19,6 +19,118 @@
 
 namespace
 {
+    QString formatSimulationTimestamp(
+        double timeMs)
+    {
+        if (
+            timeMs <
+            0.0
+            )
+        {
+            timeMs =
+                0.0;
+        }
+
+        const qint64 totalMilliseconds =
+            static_cast<qint64>(
+                timeMs +
+                0.5
+                );
+
+        const qint64 hours =
+            totalMilliseconds /
+            3600000LL;
+
+        const qint64 minutes =
+            (
+                totalMilliseconds /
+                60000LL
+                ) %
+            60LL;
+
+        const qint64 seconds =
+            (
+                totalMilliseconds /
+                1000LL
+                ) %
+            60LL;
+
+        const qint64 milliseconds =
+            totalMilliseconds %
+            1000LL;
+
+        return
+            QString(
+                "%1:%2:%3.%4"
+            )
+            .arg(
+                hours,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                minutes,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                seconds,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                milliseconds,
+                3,
+                10,
+                QLatin1Char('0')
+            );
+    }
+
+    QString formatShortDuration(
+        double durationMs)
+    {
+        if (
+            durationMs <
+            0.001
+            )
+        {
+            return
+                QString::number(
+                    durationMs *
+                    1000000.0,
+                    'f',
+                    0
+                ) +
+                " ns";
+        }
+
+        if (
+            durationMs <
+            1.0
+            )
+        {
+            return
+                QString::number(
+                    durationMs *
+                    1000.0,
+                    'f',
+                    3
+                ) +
+                " µs";
+        }
+
+        return
+            QString::number(
+                durationMs,
+                'f',
+                3
+            ) +
+            " ms";
+    }
+
     QString formatEtherType(
         std::uint16_t etherType)
     {
@@ -1239,8 +1351,16 @@ StatisticsWidget::StatisticsWidget(
     ethernetMetrics->addWidget(
         createSummaryCard(
             "◷",
-            "Busy Until",
-            ethernetBusyUntilValueLabel
+            "Last TX Complete",
+            ethernetLastTxCompleteValueLabel
+        )
+    );
+
+    ethernetMetrics->addWidget(
+        createSummaryCard(
+            "⌁",
+            "Link State",
+            ethernetLinkStateValueLabel
         )
     );
 
@@ -1389,7 +1509,7 @@ StatisticsWidget::StatisticsWidget(
     ethernetTraceTable =
         new QTableWidget(
             0,
-            7
+            8
         );
 
     ethernetTraceTable->setHorizontalHeaderLabels(
@@ -1398,9 +1518,10 @@ StatisticsWidget::StatisticsWidget(
             "Source MAC",
             "Destination MAC",
             "EtherType",
+            "Length",
             "Payload",
             "Wait",
-            "TX Time"
+            "TX Duration"
         }
     );
 
@@ -1452,20 +1573,27 @@ StatisticsWidget::StatisticsWidget(
         ->horizontalHeader()
         ->setSectionResizeMode(
             4,
-            QHeaderView::Stretch
-        );
-
-    ethernetTraceTable
-        ->horizontalHeader()
-        ->setSectionResizeMode(
-            5,
             QHeaderView::ResizeToContents
         );
 
     ethernetTraceTable
         ->horizontalHeader()
         ->setSectionResizeMode(
+            5,
+            QHeaderView::Stretch
+        );
+
+    ethernetTraceTable
+        ->horizontalHeader()
+        ->setSectionResizeMode(
             6,
+            QHeaderView::ResizeToContents
+        );
+
+    ethernetTraceTable
+        ->horizontalHeader()
+        ->setSectionResizeMode(
+            7,
             QHeaderView::ResizeToContents
         );
 
@@ -2001,7 +2129,7 @@ void StatisticsWidget::applyThemeStyle()
 void StatisticsWidget::updateStatistics(
     const CanStatistics&,
     std::uint32_t,
-    double,
+    double simulationTimeMs,
     const VirtualEthernetBus& ethernetBus,
     const EthernetNode& ethernetNodeA,
     const EthernetNode& ethernetNodeB,
@@ -2133,7 +2261,8 @@ void StatisticsWidget::updateStatistics(
         ethernetBus,
         ethernetNodeA,
         ethernetNodeB,
-        ethernetNodeAFaultActive
+        ethernetNodeAFaultActive,
+        simulationTimeMs
     );
 
     updateEthernetTrace(
@@ -2165,7 +2294,8 @@ void StatisticsWidget::updateEthernetStatistics(
     const VirtualEthernetBus& ethernetBus,
     const EthernetNode& ethernetNodeA,
     const EthernetNode& ethernetNodeB,
-    bool ethernetNodeAFaultActive)
+    bool ethernetNodeAFaultActive,
+    double simulationTimeMs)
 {
     const EthernetStatistics& statistics =
         ethernetBus.getStatistics();
@@ -2218,13 +2348,37 @@ void StatisticsWidget::updateEthernetStatistics(
         )
     );
 
-    ethernetBusyUntilValueLabel->setText(
-        QString::number(
-            ethernetBus.getBusyUntilMs(),
-            'f',
-            3
-        ) +
-        " ms"
+    const double lastTxCompleteMs =
+        ethernetBus.getBusyUntilMs();
+
+    ethernetLastTxCompleteValueLabel->setText(
+        lastTxCompleteMs >
+        0.0
+        ? formatSimulationTimestamp(
+            lastTxCompleteMs
+        )
+        : "--"
+    );
+
+    const bool linkBusy =
+        lastTxCompleteMs >
+        simulationTimeMs;
+
+    ethernetLinkStateValueLabel->setText(
+        ethernetNodeAFaultActive
+        ? "● DEGRADED"
+        : (
+            linkBusy
+            ? "● BUSY"
+            : "● IDLE"
+            )
+    );
+
+    setStatusStyle(
+        ethernetLinkStateValueLabel,
+        ethernetNodeAFaultActive
+        ? "warning"
+        : "healthy"
     );
 
     const EthernetNodeStatistics&
@@ -2322,12 +2476,9 @@ void StatisticsWidget::updateEthernetTrace(
             row,
             0,
             new QTableWidgetItem(
-                QString::number(
-                    entry.startTimeMs,
-                    'f',
-                    3
-                ) +
-                " ms"
+                formatSimulationTimestamp(
+                    entry.startTimeMs
+                )
             )
         );
 
@@ -2365,6 +2516,19 @@ void StatisticsWidget::updateEthernetTrace(
             row,
             4,
             new QTableWidgetItem(
+                QString::number(
+                    static_cast<qulonglong>(
+                        entry.frame.payload.size()
+                        )
+                ) +
+                " B"
+            )
+        );
+
+        ethernetTraceTable->setItem(
+            row,
+            5,
+            new QTableWidgetItem(
                 formatPayload(
                     entry.frame.payload
                 )
@@ -2373,27 +2537,21 @@ void StatisticsWidget::updateEthernetTrace(
 
         ethernetTraceTable->setItem(
             row,
-            5,
+            6,
             new QTableWidgetItem(
-                QString::number(
-                    entry.waitingTimeMs,
-                    'f',
-                    6
-                ) +
-                " ms"
+                formatShortDuration(
+                    entry.waitingTimeMs
+                )
             )
         );
 
         ethernetTraceTable->setItem(
             row,
-            6,
+            7,
             new QTableWidgetItem(
-                QString::number(
-                    entry.transmissionTimeMs,
-                    'f',
-                    6
-                ) +
-                " ms"
+                formatShortDuration(
+                    entry.transmissionTimeMs
+                )
             )
         );
 

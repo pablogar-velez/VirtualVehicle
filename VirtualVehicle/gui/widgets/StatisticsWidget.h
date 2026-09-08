@@ -72,7 +72,8 @@ private:
     // ==================================================
 
     QLabel* ethernetPendingFramesValueLabel{};
-    QLabel* ethernetBusyUntilValueLabel{};
+    QLabel* ethernetLastTxCompleteValueLabel{};
+    QLabel* ethernetLinkStateValueLabel{};
 
     QLabel* ethernetNodeATxValueLabel{};
     QLabel* ethernetNodeARxValueLabel{};
@@ -94,7 +95,8 @@ private:
         const VirtualEthernetBus& ethernetBus,
         const EthernetNode& ethernetNodeA,
         const EthernetNode& ethernetNodeB,
-        bool ethernetNodeAFaultActive
+        bool ethernetNodeAFaultActive,
+        double simulationTimeMs
     );
 
     void updateEthernetTrace(

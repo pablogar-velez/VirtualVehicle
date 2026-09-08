@@ -3103,6 +3103,13 @@ void MainWindow::applyTheme()
             darkModeEnabled
         );
     }
+
+    if (testRunnerWidget != nullptr)
+    {
+        testRunnerWidget->setDarkMode(
+            darkModeEnabled
+        );
+    }
 }
 
 void MainWindow::updateSimulation()

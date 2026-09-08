@@ -1,16 +1,93 @@
 #include "TestRunnerWidget.h"
 
+#include <algorithm>
+#include <cstddef>
+#include <set>
+
 #include <QAbstractItemView>
 #include <QComboBox>
+#include <QColor>
 #include <QFont>
+#include <QFrame>
+#include <QGridLayout>
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QPushButton>
+#include <QSplitter>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QTextEdit>
 #include <QVBoxLayout>
+
+namespace
+{
+    QFrame* createSummaryCard(
+        const QString& title,
+        QLabel*& valueLabel)
+    {
+        QFrame* card =
+            new QFrame();
+
+        card->setObjectName(
+            "VerificationSummaryCard"
+        );
+
+        QVBoxLayout* layout =
+            new QVBoxLayout(
+                card
+            );
+
+        layout->setContentsMargins(
+            12,
+            9,
+            12,
+            9
+        );
+
+        layout->setSpacing(
+            2
+        );
+
+        QLabel* titleLabel =
+            new QLabel(
+                title
+            );
+
+        titleLabel->setObjectName(
+            "VerificationSummaryTitle"
+        );
+
+        valueLabel =
+            new QLabel(
+                "--"
+            );
+
+        valueLabel->setObjectName(
+            "VerificationSummaryValue"
+        );
+
+        layout->addWidget(
+            titleLabel
+        );
+
+        layout->addWidget(
+            valueLabel
+        );
+
+        return card;
+    }
+
+    QString escaped(
+        const std::string& value)
+    {
+        return
+            QString::fromStdString(
+                value
+            )
+            .toHtmlEscaped();
+    }
+}
 
 // ==================================================
 // Constructor
@@ -19,27 +96,188 @@
 TestRunnerWidget::TestRunnerWidget(
     QWidget* parent)
     : QGroupBox(
-        "Automated Validation",
+        "Verification Workstation",
         parent
     )
 {
+    setObjectName(
+        "VerificationWorkstation"
+    );
+
     QVBoxLayout* mainLayout =
-        new QVBoxLayout(this);
+        new QVBoxLayout(
+            this
+        );
+
+    mainLayout->setContentsMargins(
+        14,
+        18,
+        14,
+        14
+    );
+
+    mainLayout->setSpacing(
+        12
+    );
 
     // ==================================================
-    // Test selection
+    // Verification summary
     // ==================================================
+
+    QHBoxLayout* summaryCardsLayout =
+        new QHBoxLayout();
+
+    summaryCardsLayout->setSpacing(
+        10
+    );
+
+    summaryCardsLayout->addWidget(
+        createSummaryCard(
+            "Executed Tests",
+            executedValueLabel
+        )
+    );
+
+    summaryCardsLayout->addWidget(
+        createSummaryCard(
+            "Passed",
+            passedValueLabel
+        )
+    );
+
+    summaryCardsLayout->addWidget(
+        createSummaryCard(
+            "Failed",
+            failedValueLabel
+        )
+    );
+
+    summaryCardsLayout->addWidget(
+        createSummaryCard(
+            "Requirements Exercised",
+            requirementsValueLabel
+        )
+    );
+
+    summaryCardsLayout->addWidget(
+        createSummaryCard(
+            "Pass Rate",
+            passRateValueLabel
+        )
+    );
+
+    summaryCardsLayout->addWidget(
+        createSummaryCard(
+            "Baseline",
+            baselineValueLabel
+        )
+    );
+
+    baselineValueLabel->setText(
+        "v1.7"
+    );
+
+    mainLayout->addLayout(
+        summaryCardsLayout
+    );
+
+    // ==================================================
+    // Suite status
+    // ==================================================
+
+    QFrame* statusBanner =
+        new QFrame();
+
+    statusBanner->setObjectName(
+        "VerificationStatusBanner"
+    );
+
+    QHBoxLayout* statusLayout =
+        new QHBoxLayout(
+            statusBanner
+        );
+
+    statusLayout->setContentsMargins(
+        12,
+        8,
+        12,
+        8
+    );
+
+    QLabel* statusTitle =
+        new QLabel(
+            "Verification Status"
+        );
+
+    statusTitle->setObjectName(
+        "VerificationCardTitle"
+    );
+
+    suiteStatusLabel =
+        new QLabel(
+            "● NOT RUN"
+        );
+
+    suiteStatusLabel->setObjectName(
+        "VerificationSuiteStatus"
+    );
+
+    statusLayout->addWidget(
+        statusTitle
+    );
+
+    statusLayout->addStretch();
+
+    statusLayout->addWidget(
+        suiteStatusLabel
+    );
+
+    mainLayout->addWidget(
+        statusBanner
+    );
+
+    // ==================================================
+    // Test execution controls
+    // ==================================================
+
+    QFrame* controlsFrame =
+        new QFrame();
+
+    controlsFrame->setObjectName(
+        "VerificationControls"
+    );
 
     QHBoxLayout* selectorLayout =
-        new QHBoxLayout();
+        new QHBoxLayout(
+            controlsFrame
+        );
+
+    selectorLayout->setContentsMargins(
+        12,
+        9,
+        12,
+        9
+    );
+
+    selectorLayout->setSpacing(
+        10
+    );
 
     QLabel* selectorLabel =
         new QLabel(
-            "Test:"
+            "Test Case"
         );
+
+    selectorLabel->setObjectName(
+        "VerificationMutedText"
+    );
 
     testSelector =
         new QComboBox();
+
+    testSelector->setObjectName(
+        "VerificationTestSelector"
+    );
 
     // ==================================================
     // System Tests
@@ -494,19 +732,28 @@ TestRunnerWidget::TestRunnerWidget(
         "TC_VAL_006"
     );
 
+
     // ==================================================
     // Buttons
     // ==================================================
 
     runSelectedButton =
         new QPushButton(
-            "Run Selected Test"
+            "Run Selected"
         );
+
+    runSelectedButton->setObjectName(
+        "VerificationSecondaryButton"
+    );
 
     runAllButton =
         new QPushButton(
             "Run All Tests"
         );
+
+    runAllButton->setObjectName(
+        "VerificationPrimaryButton"
+    );
 
     selectorLayout->addWidget(
         selectorLabel
@@ -525,43 +772,72 @@ TestRunnerWidget::TestRunnerWidget(
         runAllButton
     );
 
-    mainLayout->addLayout(
-        selectorLayout
+    mainLayout->addWidget(
+        controlsFrame
     );
 
     // ==================================================
-    // Summary
+    // Main verification area
     // ==================================================
 
-    summaryLabel =
-        new QLabel(
-            "Tests: 0 | Passed: 0 | Failed: 0"
+    QSplitter* verificationSplitter =
+        new QSplitter(
+            Qt::Vertical
         );
 
-    QFont summaryFont =
-        summaryLabel->font();
-
-    summaryFont.setBold(
-        true
-    );
-
-    summaryLabel->setFont(
-        summaryFont
-    );
-
-    mainLayout->addWidget(
-        summaryLabel
+    verificationSplitter->setObjectName(
+        "VerificationSplitter"
     );
 
     // ==================================================
     // Results table
     // ==================================================
 
+    QFrame* resultsPanel =
+        new QFrame();
+
+    resultsPanel->setObjectName(
+        "VerificationPanel"
+    );
+
+    QVBoxLayout* resultsLayout =
+        new QVBoxLayout(
+            resultsPanel
+        );
+
+    resultsLayout->setContentsMargins(
+        10,
+        10,
+        10,
+        10
+    );
+
+    resultsLayout->setSpacing(
+        7
+    );
+
+    QLabel* resultsTitle =
+        new QLabel(
+            "Test Results"
+        );
+
+    resultsTitle->setObjectName(
+        "VerificationPanelTitle"
+    );
+
+    resultsLayout->addWidget(
+        resultsTitle
+    );
+
     resultsTable =
         new QTableWidget(
             0,
             8
         );
+
+    resultsTable->setObjectName(
+        "VerificationResultsTable"
+    );
 
     resultsTable->setHorizontalHeaderLabels(
         {
@@ -592,9 +868,15 @@ TestRunnerWidget::TestRunnerWidget(
         true
     );
 
-    // ==================================================
-    // Column sizing
-    // ==================================================
+    resultsTable->setShowGrid(
+        false
+    );
+
+    resultsTable
+        ->verticalHeader()
+        ->setVisible(
+            false
+        );
 
     resultsTable
         ->horizontalHeader()
@@ -652,28 +934,98 @@ TestRunnerWidget::TestRunnerWidget(
             QHeaderView::ResizeToContents
         );
 
-    mainLayout->addWidget(
+    resultsLayout->addWidget(
         resultsTable,
-        2
+        1
+    );
+
+    verificationSplitter->addWidget(
+        resultsPanel
     );
 
     // ==================================================
-    // Detail panel
+    // Verification evidence
     // ==================================================
+
+    QFrame* evidencePanel =
+        new QFrame();
+
+    evidencePanel->setObjectName(
+        "VerificationPanel"
+    );
+
+    QVBoxLayout* evidenceLayout =
+        new QVBoxLayout(
+            evidencePanel
+        );
+
+    evidenceLayout->setContentsMargins(
+        10,
+        10,
+        10,
+        10
+    );
+
+    evidenceLayout->setSpacing(
+        7
+    );
+
+    QLabel* evidenceTitle =
+        new QLabel(
+            "Verification Evidence"
+        );
+
+    evidenceTitle->setObjectName(
+        "VerificationPanelTitle"
+    );
+
+    evidenceLayout->addWidget(
+        evidenceTitle
+    );
 
     detailText =
         new QTextEdit();
+
+    detailText->setObjectName(
+        "VerificationEvidence"
+    );
 
     detailText->setReadOnly(
         true
     );
 
     detailText->setPlaceholderText(
-        "Select a test result to inspect validation evidence."
+        "Select a test result to inspect requirements-based verification evidence."
+    );
+
+    evidenceLayout->addWidget(
+        detailText,
+        1
+    );
+
+    verificationSplitter->addWidget(
+        evidencePanel
+    );
+
+    verificationSplitter->setStretchFactor(
+        0,
+        3
+    );
+
+    verificationSplitter->setStretchFactor(
+        1,
+        2
+    );
+
+    verificationSplitter->setSizes(
+        {
+            430,
+            250
+        }
     );
 
     mainLayout->addWidget(
-        detailText,
+        verificationSplitter,
         1
     );
 
@@ -694,6 +1046,8 @@ TestRunnerWidget::TestRunnerWidget(
             );
         }
     );
+
+    applyThemeStyle();
 }
 
 // ==================================================
@@ -778,6 +1132,10 @@ void TestRunnerWidget::setResults(
     currentResults =
         results;
 
+    synchronizeSelector(
+        results
+    );
+
     resultsTable->setRowCount(
         static_cast<int>(
             results.size()
@@ -792,79 +1150,40 @@ void TestRunnerWidget::setResults(
         results
         )
     {
-        // ==================================================
-        // Test ID
-        // ==================================================
-
-        resultsTable->setItem(
-            row,
-            0,
+        QTableWidgetItem* idItem =
             new QTableWidgetItem(
                 QString::fromStdString(
                     test.id
                 )
-            )
-        );
+            );
 
-        // ==================================================
-        // Name
-        // ==================================================
-
-        resultsTable->setItem(
-            row,
-            1,
+        QTableWidgetItem* nameItem =
             new QTableWidgetItem(
                 QString::fromStdString(
                     test.name
                 )
-            )
-        );
+            );
 
-        // ==================================================
-        // Requirement
-        // ==================================================
-
-        resultsTable->setItem(
-            row,
-            2,
+        QTableWidgetItem* requirementItem =
             new QTableWidgetItem(
                 QString::fromStdString(
                     test.requirementId
                 )
-            )
-        );
+            );
 
-        // ==================================================
-        // Expected
-        // ==================================================
-
-        resultsTable->setItem(
-            row,
-            3,
+        QTableWidgetItem* expectedItem =
             new QTableWidgetItem(
                 QString::fromStdString(
                     test.result.expected
                 )
-            )
-        );
+            );
 
-        // ==================================================
-        // Actual
-        // ==================================================
-
-        resultsTable->setItem(
-            row,
-            4,
+        QTableWidgetItem* actualItem =
             new QTableWidgetItem(
                 QString::fromStdString(
                     test.result.actual
                 )
-            )
-        );
-
-        // ==================================================
-        // Response / Limit
-        // ==================================================
+            );
 
         QString timingText;
 
@@ -906,19 +1225,7 @@ void TestRunnerWidget::setResults(
             Qt::AlignCenter
         );
 
-        resultsTable->setItem(
-            row,
-            5,
-            timingItem
-        );
-
-        // ==================================================
-        // Execution time
-        // ==================================================
-
-        resultsTable->setItem(
-            row,
-            6,
+        QTableWidgetItem* executionItem =
             new QTableWidgetItem(
                 QString::number(
                     test.result.executionTimeMs,
@@ -926,12 +1233,11 @@ void TestRunnerWidget::setResults(
                     3
                 ) +
                 " ms"
-            )
-        );
+            );
 
-        // ==================================================
-        // Result
-        // ==================================================
+        executionItem->setTextAlignment(
+            Qt::AlignCenter
+        );
 
         QTableWidgetItem* statusItem =
             new QTableWidgetItem(
@@ -953,6 +1259,71 @@ void TestRunnerWidget::setResults(
 
         statusItem->setFont(
             statusFont
+        );
+
+        if (
+            test.result.status ==
+            TestStatus::Passed
+            )
+        {
+            statusItem->setForeground(
+                QColor(
+                    "#138A4B"
+                )
+            );
+        }
+        else if (
+            test.result.status ==
+            TestStatus::Failed
+            )
+        {
+            statusItem->setForeground(
+                QColor(
+                    "#C94B4B"
+                )
+            );
+        }
+
+        resultsTable->setItem(
+            row,
+            0,
+            idItem
+        );
+
+        resultsTable->setItem(
+            row,
+            1,
+            nameItem
+        );
+
+        resultsTable->setItem(
+            row,
+            2,
+            requirementItem
+        );
+
+        resultsTable->setItem(
+            row,
+            3,
+            expectedItem
+        );
+
+        resultsTable->setItem(
+            row,
+            4,
+            actualItem
+        );
+
+        resultsTable->setItem(
+            row,
+            5,
+            timingItem
+        );
+
+        resultsTable->setItem(
+            row,
+            6,
+            executionItem
         );
 
         resultsTable->setItem(
@@ -985,6 +1356,61 @@ void TestRunnerWidget::setResults(
 }
 
 // ==================================================
+// Selector synchronization
+// ==================================================
+
+void TestRunnerWidget::synchronizeSelector(
+    const std::vector<TestCase>& results)
+{
+    for (
+        const TestCase& test :
+        results
+        )
+    {
+        bool alreadyPresent =
+            false;
+
+        for (
+            int index = 0;
+            index < testSelector->count();
+            ++index
+            )
+        {
+            if (
+                testSelector
+                ->itemData(
+                    index
+                )
+                .toString() ==
+                QString::fromStdString(
+                    test.id
+                )
+                )
+            {
+                alreadyPresent =
+                    true;
+
+                break;
+            }
+        }
+
+        if (!alreadyPresent)
+        {
+            testSelector->addItem(
+                QString::fromStdString(
+                    test.id +
+                    " - " +
+                    test.name
+                ),
+                QString::fromStdString(
+                    test.id
+                )
+            );
+        }
+    }
+}
+
+// ==================================================
 // Summary
 // ==================================================
 
@@ -997,11 +1423,23 @@ void TestRunnerWidget::updateSummary(
     std::size_t failed =
         0;
 
+    std::set<std::string>
+        exercisedRequirements;
+
     for (
         const TestCase& test :
         results
         )
     {
+        if (
+            !test.requirementId.empty()
+            )
+        {
+            exercisedRequirements.insert(
+                test.requirementId
+            );
+        }
+
         if (
             test.result.status ==
             TestStatus::Passed
@@ -1018,25 +1456,136 @@ void TestRunnerWidget::updateSummary(
         }
     }
 
-    summaryLabel->setText(
-        QString(
-            "Tests: %1 | Passed: %2 | Failed: %3"
-        )
-        .arg(
+    const std::size_t executed =
+        passed +
+        failed;
+
+    const double passRate =
+        executed >
+        0
+        ? (
+            static_cast<double>(
+                passed
+                ) /
+            static_cast<double>(
+                executed
+                )
+            ) *
+        100.0
+        : 0.0;
+
+    executedValueLabel->setText(
+        QString::number(
             static_cast<qulonglong>(
-                results.size()
+                executed
                 )
         )
-        .arg(
+    );
+
+    passedValueLabel->setText(
+        QString::number(
             static_cast<qulonglong>(
                 passed
                 )
         )
-        .arg(
+    );
+
+    failedValueLabel->setText(
+        QString::number(
             static_cast<qulonglong>(
                 failed
                 )
         )
+    );
+
+    requirementsValueLabel->setText(
+        QString::number(
+            static_cast<qulonglong>(
+                exercisedRequirements.size()
+                )
+        )
+    );
+
+    passRateValueLabel->setText(
+        QString::number(
+            passRate,
+            'f',
+            1
+        ) +
+        " %"
+    );
+
+    if (
+        results.empty()
+        )
+    {
+        suiteStatusLabel->setText(
+            "● NOT RUN"
+        );
+
+        refreshDynamicStyle(
+            suiteStatusLabel,
+            "neutral"
+        );
+
+        return;
+    }
+
+    if (
+        failed >
+        0
+        )
+    {
+        suiteStatusLabel->setText(
+            QString(
+                "● %1 FAILED"
+            )
+            .arg(
+                static_cast<qulonglong>(
+                    failed
+                    )
+            )
+        );
+
+        refreshDynamicStyle(
+            suiteStatusLabel,
+            "failed"
+        );
+
+        return;
+    }
+
+    if (
+        executed ==
+        results.size()
+        )
+    {
+        suiteStatusLabel->setText(
+            QString(
+                "● ALL %1 TESTS PASS"
+            )
+            .arg(
+                static_cast<qulonglong>(
+                    passed
+                    )
+            )
+        );
+
+        refreshDynamicStyle(
+            suiteStatusLabel,
+            "passed"
+        );
+
+        return;
+    }
+
+    suiteStatusLabel->setText(
+        "● PARTIAL EXECUTION"
+    );
+
+    refreshDynamicStyle(
+        suiteStatusLabel,
+        "warning"
     );
 }
 
@@ -1065,128 +1614,175 @@ void TestRunnerWidget::showTestDetails(
                 )
         ];
 
-    QString detail;
+    QString statusColor =
+        "#6C7F92";
 
-    detail +=
-        "TEST CASE\n";
+    if (
+        test.result.status ==
+        TestStatus::Passed
+        )
+    {
+        statusColor =
+            "#138A4B";
+    }
+    else if (
+        test.result.status ==
+        TestStatus::Failed
+        )
+    {
+        statusColor =
+            "#C94B4B";
+    }
 
-    detail +=
-        "=========\n\n";
-
-    detail +=
-        "ID: " +
-        QString::fromStdString(
-            test.id
-        ) +
-        "\n";
-
-    detail +=
-        "Name: " +
-        QString::fromStdString(
-            test.name
-        ) +
-        "\n";
-
-    detail +=
-        "Requirement: " +
-        QString::fromStdString(
-            test.requirementId
-        ) +
-        "\n\n";
-
-    detail +=
-        "Description:\n" +
-        QString::fromStdString(
-            test.description
-        ) +
-        "\n\n";
-
-    detail +=
-        "Precondition:\n" +
-        QString::fromStdString(
-            test.precondition
-        ) +
-        "\n\n";
-
-    detail +=
-        "Stimulus:\n" +
-        QString::fromStdString(
-            test.stimulus
-        ) +
-        "\n\n";
-
-    detail +=
-        "Expected Result:\n" +
-        QString::fromStdString(
-            test.expectedResult
-        ) +
-        "\n\n";
-
-    detail +=
-        "Expected:\n" +
-        QString::fromStdString(
-            test.result.expected
-        ) +
-        "\n\n";
-
-    detail +=
-        "Actual:\n" +
-        QString::fromStdString(
-            test.result.actual
-        ) +
-        "\n\n";
-
-    // ==================================================
-    // Timing evidence
-    // ==================================================
-
-    detail +=
-        "Response Time:\n" +
+    QString timingEvidence =
         QString::number(
             test.result.responseTimeMs,
             'f',
             3
         ) +
-        " ms\n";
+        " ms";
 
     if (
         test.result.hasTimingRequirement()
         )
     {
-        detail +=
-            "Maximum Allowed:\n" +
+        timingEvidence +=
+            " / limit " +
             QString::number(
                 test.result.maximumAllowedResponseTimeMs,
                 'f',
                 3
             ) +
-            " ms\n";
+            " ms";
     }
 
-    detail +=
-        "\nExecution Time:\n" +
-        QString::number(
-            test.result.executionTimeMs,
-            'f',
-            3
-        ) +
-        " ms\n\n";
+    const QString html =
+        QString(
+            R"(
+            <div style="font-family:'Segoe UI';">
+                <table width="100%" cellspacing="0" cellpadding="4">
+                    <tr>
+                        <td width="18%"><b>Test ID</b></td>
+                        <td width="32%">%1</td>
+                        <td width="18%"><b>Requirement</b></td>
+                        <td width="32%">%2</td>
+                    </tr>
+                    <tr>
+                        <td><b>Test</b></td>
+                        <td colspan="3">%3</td>
+                    </tr>
+                    <tr>
+                        <td><b>Status</b></td>
+                        <td colspan="3">
+                            <span style="color:%4; font-weight:700;">%5</span>
+                        </td>
+                    </tr>
+                </table>
 
-    detail +=
-        "Message:\n" +
-        QString::fromStdString(
-            test.result.message
-        ) +
-        "\n\n";
+                <hr>
 
-    detail +=
-        "RESULT:\n" +
-        statusToString(
-            test.result.status
+                <p><b>Verification Objective</b><br>%6</p>
+                <p><b>Precondition</b><br>%7</p>
+                <p><b>Stimulus</b><br>%8</p>
+
+                <table width="100%" cellspacing="0" cellpadding="5">
+                    <tr>
+                        <td width="18%"><b>Expected Result</b></td>
+                        <td>%9</td>
+                    </tr>
+                    <tr>
+                        <td><b>Expected Evidence</b></td>
+                        <td>%10</td>
+                    </tr>
+                    <tr>
+                        <td><b>Actual Evidence</b></td>
+                        <td>%11</td>
+                    </tr>
+                    <tr>
+                        <td><b>Response / Limit</b></td>
+                        <td>%12</td>
+                    </tr>
+                    <tr>
+                        <td><b>Execution Time</b></td>
+                        <td>%13 ms</td>
+                    </tr>
+                </table>
+
+                <p><b>Result Message</b><br>%14</p>
+            </div>
+            )"
+        )
+        .arg(
+            escaped(
+                test.id
+            )
+        )
+        .arg(
+            escaped(
+                test.requirementId
+            )
+        )
+        .arg(
+            escaped(
+                test.name
+            )
+        )
+        .arg(
+            statusColor
+        )
+        .arg(
+            statusToString(
+                test.result.status
+            )
+        )
+        .arg(
+            escaped(
+                test.description
+            )
+        )
+        .arg(
+            escaped(
+                test.precondition
+            )
+        )
+        .arg(
+            escaped(
+                test.stimulus
+            )
+        )
+        .arg(
+            escaped(
+                test.expectedResult
+            )
+        )
+        .arg(
+            escaped(
+                test.result.expected
+            )
+        )
+        .arg(
+            escaped(
+                test.result.actual
+            )
+        )
+        .arg(
+            timingEvidence.toHtmlEscaped()
+        )
+        .arg(
+            QString::number(
+                test.result.executionTimeMs,
+                'f',
+                3
+            )
+        )
+        .arg(
+            escaped(
+                test.result.message
+            )
         );
 
-    detailText->setPlainText(
-        detail
+    detailText->setHtml(
+        html
     );
 }
 
@@ -1204,7 +1800,373 @@ void TestRunnerWidget::clear()
 
     detailText->clear();
 
-    summaryLabel->setText(
-        "Tests: 0 | Passed: 0 | Failed: 0"
+    executedValueLabel->setText(
+        "0"
+    );
+
+    passedValueLabel->setText(
+        "0"
+    );
+
+    failedValueLabel->setText(
+        "0"
+    );
+
+    requirementsValueLabel->setText(
+        "0"
+    );
+
+    passRateValueLabel->setText(
+        "0.0 %"
+    );
+
+    suiteStatusLabel->setText(
+        "● NOT RUN"
+    );
+
+    refreshDynamicStyle(
+        suiteStatusLabel,
+        "neutral"
+    );
+}
+
+// ==================================================
+// Theme
+// ==================================================
+
+void TestRunnerWidget::setDarkMode(
+    bool enabled)
+{
+    darkModeEnabled =
+        enabled;
+
+    applyThemeStyle();
+}
+
+void TestRunnerWidget::refreshDynamicStyle(
+    QLabel* label,
+    const char* state)
+{
+    if (
+        label ==
+        nullptr
+        )
+    {
+        return;
+    }
+
+    label->setProperty(
+        "state",
+        state
+    );
+
+    label->style()->unpolish(
+        label
+    );
+
+    label->style()->polish(
+        label
+    );
+}
+
+void TestRunnerWidget::applyThemeStyle()
+{
+    if (darkModeEnabled)
+    {
+        setStyleSheet(
+            R"(
+                QGroupBox#VerificationWorkstation
+                {
+                    background: transparent;
+                    color: #E8EDF3;
+                }
+
+                QFrame#VerificationSummaryCard,
+                QFrame#VerificationStatusBanner,
+                QFrame#VerificationControls,
+                QFrame#VerificationPanel
+                {
+                    background-color: #16222E;
+                    border: 1px solid #304050;
+                    border-radius: 8px;
+                }
+
+                QLabel#VerificationSummaryTitle,
+                QLabel#VerificationMutedText
+                {
+                    color: #8EA2B5;
+                }
+
+                QLabel#VerificationSummaryValue,
+                QLabel#VerificationCardTitle,
+                QLabel#VerificationPanelTitle
+                {
+                    color: #EAF1F7;
+                    font-weight: 700;
+                }
+
+                QLabel#VerificationSummaryValue
+                {
+                    font-size: 15px;
+                }
+
+                QLabel#VerificationSuiteStatus
+                {
+                    font-weight: 700;
+                }
+
+                QLabel[state="passed"]
+                {
+                    color: #43D17D;
+                }
+
+                QLabel[state="failed"]
+                {
+                    color: #F07171;
+                }
+
+                QLabel[state="warning"]
+                {
+                    color: #E2A34B;
+                }
+
+                QLabel[state="neutral"]
+                {
+                    color: #9AAABB;
+                }
+
+                QComboBox#VerificationTestSelector
+                {
+                    min-height: 34px;
+                    color: #E7EEF5;
+                    background-color: #17232E;
+                    border: 1px solid #34495A;
+                    border-radius: 6px;
+                    padding: 3px 8px;
+                }
+
+                QComboBox#VerificationTestSelector QAbstractItemView
+                {
+                    color: #E7EEF5;
+                    background-color: #17232E;
+                    selection-background-color: #315A7D;
+                }
+
+                QPushButton#VerificationPrimaryButton,
+                QPushButton#VerificationSecondaryButton
+                {
+                    min-height: 36px;
+                    min-width: 115px;
+                    border-radius: 6px;
+                    font-weight: 600;
+                }
+
+                QPushButton#VerificationPrimaryButton
+                {
+                    color: #FFFFFF;
+                    background-color: #456E97;
+                    border: 1px solid #5B86AE;
+                }
+
+                QPushButton#VerificationPrimaryButton:hover
+                {
+                    background-color: #527DA7;
+                }
+
+                QPushButton#VerificationSecondaryButton
+                {
+                    color: #E7EEF5;
+                    background-color: #1A2733;
+                    border: 1px solid #34495A;
+                }
+
+                QPushButton#VerificationSecondaryButton:hover
+                {
+                    background-color: #233544;
+                    border-color: #4B667B;
+                }
+
+                QTableWidget#VerificationResultsTable
+                {
+                    color: #D9E3EC;
+                    background-color: #121C25;
+                    alternate-background-color: #17232E;
+                    border: 1px solid #2F4050;
+                    border-radius: 6px;
+                    selection-background-color: #315A7D;
+                    selection-color: #FFFFFF;
+                }
+
+                QHeaderView::section
+                {
+                    color: #C7D4DF;
+                    background-color: #1C2935;
+                    border: none;
+                    border-bottom: 1px solid #314252;
+                    padding: 7px;
+                    font-weight: 700;
+                }
+
+                QTextEdit#VerificationEvidence
+                {
+                    color: #D9E3EC;
+                    background-color: #121C25;
+                    border: 1px solid #2F4050;
+                    border-radius: 6px;
+                    padding: 6px;
+                }
+
+                QSplitter::handle
+                {
+                    background-color: #263746;
+                    height: 4px;
+                }
+            )"
+        );
+
+        return;
+    }
+
+    setStyleSheet(
+        R"(
+            QGroupBox#VerificationWorkstation
+            {
+                background: transparent;
+                color: #17212B;
+            }
+
+            QFrame#VerificationSummaryCard,
+            QFrame#VerificationStatusBanner,
+            QFrame#VerificationControls,
+            QFrame#VerificationPanel
+            {
+                background-color: #FFFFFF;
+                border: 1px solid #DCE3EA;
+                border-radius: 8px;
+            }
+
+            QLabel#VerificationSummaryTitle,
+            QLabel#VerificationMutedText
+            {
+                color: #74879A;
+            }
+
+            QLabel#VerificationSummaryValue,
+            QLabel#VerificationCardTitle,
+            QLabel#VerificationPanelTitle
+            {
+                color: #17212B;
+                font-weight: 700;
+            }
+
+            QLabel#VerificationSummaryValue
+            {
+                font-size: 15px;
+            }
+
+            QLabel#VerificationSuiteStatus
+            {
+                font-weight: 700;
+            }
+
+            QLabel[state="passed"]
+            {
+                color: #138A4B;
+            }
+
+            QLabel[state="failed"]
+            {
+                color: #C94B4B;
+            }
+
+            QLabel[state="warning"]
+            {
+                color: #C58A20;
+            }
+
+            QLabel[state="neutral"]
+            {
+                color: #6C7F92;
+            }
+
+            QComboBox#VerificationTestSelector
+            {
+                min-height: 34px;
+                color: #17212B;
+                background-color: #FFFFFF;
+                border: 1px solid #CBD6E0;
+                border-radius: 6px;
+                padding: 3px 8px;
+            }
+
+            QPushButton#VerificationPrimaryButton,
+            QPushButton#VerificationSecondaryButton
+            {
+                min-height: 36px;
+                min-width: 115px;
+                border-radius: 6px;
+                font-weight: 600;
+            }
+
+            QPushButton#VerificationPrimaryButton
+            {
+                color: #FFFFFF;
+                background-color: #456E97;
+                border: 1px solid #456E97;
+            }
+
+            QPushButton#VerificationPrimaryButton:hover
+            {
+                background-color: #527DA7;
+            }
+
+            QPushButton#VerificationSecondaryButton
+            {
+                color: #263746;
+                background-color: #FFFFFF;
+                border: 1px solid #CBD6E0;
+            }
+
+            QPushButton#VerificationSecondaryButton:hover
+            {
+                background-color: #F0F4F8;
+            }
+
+            QTableWidget#VerificationResultsTable
+            {
+                color: #17212B;
+                background-color: #FFFFFF;
+                alternate-background-color: #F6F8FA;
+                border: 1px solid #E0E6EC;
+                border-radius: 6px;
+                selection-background-color: #D9EAF8;
+                selection-color: #17212B;
+            }
+
+            QHeaderView::section
+            {
+                color: #425364;
+                background-color: #EEF2F5;
+                border: none;
+                border-bottom: 1px solid #DCE3EA;
+                padding: 7px;
+                font-weight: 700;
+            }
+
+            QTextEdit#VerificationEvidence
+            {
+                color: #17212B;
+                background-color: #FFFFFF;
+                border: 1px solid #E0E6EC;
+                border-radius: 6px;
+                padding: 6px;
+            }
+
+            QSplitter::handle
+            {
+                background-color: #DDE5EC;
+                height: 4px;
+            }
+        )"
     );
 }

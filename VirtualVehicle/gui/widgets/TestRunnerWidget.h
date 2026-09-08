@@ -7,11 +7,11 @@
 
 #include "../../test/TestCase.h"
 
+class QComboBox;
 class QLabel;
 class QPushButton;
 class QTableWidget;
 class QTextEdit;
-class QComboBox;
 
 class TestRunnerWidget : public QGroupBox
 {
@@ -47,9 +47,17 @@ public:
 
     void clear();
 
+    // ==================================================
+    // Theme
+    // ==================================================
+
+    void setDarkMode(
+        bool enabled
+    );
+
 private:
     // ==================================================
-    // Test selection
+    // Test selection / execution
     // ==================================================
 
     QComboBox* testSelector{};
@@ -57,17 +65,29 @@ private:
     QPushButton* runSelectedButton{};
     QPushButton* runAllButton{};
 
-    QLabel* summaryLabel{};
+    QLabel* suiteStatusLabel{};
+
+    // ==================================================
+    // Verification summary
+    // ==================================================
+
+    QLabel* executedValueLabel{};
+    QLabel* passedValueLabel{};
+    QLabel* failedValueLabel{};
+    QLabel* requirementsValueLabel{};
+    QLabel* passRateValueLabel{};
+    QLabel* baselineValueLabel{};
 
     // ==================================================
     // Results
     // ==================================================
 
     QTableWidget* resultsTable{};
-
     QTextEdit* detailText{};
 
     std::vector<TestCase> currentResults;
+
+    bool darkModeEnabled{ false };
 
     // ==================================================
     // Helpers
@@ -81,7 +101,18 @@ private:
         int row
     );
 
+    void synchronizeSelector(
+        const std::vector<TestCase>& results
+    );
+
     QString statusToString(
         TestStatus status
     ) const;
+
+    void applyThemeStyle();
+
+    void refreshDynamicStyle(
+        QLabel* label,
+        const char* state
+    );
 };

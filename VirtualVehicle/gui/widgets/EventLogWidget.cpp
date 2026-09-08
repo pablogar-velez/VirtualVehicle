@@ -6,6 +6,75 @@
 #include <QTableWidgetItem>
 #include <QVBoxLayout>
 
+namespace
+{
+    QString formatSimulationTimestamp(
+        double timeMs)
+    {
+        if (timeMs < 0.0)
+        {
+            timeMs = 0.0;
+        }
+
+        const qint64 totalMilliseconds =
+            static_cast<qint64>(
+                timeMs +
+                0.5
+                );
+
+        const qint64 hours =
+            totalMilliseconds /
+            3600000LL;
+
+        const qint64 minutes =
+            (
+                totalMilliseconds /
+                60000LL
+                ) %
+            60LL;
+
+        const qint64 seconds =
+            (
+                totalMilliseconds /
+                1000LL
+                ) %
+            60LL;
+
+        const qint64 milliseconds =
+            totalMilliseconds %
+            1000LL;
+
+        return
+            QString(
+                "%1:%2:%3.%4"
+            )
+            .arg(
+                hours,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                minutes,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                seconds,
+                2,
+                10,
+                QLatin1Char('0')
+            )
+            .arg(
+                milliseconds,
+                3,
+                10,
+                QLatin1Char('0')
+            );
+    }
+}
+
 EventLogWidget::EventLogWidget(
     QWidget* parent)
     : QGroupBox(
@@ -96,12 +165,9 @@ void EventLogWidget::updateEvents(
 
         QTableWidgetItem* timeItem =
             new QTableWidgetItem(
-                QString::number(
-                    event.timeMs,
-                    'f',
-                    3
-                ) +
-                " ms"
+                formatSimulationTimestamp(
+                    event.timeMs
+                )
             );
 
         QTableWidgetItem* categoryItem =

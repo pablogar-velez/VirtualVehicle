@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <set>
 #include <vector>
 
 #include <QGroupBox>
@@ -66,6 +67,7 @@ private:
 
     std::size_t displayedTraceCount{ 0 };
     std::size_t latestTraceSize{ 0 };
+    std::size_t idScanCount{ 0 };
 
     bool viewFrozen{ false };
     bool filterDirty{ false };
@@ -73,6 +75,8 @@ private:
     bool autoSelectLatestFrame{ true };
 
     const std::vector<CanTraceEntry>* currentTrace{ nullptr };
+
+    std::set<std::uint32_t> knownCanIds;
 
     void appendTraceEntry(
         const CanTraceEntry& entry
@@ -120,4 +124,8 @@ private:
     ) const;
 
     void selectLatestFrameIfNeeded();
+
+    void synchronizeVisibleWindow(
+        const std::vector<CanTraceEntry>& trace
+    );
 };
