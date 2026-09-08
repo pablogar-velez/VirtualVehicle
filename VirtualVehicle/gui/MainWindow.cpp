@@ -5,6 +5,7 @@
 #include <vector>
 
 #include <QAbstractItemView>
+#include <QCheckBox>
 #include <QFrame>
 #include <QGroupBox>
 #include <QHeaderView>
@@ -833,17 +834,59 @@ QWidget* MainWindow::createHeader()
         110
     );
 
-    themeToggleButton =
-        new QPushButton(
-            "Dark"
-        );
+    QWidget* themeControl =
+        new QWidget();
 
-    themeToggleButton->setObjectName(
-        "ThemeButton"
+    themeControl->setObjectName(
+        "ThemeControl"
     );
 
-    themeToggleButton->setMinimumWidth(
-        82
+    QHBoxLayout* themeControlLayout =
+        new QHBoxLayout(
+            themeControl
+        );
+
+    themeControlLayout->setContentsMargins(
+        8,
+        0,
+        4,
+        0
+    );
+
+    themeControlLayout->setSpacing(
+        7
+    );
+
+    themeModeLabel =
+        new QLabel(
+            "☾  Dark Mode"
+        );
+
+    themeModeLabel->setObjectName(
+        "ThemeModeLabel"
+    );
+
+    themeToggleSwitch =
+        new QCheckBox();
+
+    themeToggleSwitch->setObjectName(
+        "ThemeSwitch"
+    );
+
+    themeToggleSwitch->setChecked(
+        false
+    );
+
+    themeToggleSwitch->setCursor(
+        Qt::PointingHandCursor
+    );
+
+    themeControlLayout->addWidget(
+        themeModeLabel
+    );
+
+    themeControlLayout->addWidget(
+        themeToggleSwitch
     );
 
     headerLayout->addWidget(
@@ -859,7 +902,7 @@ QWidget* MainWindow::createHeader()
     );
 
     headerLayout->addWidget(
-        themeToggleButton
+        themeControl
     );
 
     return headerWidget;
@@ -1147,7 +1190,7 @@ QWidget* MainWindow::createDashboardPage()
         );
 
         button->setMinimumHeight(
-            58
+            62
         );
     }
 
@@ -1157,7 +1200,7 @@ QWidget* MainWindow::createDashboardPage()
     );
 
     scenarioControlWidget->setMinimumHeight(
-        84
+        96
     );
 
     dashboardLayout->addWidget(
@@ -1650,7 +1693,7 @@ QWidget* MainWindow::createNetworkPage()
 
     QLabel* subtitleLabel =
         new QLabel(
-            "CAN and Automotive Ethernet communication statistics"
+            "Automotive Ethernet network topology and traffic monitoring"
         );
 
     subtitleLabel->setObjectName(
@@ -1822,12 +1865,15 @@ void MainWindow::setupConnections()
     );
 
     connect(
-        themeToggleButton,
-        &QPushButton::clicked,
+        themeToggleSwitch,
+        &QCheckBox::toggled,
         this,
-        [this]()
+        [this](bool checked)
         {
-            toggleTheme();
+            darkModeEnabled =
+                checked;
+
+            applyTheme();
         }
     );
 
@@ -2113,6 +2159,72 @@ void MainWindow::setupConnections()
         }
     );
 
+    // ==================================================
+    // Network / Automotive Ethernet
+    // ==================================================
+
+    connect(
+        statisticsWidget->getSendAToBButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            const MacAddress& nodeA =
+                engine
+                .getEthernetNodeA()
+                .getMacAddress();
+
+            const MacAddress& nodeB =
+                engine
+                .getEthernetNodeB()
+                .getMacAddress();
+
+            engine.submitEthernetFrame(
+                nodeA,
+                nodeB,
+                0x88B5,
+                {
+                    0x56,
+                    0x56,
+                    0x41,
+                    0x32,
+                    0x42
+                }
+            );
+        }
+    );
+
+    connect(
+        statisticsWidget->getSendBToAButton(),
+        &QPushButton::clicked,
+        this,
+        [this]()
+        {
+            const MacAddress& nodeA =
+                engine
+                .getEthernetNodeA()
+                .getMacAddress();
+
+            const MacAddress& nodeB =
+                engine
+                .getEthernetNodeB()
+                .getMacAddress();
+
+            engine.submitEthernetFrame(
+                nodeB,
+                nodeA,
+                0x88B5,
+                {
+                    0x56,
+                    0x56,
+                    0x42,
+                    0x32,
+                    0x41
+                }
+            );
+        }
+    );
+
     connect(
         testRunnerWidget->getRunSelectedButton(),
         &QPushButton::clicked,
@@ -2194,17 +2306,31 @@ void MainWindow::toggleTheme()
     darkModeEnabled =
         !darkModeEnabled;
 
+    if (themeToggleSwitch != nullptr)
+    {
+        themeToggleSwitch->setChecked(
+            darkModeEnabled
+        );
+    }
+
     applyTheme();
 }
 
 void MainWindow::applyTheme()
 {
-    if (themeToggleButton != nullptr)
+    if (themeToggleSwitch != nullptr)
     {
-        themeToggleButton->setText(
+        themeToggleSwitch->setChecked(
             darkModeEnabled
-            ? "Light"
-            : "Dark"
+        );
+    }
+
+    if (themeModeLabel != nullptr)
+    {
+        themeModeLabel->setText(
+            darkModeEnabled
+            ? "☾  Dark Mode"
+            : "☀  Light Mode"
         );
     }
 
@@ -2295,6 +2421,41 @@ void MainWindow::applyTheme()
                 {
                     background-color: #253241;
                     border-color: #45576A;
+                }
+
+                QWidget#ThemeControl
+                {
+                    background: transparent;
+                }
+
+                QLabel#ThemeModeLabel
+                {
+                    color: #DCE5EE;
+                    font-weight: 600;
+                }
+
+                QCheckBox#ThemeSwitch
+                {
+                    spacing: 0px;
+                    min-width: 44px;
+                    max-width: 44px;
+                    min-height: 24px;
+                    max-height: 24px;
+                }
+
+                QCheckBox#ThemeSwitch::indicator
+                {
+                    width: 42px;
+                    height: 22px;
+                    border-radius: 11px;
+                    border: 1px solid #536476;
+                    background-color: #2A3542;
+                }
+
+                QCheckBox#ThemeSwitch::indicator:checked
+                {
+                    border: 1px solid #5E8AB4;
+                    background-color: #456E97;
                 }
 
                 QPushButton#AutoDriveButton:checked,
@@ -2641,6 +2802,41 @@ void MainWindow::applyTheme()
                     border-color: #B6C4D2;
                 }
 
+                QWidget#ThemeControl
+                {
+                    background: transparent;
+                }
+
+                QLabel#ThemeModeLabel
+                {
+                    color: #17202B;
+                    font-weight: 600;
+                }
+
+                QCheckBox#ThemeSwitch
+                {
+                    spacing: 0px;
+                    min-width: 44px;
+                    max-width: 44px;
+                    min-height: 24px;
+                    max-height: 24px;
+                }
+
+                QCheckBox#ThemeSwitch::indicator
+                {
+                    width: 42px;
+                    height: 22px;
+                    border-radius: 11px;
+                    border: 1px solid #C7D2DC;
+                    background-color: #E1E7ED;
+                }
+
+                QCheckBox#ThemeSwitch::indicator:checked
+                {
+                    border: 1px solid #456E97;
+                    background-color: #456E97;
+                }
+
                 QPushButton#AutoDriveButton:checked,
                 QPushButton#ScenarioButton:checked
                 {
@@ -2891,6 +3087,20 @@ void MainWindow::applyTheme()
                     padding: 7px;
                 }
             )"
+        );
+    }
+
+    if (statisticsWidget != nullptr)
+    {
+        statisticsWidget->setDarkMode(
+            darkModeEnabled
+        );
+    }
+
+    if (faultInjectionWidget != nullptr)
+    {
+        faultInjectionWidget->setDarkMode(
+            darkModeEnabled
         );
     }
 }
@@ -3183,7 +3393,11 @@ void MainWindow::refreshUi()
         statisticsWidget->updateStatistics(
             engine.getCanStatistics(),
             engine.getCanBitrate(),
-            engine.getCurrentTimeMs()
+            engine.getCurrentTimeMs(),
+            engine.getEthernetBus(),
+            engine.getEthernetNodeA(),
+            engine.getEthernetNodeB(),
+            engine.isEthernetNodeACommunicationFaultActive()
         );
 
         break;

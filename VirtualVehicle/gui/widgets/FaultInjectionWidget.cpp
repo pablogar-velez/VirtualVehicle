@@ -1649,6 +1649,311 @@ FaultInjectionWidget::FaultInjectionWidget(
     // Workstation-specific styling
     // ==================================================
 
+    applyThemeStyle();
+}
+
+
+// ==================================================
+// Theme
+// ==================================================
+
+void FaultInjectionWidget::setDarkMode(
+    bool enabled)
+{
+    darkModeEnabled =
+        enabled;
+
+    applyThemeStyle();
+}
+
+void FaultInjectionWidget::applyThemeStyle()
+{
+    if (darkModeEnabled)
+    {
+        setStyleSheet(
+            R"(
+            QGroupBox#DiagnosticWorkstation
+            {
+                background: transparent;
+                color: #E8EDF3;
+            }
+
+            QTabWidget#DiagnosticWorkspaceTabs::pane
+            {
+                border: 1px solid #304050;
+                border-radius: 9px;
+                background-color: transparent;
+                top: -1px;
+            }
+
+            QTabWidget#DiagnosticWorkspaceTabs QTabBar
+            {
+                background: transparent;
+            }
+
+            QTabWidget#DiagnosticWorkspaceTabs QTabBar::tab
+            {
+                min-width: 135px;
+                min-height: 36px;
+                padding: 5px 16px;
+                margin-right: 6px;
+                border: 1px solid #314252;
+                border-radius: 7px;
+                background-color: #172431;
+                color: #91A4B7;
+            }
+
+            QTabWidget#DiagnosticWorkspaceTabs QTabBar::tab:hover
+            {
+                background-color: #1E3040;
+                color: #D6E2ED;
+            }
+
+            QTabWidget#DiagnosticWorkspaceTabs QTabBar::tab:selected
+            {
+                background-color: #456E97;
+                color: #FFFFFF;
+                border-color: #5B86AE;
+                font-weight: 700;
+            }
+
+            QWidget#DiagnosticTabPage,
+            QWidget#DiagnosticScrollContent
+            {
+                background: transparent;
+                color: #E8EDF3;
+            }
+
+            QGroupBox#DiagnosticSection
+            {
+                border: 1px solid #304050;
+                border-radius: 9px;
+                margin-top: 10px;
+                padding-top: 12px;
+                font-weight: 700;
+                color: #E6EDF4;
+            }
+
+            QGroupBox#DiagnosticSection::title
+            {
+                subcontrol-origin: margin;
+                left: 10px;
+                padding: 0 5px;
+                color: #E6EDF4;
+            }
+
+            QFrame#DiagnosticSummaryCard,
+            QFrame#DiagnosticFaultRow,
+            QFrame#DiagnosticHealthCard,
+            QFrame#DiagnosticTransactionCard,
+            QFrame#DiagnosticInstructionCard
+            {
+                border: 1px solid #304050;
+                border-radius: 8px;
+                background-color: #16222E;
+            }
+
+            QFrame#DiagnosticInstructionCard
+            {
+                background-color: #14202A;
+            }
+
+            QFrame#DiagnosticFaultRow
+            {
+                min-height: 68px;
+            }
+
+            QLabel#DiagnosticSummaryTitle,
+            QLabel#DiagnosticDescription,
+            QLabel#DiagnosticTransactionTitle,
+            QLabel#UdsServiceDescription,
+            QLabel#DiagnosticWorkflowHint
+            {
+                color: #8EA2B5;
+            }
+
+            QLabel#DiagnosticCardTitle,
+            QLabel#DiagnosticGuidanceTitle,
+            QLabel#DiagnosticSummaryValue
+            {
+                color: #EAF1F7;
+                font-weight: 700;
+            }
+
+            QLabel#DiagnosticCardTitle,
+            QLabel#DiagnosticGuidanceTitle
+            {
+                font-size: 13px;
+            }
+
+            QLabel#DiagnosticStateBadge,
+            QLabel#UdsResponseStatus,
+            QLabel#DiagnosticMonitorOverall,
+            QLabel#DiagnosticMonitorValue
+            {
+                font-weight: 700;
+            }
+
+            QLabel#DtcEmptyState
+            {
+                color: #43D17D;
+                font-weight: 700;
+            }
+
+            QLabel[state="healthy"],
+            QLabel[state="positive"]
+            {
+                color: #43D17D;
+            }
+
+            QLabel[state="warning"],
+            QLabel[state="negative"]
+            {
+                color: #F08A53;
+            }
+
+            QLabel[state="busy"]
+            {
+                color: #E2A34B;
+            }
+
+            QLabel[state="neutral"]
+            {
+                color: #9AAABB;
+            }
+
+            QLabel#DiagnosticGuidanceAction
+            {
+                color: #C8D5E0;
+                font-weight: 600;
+            }
+
+            QLabel#DiagnosticByteString
+            {
+                color: #EAF1F7;
+                font-family: Consolas, "Courier New", monospace;
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            QScrollArea#DiagnosticScrollArea
+            {
+                background: transparent;
+                border: none;
+            }
+
+            QScrollBar:vertical
+            {
+                background: transparent;
+                width: 9px;
+                margin: 2px 0 2px 0;
+            }
+
+            QScrollBar::handle:vertical
+            {
+                background: #4A5E70;
+                min-height: 28px;
+                border-radius: 4px;
+            }
+
+            QScrollBar::handle:vertical:hover
+            {
+                background: #617589;
+            }
+
+            QScrollBar::add-line:vertical,
+            QScrollBar::sub-line:vertical
+            {
+                height: 0px;
+            }
+
+            QScrollBar::add-page:vertical,
+            QScrollBar::sub-page:vertical
+            {
+                background: transparent;
+            }
+
+            QPushButton#DiagnosticPrimaryButton,
+            QPushButton#DiagnosticClearAllButton,
+            QPushButton#DiagnosticDangerButton,
+            QPushButton#DiagnosticSecondaryButton
+            {
+                color: #E7EEF5;
+                background-color: #1A2733;
+                border: 1px solid #34495A;
+                border-radius: 6px;
+            }
+
+            QPushButton#DiagnosticPrimaryButton:hover,
+            QPushButton#DiagnosticClearAllButton:hover,
+            QPushButton#DiagnosticDangerButton:hover,
+            QPushButton#DiagnosticSecondaryButton:hover
+            {
+                background-color: #233544;
+                border-color: #4B667B;
+            }
+
+            QPushButton#DiagnosticPrimaryButton
+            {
+                min-width: 120px;
+                min-height: 38px;
+            }
+
+            QPushButton#DiagnosticClearAllButton
+            {
+                min-width: 130px;
+                min-height: 38px;
+                font-weight: 700;
+            }
+
+            QPushButton#DiagnosticDangerButton,
+            QPushButton#DiagnosticSecondaryButton
+            {
+                min-height: 32px;
+            }
+
+            QTableWidget
+            {
+                color: #D9E3EC;
+                background-color: #121C25;
+                alternate-background-color: #17232E;
+                border: 1px solid #2F4050;
+                border-radius: 6px;
+                selection-background-color: #315A7D;
+                selection-color: #FFFFFF;
+            }
+
+            QHeaderView::section
+            {
+                color: #C7D4DF;
+                background-color: #1C2935;
+                border: none;
+                border-bottom: 1px solid #314252;
+                padding: 7px;
+            }
+
+            QComboBox#UdsServiceCombo
+            {
+                color: #E7EEF5;
+                background-color: #17232E;
+                border: 1px solid #34495A;
+                border-radius: 5px;
+                padding: 5px 8px;
+            }
+
+            QComboBox#UdsServiceCombo QAbstractItemView
+            {
+                color: #E7EEF5;
+                background-color: #17232E;
+                selection-background-color: #315A7D;
+            }
+
+            )"
+        );
+
+        return;
+    }
+
     setStyleSheet(
         R"(
             QGroupBox#DiagnosticWorkstation
@@ -1918,6 +2223,7 @@ FaultInjectionWidget::FaultInjectionWidget(
                 border: 1px solid #CFD9E2;
                 outline: none;
             }
+        
         )"
     );
 }

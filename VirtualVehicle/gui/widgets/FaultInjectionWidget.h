@@ -73,6 +73,10 @@ public:
 
     void clearRuntimeView();
 
+    void setDarkMode(
+        bool enabled
+    );
+
 private:
     // ==================================================
     // Diagnostic summary
@@ -154,6 +158,8 @@ private:
     QLabel* responseBytesLabel{};
     QLabel* responseStatusLabel{};
 
+    bool darkModeEnabled{ false };
+
     // ==================================================
     // Helpers
     // ==================================================
@@ -178,6 +184,8 @@ private:
         QLabel* label,
         const char* state
     );
+
+    void applyThemeStyle();
 
     static QString formatDtcCode(
         std::uint32_t code

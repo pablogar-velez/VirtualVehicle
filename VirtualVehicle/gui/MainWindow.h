@@ -7,6 +7,7 @@
 
 class QLabel;
 class QPushButton;
+class QCheckBox;
 class QStackedWidget;
 class QWidget;
 
@@ -38,7 +39,8 @@ private:
     QPushButton* autoDriveButton{};
     QPushButton* pauseResumeButton{};
     QPushButton* resetButton{};
-    QPushButton* themeToggleButton{};
+    QLabel* themeModeLabel{};
+    QCheckBox* themeToggleSwitch{};
 
     QWidget* sidebarWidget{};
 
