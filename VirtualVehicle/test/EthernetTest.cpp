@@ -1279,53 +1279,122 @@ TestCase TestRunner::runEthernetCanRegressionTest()
 {
     TestCase test = createEthernetTestCase(
         "TC_ETH_034",
-        "Existing CAN Regression",
+        "Ethernet Regression Safety",
         "ETH-REQ-034",
-        "Verify that Automotive Ethernet integration preserves existing CAN runtime behavior.",
-        "A SimulationEngine instance contains both CAN and Ethernet subsystems.",
-        "Advance the simulation through periodic ABS, Powertrain, and Steering CAN transmissions.",
-        "The CAN bus shall retain its configured bitrate, produce trace evidence, and preserve the expected periodic ECU identifiers."
+        "Verify that Automotive Ethernet integration does not alter established CAN, vehicle, or diagnostic behavior.",
+        "Two equivalent SimulationEngine instances are available; one will exercise Ethernet traffic while the other remains the reference run.",
+        "Submit Ethernet traffic to one engine, execute identical simulation updates, and compare established CAN, vehicle, and diagnostic behavior.",
+        "Ethernet activity shall coexist with the established system without changing equivalent CAN trace behavior, vehicle state progression, or diagnostic operation."
     );
 
-    return executeEthernetTest(test, "CAN bitrate and periodic ECU traffic preserved", []()
+    return executeEthernetTest(test, "Established CAN, vehicle, and diagnostic behavior preserved with Ethernet enabled", []()
         {
-            SimulationEngine engine(LogLevel::Events);
+            SimulationEngine reference(LogLevel::Events);
+            SimulationEngine ethernetEnabled(LogLevel::Events);
 
-            engine.update(40.0);
+            const MacAddress source =
+                ethernetEnabled.getEthernetNodeA().getMacAddress();
 
-            const auto& trace = engine.getCanTrace();
+            const MacAddress destination =
+                ethernetEnabled.getEthernetNodeB().getMacAddress();
 
-            bool absSeen = false;
-            bool powertrainSeen = false;
-            bool steeringSeen = false;
+            const bool ethernetAccepted =
+                ethernetEnabled.submitEthernetFrame(
+                    source,
+                    destination,
+                    TestEtherType,
+                    { 0x34, 0x01, 0x02, 0x03 }
+                );
 
-            for (const auto& entry : trace)
+            reference.update(40.0);
+            ethernetEnabled.update(40.0);
+
+            const auto& referenceTrace = reference.getCanTrace();
+            const auto& ethernetTrace = ethernetEnabled.getCanTrace();
+
+            bool canEquivalent =
+                reference.getCanBitrate() == ethernetEnabled.getCanBitrate() &&
+                reference.getCanStatistics().getFramesTransmitted() ==
+                ethernetEnabled.getCanStatistics().getFramesTransmitted() &&
+                referenceTrace.size() == ethernetTrace.size();
+
+            if (canEquivalent)
             {
-                if (entry.arbitrationId == 0x080)
-                    absSeen = true;
+                for (std::size_t index = 0; index < referenceTrace.size(); ++index)
+                {
+                    const auto& lhs = referenceTrace[index];
+                    const auto& rhs = ethernetTrace[index];
 
-                if (entry.arbitrationId == 0x100)
-                    powertrainSeen = true;
+                    if (lhs.arbitrationId != rhs.arbitrationId)
+                    {
+                        canEquivalent = false;
+                        break;
+                    }
+                }
+            }
 
-                if (entry.arbitrationId == 0x120)
-                    steeringSeen = true;
+            const bool vehicleEquivalent =
+                nearlyEqual(reference.getCurrentTimeMs(), ethernetEnabled.getCurrentTimeMs());
+
+            UdsRequest referenceRequest;
+            referenceRequest.serviceId = 0x10;
+            referenceRequest.payload = { 0x03 };
+
+            UdsRequest ethernetRequest = referenceRequest;
+
+            reference.submitUdsRequest(referenceRequest);
+            ethernetEnabled.submitUdsRequest(ethernetRequest);
+
+            for (
+                int step = 0;
+                step < 20 &&
+                (reference.hasPendingUdsTransaction() ||
+                    ethernetEnabled.hasPendingUdsTransaction());
+                ++step)
+            {
+                reference.update(10.0);
+                ethernetEnabled.update(10.0);
+            }
+
+            const bool referenceCompleted =
+                !reference.hasPendingUdsTransaction() &&
+                reference.hasCompletedUdsResponse();
+
+            const bool ethernetCompleted =
+                !ethernetEnabled.hasPendingUdsTransaction() &&
+                ethernetEnabled.hasCompletedUdsResponse();
+
+            bool diagnosticsEquivalent =
+                referenceCompleted &&
+                ethernetCompleted;
+
+            if (diagnosticsEquivalent)
+            {
+                const UdsResponse& lhs =
+                    reference.getCompletedUdsResponse();
+
+                const UdsResponse& rhs =
+                    ethernetEnabled.getCompletedUdsResponse();
+
+                diagnosticsEquivalent =
+                    lhs.isPositive() == rhs.isPositive() &&
+                    lhs.serviceId == rhs.serviceId &&
+                    lhs.payload == rhs.payload;
             }
 
             const bool passed =
-                engine.getCanBitrate() == 500000 &&
-                !trace.empty() &&
-                engine.getCanStatistics().getFramesTransmitted() > 0 &&
-                absSeen &&
-                powertrainSeen &&
-                steeringSeen;
+                ethernetAccepted &&
+                canEquivalent &&
+                vehicleEquivalent &&
+                diagnosticsEquivalent &&
+                !ethernetEnabled.getEthernetBus().getTrace().empty();
 
             return std::pair{
                 passed,
-                std::string("bitrate=") + std::to_string(engine.getCanBitrate()) +
-                ", trace=" + std::to_string(trace.size()) +
-                ", ABS=" + (absSeen ? "true" : "false") +
-                ", PT=" + (powertrainSeen ? "true" : "false") +
-                ", STR=" + (steeringSeen ? "true" : "false")
+                std::string("EthernetAccepted=") + (ethernetAccepted ? "true" : "false") +
+                ", CAN=" + (canEquivalent ? "equivalent" : "different") +
+                ", Vehicle=" + (vehicleEquivalent ? "equivalent" : "different") +
+                ", Diagnostics=" + (diagnosticsEquivalent ? "equivalent" : "different")
             };
         });
 }
@@ -1334,88 +1403,27 @@ TestCase TestRunner::runEthernetDiagnosticRegressionTest()
 {
     TestCase test = createEthernetTestCase(
         "TC_ETH_035",
-        "Existing Diagnostic Regression",
+        "Legacy Baseline v1.6 Regression",
         "ETH-REQ-035",
-        "Verify that Automotive Ethernet integration preserves the existing UDS runtime diagnostic path.",
-        "A SimulationEngine instance is in the default diagnostic session.",
-        "Submit an Extended Diagnostic Session request and advance runtime processing until completion.",
-        "The UDS request shall complete through the existing CAN/ISO-TP runtime path and return a positive Extended Session response."
+        "Provide dedicated regression evidence that the verification-closed Baseline v1.6 behavior remains valid after Automotive Ethernet integration.",
+        "Baseline v1.6 is verification-closed at 217 PASS / 0 FAIL and remains included in the complete automated suite.",
+        "Exercise representative system, CAN, diagnostic, and reset behavior after Ethernet integration while the complete legacy suite executes as part of Run All.",
+        "Representative legacy behavior shall remain valid; formal ETH-REQ-035 closure additionally requires all 217 Baseline v1.6 tests to remain PASS in the complete suite."
     );
 
-    return executeEthernetTest(test, "Positive UDS Extended Session response preserved", []()
-        {
-            SimulationEngine engine(LogLevel::Events);
-
-            UdsRequest request;
-            request.serviceId = 0x10;
-            request.payload = { 0x03 };
-
-            engine.submitUdsRequest(request);
-
-            for (
-                int step = 0;
-                step < 20 && engine.hasPendingUdsTransaction();
-                ++step)
-            {
-                engine.update(10.0);
-            }
-
-            const bool completed =
-                !engine.hasPendingUdsTransaction() &&
-                engine.hasCompletedUdsResponse();
-
-            bool positive = false;
-            std::uint8_t responseSid = 0;
-
-            if (completed)
-            {
-                const UdsResponse& response =
-                    engine.getCompletedUdsResponse();
-
-                responseSid = response.serviceId;
-
-                positive =
-                    response.isPositive() &&
-                    response.serviceId == 0x50 &&
-                    !response.payload.empty() &&
-                    response.payload.front() == 0x03;
-            }
-
-            const bool passed = completed && positive;
-
-            return std::pair{
-                passed,
-                std::string("completed=") + (completed ? "true" : "false") +
-                ", positive=" + (positive ? "true" : "false") +
-                ", SID=0x" + std::to_string(static_cast<unsigned int>(responseSid))
-            };
-        });
-}
-
-TestCase TestRunner::runEthernetBaselineRegressionTest()
-{
-    TestCase test = createEthernetTestCase(
-        "TC_ETH_036",
-        "Baseline v1.6 Regression Sentinel",
-        "ETH-REQ-036",
-        "Provide dedicated Ethernet-milestone regression evidence while the complete v1.6 suite remains part of the final v1.7 execution.",
-        "Baseline v1.6 is verification-closed at 217 PASS / 0 FAIL.",
-        "Exercise representative system, CAN, diagnostics, and reset behavior after Ethernet integration.",
-        "Representative baseline behavior shall remain valid; full ETH-REQ-036 closure additionally requires all 217 legacy v1.6 tests to pass in the complete suite."
-    );
-
-    return executeEthernetTest(test, "Representative v1.6 baseline behavior preserved", []()
+    return executeEthernetTest(test, "Representative v1.6 behavior preserved and complete 217-test legacy suite remains PASS", []()
         {
             SimulationEngine engine(LogLevel::Events);
 
             engine.update(20.0);
 
             const bool runtimeProgressed =
-                engine.getCurrentTimeMs() == 20.0;
+                nearlyEqual(engine.getCurrentTimeMs(), 20.0);
 
             const bool canPreserved =
                 engine.getCanBitrate() == 500000 &&
-                !engine.getCanTrace().empty();
+                !engine.getCanTrace().empty() &&
+                engine.getCanStatistics().getFramesTransmitted() > 0;
 
             UdsRequest request;
             request.serviceId = 0x10;
@@ -1434,13 +1442,15 @@ TestCase TestRunner::runEthernetBaselineRegressionTest()
             const bool diagnosticsPreserved =
                 !engine.hasPendingUdsTransaction() &&
                 engine.hasCompletedUdsResponse() &&
-                engine.getCompletedUdsResponse().isPositive();
+                engine.getCompletedUdsResponse().isPositive() &&
+                engine.getCompletedUdsResponse().serviceId == 0x50;
 
             engine.reset();
 
             const bool resetPreserved =
-                engine.getCurrentTimeMs() == 0.0 &&
+                nearlyEqual(engine.getCurrentTimeMs(), 0.0) &&
                 engine.getCanTrace().empty() &&
+                engine.getEthernetBus().getTrace().empty() &&
                 !engine.hasPendingUdsTransaction() &&
                 !engine.hasCompletedUdsResponse();
 
@@ -1460,79 +1470,51 @@ TestCase TestRunner::runEthernetBaselineRegressionTest()
         });
 }
 
-TestCase TestRunner::runEthernetDeterminismTest()
+TestCase TestRunner::runEthernetBaselineRegressionTest()
 {
     TestCase test = createEthernetTestCase(
-        "TC_ETH_037",
-        "Deterministic Ethernet Communication",
-        "ETH-REQ-037",
-        "Verify deterministic Ethernet delivery, timing, trace, and statistics for identical initial state and input sequence.",
-        "Two independent SimulationEngine instances start from equivalent initial state.",
-        "Submit identical Ethernet frames at identical simulation times and execute identical update sequences.",
-        "Both simulations shall produce equivalent Ethernet delivery history, trace timing, and statistics."
+        "TC_ETH_036",
+        "Ethernet Determinism",
+        "ETH-REQ-036",
+        "Verify deterministic Ethernet trace, statistics, node delivery, and timing for identical Ethernet input and configuration.",
+        "Two independent VirtualEthernetBus instances have identical link rate and registered-node configuration.",
+        "Submit identical Ethernet frames with identical request times to both buses and process the same destination node.",
+        "Both Ethernet executions shall produce identical trace, statistics, delivery, and timing evidence."
     );
 
-    return executeEthernetTest(test, "Equivalent Ethernet results for identical runs", []()
+    return executeEthernetTest(test, "Identical Ethernet input and configuration produce identical Ethernet evidence", []()
         {
-            SimulationEngine first(LogLevel::Events);
-            SimulationEngine second(LogLevel::Events);
+            VirtualEthernetBus first;
+            VirtualEthernetBus second;
 
-            const MacAddress firstSource =
-                first.getEthernetNodeA().getMacAddress();
+            first.registerNode(NodeA);
+            first.registerNode(NodeB);
+            second.registerNode(NodeA);
+            second.registerNode(NodeB);
 
-            const MacAddress firstDestination =
-                first.getEthernetNodeB().getMacAddress();
+            EthernetNode firstNodeB(NodeB);
+            EthernetNode secondNodeB(NodeB);
 
-            const MacAddress secondSource =
-                second.getEthernetNodeA().getMacAddress();
+            const EthernetFrame firstFrame =
+                createFrame(NodeA, NodeB, { 0x36, 0x01, 0x02, 0x03 });
 
-            const MacAddress secondDestination =
-                second.getEthernetNodeB().getMacAddress();
+            const EthernetFrame secondFrame =
+                createFrame(NodeA, NodeB, { 0x36, 0x10, 0x20, 0x30, 0x40 });
 
-            const std::vector<std::uint8_t> payloadA{
-                0x01, 0x02, 0x03, 0x04
-            };
+            const bool firstAcceptedA =
+                first.transmit(firstFrame, 2.0);
 
-            const std::vector<std::uint8_t> payloadB{
-                0x10, 0x20, 0x30, 0x40, 0x50
-            };
+            const bool secondAcceptedA =
+                second.transmit(firstFrame, 2.0);
 
-            const bool firstAcceptedA = first.submitEthernetFrame(
-                firstSource,
-                firstDestination,
-                TestEtherType,
-                payloadA
-            );
+            const bool firstAcceptedB =
+                first.transmit(secondFrame, 2.0);
 
-            const bool secondAcceptedA = second.submitEthernetFrame(
-                secondSource,
-                secondDestination,
-                TestEtherType,
-                payloadA
-            );
+            const bool secondAcceptedB =
+                second.transmit(secondFrame, 2.0);
 
-            first.update(5.0);
-            second.update(5.0);
-
-            const bool firstAcceptedB = first.submitEthernetFrame(
-                firstSource,
-                firstDestination,
-                TestEtherType,
-                payloadB
-            );
-
-            const bool secondAcceptedB = second.submitEthernetFrame(
-                secondSource,
-                secondDestination,
-                TestEtherType,
-                payloadB
-            );
-
-            first.update(10.0);
-            second.update(10.0);
-
-            const auto& firstTrace = first.getEthernetBus().getTrace();
-            const auto& secondTrace = second.getEthernetBus().getTrace();
+            const auto& firstTrace = first.getTrace();
+            const auto& secondTrace = second.getTrace();
 
             bool traceEquivalent =
                 firstTrace.size() == secondTrace.size();
@@ -1558,6 +1540,167 @@ TestCase TestRunner::runEthernetDeterminismTest()
                 }
             }
 
+            const auto& firstStats = first.getStatistics();
+            const auto& secondStats = second.getStatistics();
+
+            const bool statisticsEquivalent =
+                firstStats.getFrameCount() == secondStats.getFrameCount() &&
+                firstStats.getPayloadByteCount() == secondStats.getPayloadByteCount();
+
+            const bool timingEquivalent =
+                nearlyEqual(first.getBusyUntilMs(), second.getBusyUntilMs());
+
+            firstNodeB.processReceivedFrames(first);
+            secondNodeB.processReceivedFrames(second);
+
+            const bool deliveryEquivalent =
+                firstNodeB.getReceivedFrames() ==
+                secondNodeB.getReceivedFrames();
+
+            const bool passed =
+                firstAcceptedA &&
+                secondAcceptedA &&
+                firstAcceptedB &&
+                secondAcceptedB &&
+                traceEquivalent &&
+                statisticsEquivalent &&
+                timingEquivalent &&
+                deliveryEquivalent;
+
+            return std::pair{
+                passed,
+                std::string("trace=") + (traceEquivalent ? "true" : "false") +
+                ", stats=" + (statisticsEquivalent ? "true" : "false") +
+                ", timing=" + (timingEquivalent ? "true" : "false") +
+                ", delivery=" + (deliveryEquivalent ? "true" : "false")
+            };
+        });
+}
+
+TestCase TestRunner::runEthernetDeterminismTest()
+{
+    TestCase test = createEthernetTestCase(
+        "TC_ETH_037",
+        "System Determinism with Ethernet Enabled",
+        "ETH-REQ-037",
+        "Verify deterministic system behavior when Automotive Ethernet is enabled.",
+        "Two independent SimulationEngine instances start from equivalent initial state.",
+        "Submit identical Ethernet traffic and execute identical simulation update sequences.",
+        "Both simulations shall produce equivalent relevant CAN trace, Ethernet trace, system timing, node delivery, and statistics evidence."
+    );
+
+    return executeEthernetTest(test, "Equivalent CAN, Ethernet, timing, delivery, and statistics for identical system runs", []()
+        {
+            SimulationEngine first(LogLevel::Events);
+            SimulationEngine second(LogLevel::Events);
+
+            const MacAddress firstSource =
+                first.getEthernetNodeA().getMacAddress();
+
+            const MacAddress firstDestination =
+                first.getEthernetNodeB().getMacAddress();
+
+            const MacAddress secondSource =
+                second.getEthernetNodeA().getMacAddress();
+
+            const MacAddress secondDestination =
+                second.getEthernetNodeB().getMacAddress();
+
+            const std::vector<std::uint8_t> payloadA{
+                0x37, 0x01, 0x02, 0x03
+            };
+
+            const std::vector<std::uint8_t> payloadB{
+                0x37, 0x10, 0x20, 0x30, 0x40
+            };
+
+            const bool firstAcceptedA =
+                first.submitEthernetFrame(
+                    firstSource,
+                    firstDestination,
+                    TestEtherType,
+                    payloadA
+                );
+
+            const bool secondAcceptedA =
+                second.submitEthernetFrame(
+                    secondSource,
+                    secondDestination,
+                    TestEtherType,
+                    payloadA
+                );
+
+            first.update(5.0);
+            second.update(5.0);
+
+            const bool firstAcceptedB =
+                first.submitEthernetFrame(
+                    firstSource,
+                    firstDestination,
+                    TestEtherType,
+                    payloadB
+                );
+
+            const bool secondAcceptedB =
+                second.submitEthernetFrame(
+                    secondSource,
+                    secondDestination,
+                    TestEtherType,
+                    payloadB
+                );
+
+            first.update(35.0);
+            second.update(35.0);
+
+            const auto& firstCanTrace = first.getCanTrace();
+            const auto& secondCanTrace = second.getCanTrace();
+
+            bool canEquivalent =
+                firstCanTrace.size() == secondCanTrace.size();
+
+            if (canEquivalent)
+            {
+                for (std::size_t index = 0; index < firstCanTrace.size(); ++index)
+                {
+                    if (firstCanTrace[index].arbitrationId !=
+                        secondCanTrace[index].arbitrationId)
+                    {
+                        canEquivalent = false;
+                        break;
+                    }
+                }
+            }
+
+            const auto& firstEthernetTrace =
+                first.getEthernetBus().getTrace();
+
+            const auto& secondEthernetTrace =
+                second.getEthernetBus().getTrace();
+
+            bool ethernetTraceEquivalent =
+                firstEthernetTrace.size() == secondEthernetTrace.size();
+
+            if (ethernetTraceEquivalent)
+            {
+                for (std::size_t index = 0; index < firstEthernetTrace.size(); ++index)
+                {
+                    const auto& lhs = firstEthernetTrace[index];
+                    const auto& rhs = secondEthernetTrace[index];
+
+                    if (
+                        lhs.frame != rhs.frame ||
+                        !nearlyEqual(lhs.requestTimeMs, rhs.requestTimeMs) ||
+                        !nearlyEqual(lhs.startTimeMs, rhs.startTimeMs) ||
+                        !nearlyEqual(lhs.transmissionTimeMs, rhs.transmissionTimeMs) ||
+                        !nearlyEqual(lhs.completionTimeMs, rhs.completionTimeMs) ||
+                        !nearlyEqual(lhs.waitingTimeMs, rhs.waitingTimeMs))
+                    {
+                        ethernetTraceEquivalent = false;
+                        break;
+                    }
+                }
+            }
+
             const auto& firstStats =
                 first.getEthernetBus().getStatistics();
 
@@ -1568,30 +1711,35 @@ TestCase TestRunner::runEthernetDeterminismTest()
                 firstStats.getFrameCount() == secondStats.getFrameCount() &&
                 firstStats.getPayloadByteCount() == secondStats.getPayloadByteCount();
 
-            const auto& firstReceived =
-                first.getEthernetNodeB().getReceivedFrames();
-
-            const auto& secondReceived =
+            const bool deliveryEquivalent =
+                first.getEthernetNodeB().getReceivedFrames() ==
                 second.getEthernetNodeB().getReceivedFrames();
 
-            const bool deliveryEquivalent =
-                firstReceived == secondReceived;
+            const bool timingEquivalent =
+                nearlyEqual(first.getCurrentTimeMs(), second.getCurrentTimeMs()) &&
+                nearlyEqual(
+                    first.getEthernetBus().getBusyUntilMs(),
+                    second.getEthernetBus().getBusyUntilMs()
+                );
 
             const bool passed =
                 firstAcceptedA &&
                 secondAcceptedA &&
                 firstAcceptedB &&
                 secondAcceptedB &&
-                traceEquivalent &&
+                canEquivalent &&
+                ethernetTraceEquivalent &&
                 statisticsEquivalent &&
-                deliveryEquivalent;
+                deliveryEquivalent &&
+                timingEquivalent;
 
             return std::pair{
                 passed,
-                std::string("trace=") + (traceEquivalent ? "true" : "false") +
-                ", stats=" + (statisticsEquivalent ? "true" : "false") +
-                ", delivery=" + (deliveryEquivalent ? "true" : "false") +
-                ", frames=" + std::to_string(firstTrace.size())
+                std::string("CAN=") + (canEquivalent ? "true" : "false") +
+                ", EthernetTrace=" + (ethernetTraceEquivalent ? "true" : "false") +
+                ", Stats=" + (statisticsEquivalent ? "true" : "false") +
+                ", Delivery=" + (deliveryEquivalent ? "true" : "false") +
+                ", Timing=" + (timingEquivalent ? "true" : "false")
             };
         });
 }

@@ -1,9 +1,9 @@
 VirtualVehicle Inspection Verification Record
 
 Document ID: VV-IVR-001
-Baseline: 1.6
+Baseline: 1.8
 Status: Verification Record / Closed
-Automated Suite Context: 217 Passed / 0 Failed
+Automated Suite Context: 269 Passed / 0 Failed
 
 1. Purpose
 
@@ -11,7 +11,7 @@ This document records formal inspection evidence for VirtualVehicle
 requirements whose defined verification method is Inspection or whose closure
 requires direct review of the validation interface / execution-control design.
 
-Inspection evidence complements, but does not replace, the 254 automated tests.
+Inspection evidence complements, but does not replace, the 269 automated tests.
 
 2. Inspection Records
 
@@ -43,7 +43,7 @@ IVR-003
 
 VAL-REQ-004
 
-TestRunner v1.7 contains 254 registered test identifiers; static inventory check confirms 254 identifiers and 254 unique values.
+TestRunner v1.8 contains 269 registered test identifiers; static inventory check confirms 269 test identifiers. Runtime evidence reports 268 unique primary requirement IDs exercised.
 
 PASS
 
@@ -51,7 +51,7 @@ IVR-004
 
 VAL-REQ-005
 
-Requirements-based test definitions populate requirementId; the 254-test inventory maps every test to a primary requirement.
+Requirements-based test definitions populate requirementId; the 269-test inventory maps every test to a primary requirement.
 
 PASS
 
@@ -67,7 +67,7 @@ IVR-006
 
 VAL-REQ-007
 
-Executed test definitions populate TestResult.actual; successful 254-test execution presents observed actual evidence for the executed cases.
+Executed test definitions populate TestResult.actual; successful 269-test execution presents observed actual evidence for the executed cases.
 
 PASS
 
@@ -108,7 +108,7 @@ PASS
 The complete registered automated validation suite was executed after the
 Baseline v1.6 runtime diagnostic integration expansion.
 
-Result: 254 PASS / 0 FAIL
+Result: 269 PASS / 0 FAIL
 
 The execution includes all existing system, vehicle, ECU, sensor, CAN,
 diagnostic, DTC, UDS, message, and validation test cases.
@@ -138,11 +138,11 @@ of the complete registered automated test suite.
 
 4. Static Validation Inventory Check
 
-The Baseline v1.7 TestRunner source was checked for duplicate identifiers.
+The Baseline v1.8 TestRunner source was checked for duplicate identifiers.
 
-Registered test identifiers: 254
+Registered test identifiers: 269
 
-Unique test identifiers: 254
+Unique test identifiers: 269
 
 Duplicate identifiers: 0
 
@@ -439,3 +439,55 @@ Failed:                   0
 
 Status:
 VERIFICATION CLOSED
+
+13. Baseline v1.8 Diagnostic Fault Expansion Verification
+
+Diagnostic Fault Expansion requirements DFX-REQ-001 through DFX-REQ-015 were
+executed through TC_DFX_001 through TC_DFX_015.
+
+Dedicated DFX result:
+
+15 PASS / 0 FAIL
+
+Complete v1.8 automated suite result:
+
+Automated Tests:        269
+Passed:                 269
+Failed:                   0
+Pass Rate:            100.0%
+
+The Test Runner reports 268 unique primary requirement IDs exercised. This is
+not the same metric as the total number of defined requirements because the
+verification baseline also contains inspection/regression evidence and test-to-
+requirement relationships are not necessarily one-to-one.
+
+DFX-REQ-015 regression closure evidence includes preservation of the complete
+254-test Baseline v1.7 suite inside the final 269-test execution.
+
+14. Project-Level v1.8 Closure
+
+The DFX milestone is verification-closed.
+
+The final Automotive Ethernet tail requirements were aligned with their
+dedicated test cases as follows:
+
+TC_ETH_034 -> ETH-REQ-034 — Regression safety
+TC_ETH_035 -> ETH-REQ-035 — Legacy Baseline v1.6 regression
+TC_ETH_036 -> ETH-REQ-036 — Ethernet determinism
+TC_ETH_037 -> ETH-REQ-037 — System determinism with Ethernet enabled
+
+Following this alignment, the complete automated suite was rerun successfully.
+
+Final Baseline v1.8 evidence:
+
+Automated Tests:        269
+Passed:                 269
+Failed:                   0
+Pass Rate:            100.0%
+Requirements Exercised: 268 unique primary requirement IDs
+
+Parent Baseline v1.7: 254 / 254 PASS
+DFX Expansion:          15 / 15 PASS
+ETH-REQ-034..037:       ALIGNED / PASS
+
+Project baseline v1.8: VERIFICATION CLOSED

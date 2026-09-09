@@ -8,7 +8,7 @@ Document ID: VV-DFX-REQ-001
 
 Baseline: v1.8
 
-Status: IMPLEMENTED / UNVERIFIED
+Status: VERIFICATION CLOSED
 
 Parent Verified Baseline: v1.7
 
@@ -57,7 +57,7 @@ communication fault and exposes the injected-fault state.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_001
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 DFX-REQ-002 — ABS CAN Transmission Suppression
 
@@ -69,7 +69,7 @@ traffic.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_002
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 DFX-REQ-003 — ABS CAN Fault Recovery
 
@@ -79,7 +79,7 @@ be active.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_003
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 4. Powertrain CAN Communication Fault
 
@@ -90,7 +90,7 @@ Powertrain CAN communication fault and exposes the injected-fault state.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_004
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 DFX-REQ-005 — Powertrain CAN Transmission Suppression
 
@@ -102,7 +102,7 @@ traffic.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_005
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 DFX-REQ-006 — Powertrain CAN Fault Recovery
 
@@ -112,7 +112,7 @@ DTC shall no longer be active.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_006
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 5. Steering CAN Communication Fault
 
@@ -123,7 +123,7 @@ CAN communication fault and exposes the injected-fault state.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_007
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 DFX-REQ-008 — Steering CAN Transmission Suppression
 
@@ -135,7 +135,7 @@ traffic.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_008
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 DFX-REQ-009 — Steering CAN Fault Recovery
 
@@ -145,7 +145,7 @@ shall no longer be active.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_009
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 6. Automotive Ethernet Communication Fault
 
@@ -159,7 +159,7 @@ Node A shall be rejected by the runtime submission path.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_010
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 DFX-REQ-011 — Ethernet Node A Fault Recovery
 
@@ -169,7 +169,7 @@ shall no longer be active.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_011
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 7. DTC Integration
 
@@ -190,7 +190,7 @@ communication DTC.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_012
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 8. Reset Behavior
 
@@ -202,7 +202,7 @@ active v1.8 communication DTCs.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_013
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 9. Determinism
 
@@ -215,7 +215,7 @@ fault-state, DTC-state, and relevant communication evidence.
 
 Verification Method: Automated Test
 Verification Test: TC_DFX_014
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 10. Regression
 
@@ -230,7 +230,7 @@ Previous Tests: 254
 
 Required PASS: 254
 
-Required FAIL: 0
+Failed: 0
 
 TC_DFX_015 provides a dedicated regression sentinel. Formal closure of this
 requirement additionally requires successful execution of all 254 Baseline v1.7
@@ -238,7 +238,7 @@ tests within the complete v1.8 suite.
 
 Verification Method: Automated Regression Test
 Verification Test: TC_DFX_015 + complete 254-test Baseline v1.7 suite
-Verification Status: IMPLEMENTED / UNVERIFIED
+Verification Status: VERIFIED / PASS
 
 11. Verification Set
 
@@ -338,9 +338,9 @@ DFX-REQ-015
 
 Baseline v1.7 regression sentinel
 
-Dedicated tests planned: 15
+Dedicated tests executed: 15
 
-12. Planned Baseline Growth
+12. Baseline v1.8 Verification Result
 
 Parent Baseline v1.7:
 
@@ -354,7 +354,7 @@ Passed: 254
 
 Failed: 0
 
-Baseline v1.8 target after successful verification:
+Baseline v1.8 executed result:
 
 Previous Requirements: 264
 
@@ -368,12 +368,17 @@ New DFX Tests: 15
 
 Total Tests: 269
 
-Required PASS: 269
+Passed: 269
 
-Required FAIL: 0
+Failed: 0
 
-These totals are verification targets and shall not be reported as achieved until
-the complete v1.8 automated suite has successfully executed.
+The complete v1.8 automated suite was executed successfully.
+
+Result: 269 PASS / 0 FAIL
+
+The 15 DFX tests TC_DFX_001 through TC_DFX_015 completed with PASS status.
+DFX-REQ-015 closure evidence includes the complete 254-test Baseline v1.7
+regression remaining PASS within the 269-test v1.8 execution.
 
 13. Verification Boundary
 
@@ -407,14 +412,14 @@ Requirements Defined: 15
 
 Implemented: 15
 
-Verified: 0
+Verified: 15
 
 Dedicated Tests Added: 15
 
-Dedicated Tests Executed: Pending
+Dedicated Tests Executed: 15 PASS / 0 FAIL
 
 Parent Baseline: v1.7 — VERIFICATION CLOSED
 
 Milestone Status:
 
-IMPLEMENTED / VERIFICATION OPEN
+VERIFICATION CLOSED

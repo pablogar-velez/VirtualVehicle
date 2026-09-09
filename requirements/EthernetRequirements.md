@@ -397,49 +397,48 @@ Verification Method: Automated Test
 Verification Test: TC_ETH_033
 Verification Status: VERIFIED / PASS
 
-12. Regression Requirements
-ETH-REQ-034 — Existing CAN Regression
+12. Regression and Determinism Requirements
 
-Automotive Ethernet integration shall preserve the existing verified
-VirtualCanBus behavior.
+ETH-REQ-034 — Regression Safety
 
-Verification Method: Automated Test
-Verification Test: TC_ETH_034
+Automotive Ethernet integration shall not alter established CAN, vehicle, or
+diagnostic behavior.
+
+Verification Method: Automated Test / Regression
+Verification Evidence: Existing v1.7 regression suite plus dedicated Ethernet
+regression coverage
 Verification Status: VERIFIED / PASS
 
-ETH-REQ-035 — Existing Diagnostic Regression
-
-Automotive Ethernet integration shall preserve the existing verified UDS,
-ISO-TP, UDS Transport, UDS CAN Transport, and UDS Runtime Integration behavior.
-
-Verification Method: Automated Test
-Verification Test: TC_ETH_035
-Verification Status: VERIFIED / PASS
-
-ETH-REQ-036 — Baseline v1.6 Regression
+ETH-REQ-035 — Legacy Baseline Regression
 
 The complete Baseline v1.6 automated validation suite shall continue to pass
 after Automotive Ethernet integration.
 
-The required regression result shall remain:
+Required legacy result:
 
 Previous Tests: 217
 Required PASS:  217
 Required FAIL:    0
 
 Verification Method: Automated Regression Test
-Verification Test: Complete Baseline v1.6 suite
+Verification Evidence: Complete Baseline v1.6 suite
 Verification Status: VERIFIED / PASS
 
-13. Determinism Requirement
-ETH-REQ-037 — Deterministic Ethernet Communication
+ETH-REQ-036 — Ethernet Determinism
 
-For identical initial Ethernet state, node configuration, frame contents,
-simulation time, and transmission sequence, the Ethernet subsystem shall produce
-equivalent frame delivery, timing, trace, and statistics results.
+For identical Ethernet input and configuration, the Ethernet subsystem shall
+produce identical Ethernet trace, statistics, node delivery, and timing results.
 
 Verification Method: Automated Test
-Verification Test: TC_ETH_037
+Verification Status: VERIFIED / PASS
+
+ETH-REQ-037 — System Determinism with Ethernet Enabled
+
+Two SimulationEngine instances with the same scenario and Ethernet input shall
+produce equivalent relevant CAN, Ethernet, system-state, and verification
+evidence.
+
+Verification Method: Automated Test
 Verification Status: VERIFIED / PASS
 
 14. Verification Set
@@ -477,10 +476,10 @@ TC_ETH_030	ETH-REQ-030	SimulationEngine Ethernet ownership
 TC_ETH_031	ETH-REQ-031	CAN and Ethernet coexistence
 TC_ETH_032	ETH-REQ-032	Ethernet runtime processing
 TC_ETH_033	ETH-REQ-033	Ethernet runtime reset
-TC_ETH_034	ETH-REQ-034	Existing CAN regression
-TC_ETH_035	ETH-REQ-035	Existing diagnostic regression
-TC_ETH_036	ETH-REQ-036	Full Baseline v1.6 regression
-TC_ETH_037	ETH-REQ-037	Deterministic Ethernet communication
+TC_ETH_034	ETH-REQ-034	Regression safety
+TC_ETH_035	ETH-REQ-035	Legacy Baseline v1.6 regression
+TC_ETH_036	ETH-REQ-036	Ethernet determinism
+TC_ETH_037	ETH-REQ-037	System determinism with Ethernet enabled
 
 Dedicated tests executed: 37
 

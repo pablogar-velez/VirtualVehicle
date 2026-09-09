@@ -2,8 +2,8 @@ VirtualVehicle Requirements Traceability Matrix
 
 Document ID: VV-RTM-001
 Baseline: 1.8
-Status: Current Verification Record / Verification Open
-Latest Automated Suite Result: 254 Passed / 0 Failed
+Status: Current Verification Record / VERIFICATION CLOSED
+Latest Automated Suite Result: 269 Passed / 0 Failed
 
 Purpose
 
@@ -4609,7 +4609,7 @@ DFX-REQ-001
 
 ABS CAN Fault Injection
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_002
 
@@ -4617,7 +4617,7 @@ DFX-REQ-002
 
 ABS CAN Transmission Suppression
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_003
 
@@ -4625,7 +4625,7 @@ DFX-REQ-003
 
 ABS CAN Fault Recovery
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_004
 
@@ -4633,7 +4633,7 @@ DFX-REQ-004
 
 Powertrain CAN Fault Injection
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_005
 
@@ -4641,7 +4641,7 @@ DFX-REQ-005
 
 Powertrain CAN Transmission Suppression
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_006
 
@@ -4649,7 +4649,7 @@ DFX-REQ-006
 
 Powertrain CAN Fault Recovery
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_007
 
@@ -4657,7 +4657,7 @@ DFX-REQ-007
 
 Steering CAN Fault Injection
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_008
 
@@ -4665,7 +4665,7 @@ DFX-REQ-008
 
 Steering CAN Transmission Suppression
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_009
 
@@ -4673,7 +4673,7 @@ DFX-REQ-009
 
 Steering CAN Fault Recovery
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_010
 
@@ -4681,7 +4681,7 @@ DFX-REQ-010
 
 Ethernet Node A Communication Fault
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_011
 
@@ -4689,7 +4689,7 @@ DFX-REQ-011
 
 Ethernet Node A Fault Recovery
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_012
 
@@ -4697,7 +4697,7 @@ DFX-REQ-012
 
 Distinct Communication DTC Registration
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_013
 
@@ -4705,7 +4705,7 @@ DFX-REQ-013
 
 Diagnostic Fault Reset
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_014
 
@@ -4713,7 +4713,7 @@ DFX-REQ-014
 
 Deterministic Fault Behavior
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
 TC_DFX_015
 
@@ -4721,9 +4721,9 @@ DFX-REQ-015
 
 Baseline v1.7 Regression Sentinel
 
-IMPLEMENTED / UNVERIFIED
+PASS
 
-v1.8 Verification Target
+v1.8 Automated Verification Result
 
 Previous verified requirements: 264
 
@@ -4735,11 +4735,27 @@ Previous automated tests: 254
 
 New DFX automated tests: 15
 
-Target automated tests: 269
+Automated tests executed: 269
 
 DFX-REQ-015 closure requires TC_DFX_015 plus successful execution of the
 complete 254-test Baseline v1.7 regression suite.
 
-Current v1.8 status:
+Current v1.8 automated execution status:
 
-VERIFICATION OPEN
+269 PASS / 0 FAIL
+
+Unique primary requirement IDs exercised by the Test Runner: 268.
+
+DFX milestone status: VERIFICATION CLOSED.
+
+ETH-REQ-034 through ETH-REQ-037 were realigned with TC_ETH_034 through
+TC_ETH_037 and the complete automated suite was rerun successfully.
+
+Final Ethernet tail mapping:
+
+TC_ETH_034 -> ETH-REQ-034 — Regression safety
+TC_ETH_035 -> ETH-REQ-035 — Legacy Baseline v1.6 regression
+TC_ETH_036 -> ETH-REQ-036 — Ethernet determinism
+TC_ETH_037 -> ETH-REQ-037 — System determinism with Ethernet enabled
+
+Baseline v1.8 status: VERIFICATION CLOSED.
