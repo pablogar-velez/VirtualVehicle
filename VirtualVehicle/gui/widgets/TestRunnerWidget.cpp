@@ -174,7 +174,7 @@ TestRunnerWidget::TestRunnerWidget(
     );
 
     baselineValueLabel->setText(
-        "v1.7"
+        "v1.8"
     );
 
     mainLayout->addLayout(

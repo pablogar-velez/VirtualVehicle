@@ -1034,7 +1034,7 @@ QWidget* MainWindow::createSidebar()
 
     QLabel* versionLabel =
         new QLabel(
-            "v1.7.0"
+            "v1.8.0"
         );
 
     versionLabel->setObjectName(
